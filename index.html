@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="btn-container">
+            <button class="def-btn green"><i>+</i></button>
+            <button class="def-btn red"><i>−</i></button>
+    </div>
+    
     <header>
         <div class="column-1">
             <div class="menu">
@@ -17,31 +22,34 @@
         <div class="column-2">
             <div class="user-info">
                 <img src="img/user.png" alt="User Icon" class="user-icon">
-            </div>
-            <div class="help-button">
-                <img src="img/help.png" alt="Help Icon" class="help-icon">
+                <span>Pajero67</span>
             </div>
         </div>
     </header>
 
     <main>
-        <section class="resumen-section">
-                <h3>Resumen</h3>
-            <div class="resumen-div">
+        <section class="def-section resumen-section">
+            <h3>Resumen</h3>
+            <div class="def-div resumen-div">
                 <span>Balance: </span>
-                <span>0,00€</span>
+                <span class="positive">0,00€</span>
             </div>
-            <div class="resumen-div">
+            <div class="def-div resumen-div">
                 <span>Tarjetas de crédito:</span>
-                <span>0,00€</span>
+                <span class="negative">0,00€</span>
             </div>
 
             <hr class="divider">
 
-            <div class="resumen-div total">
+            <div class="def-div resumen-div total">
                 <span></span>
-                <span>0,00€</span>
+                <span class="positive">0,00€</span>
             </div>
+        </section>
+
+        <section class="def-section">
+            <h3>Default</h3>
+            <div class="def-div"></div>
         </section>
     </main>
 
