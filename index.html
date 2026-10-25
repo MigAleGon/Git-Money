@@ -95,8 +95,8 @@
             </p>
 
             <p>
-                <label for="categoria">Categotía:</label>
-                <select id="categoria" name="categoria" required>
+                <label for="categoria-movimiento">Categoría:</label>
+                <select id="categoria-movimiento" name="categoria" required>
                     <option value="">Selecciona una categoría</option>
                     <option value="nomina">Nómina</option>
                     <option value="venta">Venta</option>
@@ -110,11 +110,19 @@
             </p>
 
             <p>
+                <label for="hora">Hora:</label>
+                <input id="hora" name="hora" type="time" required>
+            </p>
+
+            <p>
                 <label for="notas">Notas (opcional)</label>
                 <input id="notas" name="notas" rows="3">
             </p>
-
-            <button id="btn-cerrar" type="button">Cancelar</button>
+            
+            <div class="botones-movimiento">
+                <button id="btn-cerrar" type="button">Cancelar</button>
+                <button id="btn-guardar" type="submit">Guardar</button>
+            </div>
         </form>
     </dialog>
 

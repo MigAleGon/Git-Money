@@ -327,6 +327,8 @@ footer{
     line-height: 1.5;
 }
 
+/* CONDIF DIALOG*/
+
 #dialogo-movimiento {
     box-sizing: border-box; /* hace que el tamaño
                              quede como un valor absoluto*/
@@ -344,6 +346,8 @@ footer{
 #dialogo-movimiento::backdrop{
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+/* CONFIG FORM */
 
 #formulario-movimiento p{
     margin-top: 16px;
@@ -367,8 +371,21 @@ footer{
                      etc */
 }
 
+/* CONFIG BOTON CERRAR */
+
 #btn-cerrar{
     margin-top: 16px;
     padding: 8px 16px;
     cursor: pointer;
+}
+
+#btn-guardar{
+    margin-top: 16px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.botones-movimiento{
+    display: flex;
+    justify-content: space-between;
 }
