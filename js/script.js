@@ -14,6 +14,48 @@ const concepto = document.getElementById("concepto")
 const importe = document.getElementById("importe")
 const notas = document.getElementById("notas")
 
+// función asincrona, como una normal pero 
+// permite usar await
+async function comprobarServidor() {
+    // try y catch sirve para tener los errores controlados
+    try{
+        // await espera una respuesta del servidor
+        // fetch hace la petición al servidor
+        const respuesta = await fetch("estado.php")
+        // .ok indica si el servidor respondió exitosamente
+        if (!respuesta.ok){
+            // Crea un mensaje de error personalizado
+            throw new Error("No se ha podido conectar con el servidor")
+        } 
+        // .json() lee el cuerpo del php y lo interpreta como json
+        const datos = await respuesta.json()
+        console.log(datos.mensaje)
+    // catch se ejecuta si el try dio error
+    } catch(error){console.log(error.message)}
+}
+
+async function probarEnvio() {
+    try{
+        const movimientoPrueba = {
+            "concepto": "Prueba ingreso",
+            "importe": 25
+        }
+        const respuesta = await fetch("guardar-movimiento.php", {
+            method: "POST", // Indica al PHP que el método será POST
+            headers: {"Content-Type": "application/json"}, // Indica el encabezado del php
+            body: JSON.stringify(movimientoPrueba) // convierte el objeto en json
+        })
+        
+        if(!respuesta.ok){
+            throw new Error("La prueba del envío fallo exitosamente")
+        }
+
+        const datos = await respuesta.json()
+        console.log(datos.metodo)
+
+    } catch (error){console.log(error.message)}
+}
+
 // DISTINCIÓN DE VENTANAS DE BOTONES
 // objetos de categorías
 const categoriaIngreso = [{texto: "Nómina", valor: "nomina"},
@@ -29,7 +71,7 @@ const categoriaGasto = [{texto: "Alimentación", valor: "alimentacion"},
 
 let tipoMovimiento // ser rellenará al apretar cualquier boton de movimiento
 
-function abrirVentana(textoTitulo, tipo){
+function abrirVentana(textoTitulo, tipo) {
     tipoMovimiento = tipo
     formularioMovimiento.reset() //limpia el formulario al abrirlo
 
@@ -77,7 +119,7 @@ function abrirVentana(textoTitulo, tipo){
 
 // Función para detectar eventos que ocurren en el html
 
-botonIngreso.addEventListener("click", function(){
+botonIngreso.addEventListener("click", function() {
     abrirVentana("Registrar ingreso" , "ingreso")
 })
 
@@ -93,7 +135,7 @@ botonCerrar.addEventListener("click", function() {
 // GUARDAR VALORES DEL MOVIMIENTO
 const movimientos = []
 
-formularioMovimiento.addEventListener("submit", function(evento){
+formularioMovimiento.addEventListener("submit", function(evento) {
     evento.preventDefault()
     const conceptoValor = concepto.value
     const importeValor = Number(importe.value)
@@ -118,3 +160,6 @@ formularioMovimiento.addEventListener("submit", function(evento){
     console.log(movimientos, movimientos.length)
     dialogoMovimiento.close()
 })
+
+comprobarServidor()
+probarEnvio()
