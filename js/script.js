@@ -69,7 +69,7 @@ const categoriaGasto = [{texto: "Alimentación", valor: "alimentacion"},
                          {texto: "Adicciones", valor: "adicciones"},
                          {texto: "Ocio", valor: "ocio"}]
 
-let tipoMovimiento // ser rellenará al apretar cualquier boton de movimiento
+let Movimiento // ser rellenará al apretar cualquier boton de movimiento
 
 function abrirVentana(textoTitulo, tipo) {
     tipoMovimiento = tipo
@@ -157,9 +157,22 @@ formularioMovimiento.addEventListener("submit", function(evento) {
     // Push añade el elemento al array
     movimientos.push(movimiento)
 
+    calcularIngresos()
+    
     console.log(movimientos, movimientos.length)
     dialogoMovimiento.close()
 })
+
+// Función para calcular el total de ingresos
+function calcularIngresos(){
+    let totalIngresos = 0
+    for(const movimiento of movimientos){
+        if(movimiento.tipo === "ingreso"){
+            totalIngresos += movimiento.importe
+        }
+    }
+    console.log(totalIngresos)
+}
 
 comprobarServidor()
 probarEnvio()

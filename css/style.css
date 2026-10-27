@@ -8,18 +8,18 @@
     --white: #ffffff;
     --blue: #0092ca;
     --light-blue: #93deff;
-    --green: #1ea86b;
-    --red: #e63946;
+    --green: #247a60;
+    --red: #f94343;
     --pink: #690e4e;
 
     /* Colores semánticos */
-    --bg: var(--light-grey);
-    --text: var(--black);
+    --bg: #f6f8fa;
+    --text: #18212f;
     --color-accent: var(--grey);
-    --panel: var(--blue);
-    --line: #e0e0e0;
-    --muted: #60776b;
-    --shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    --panel: var(--white);
+    --line: #e4e7ec;
+    --muted: #667085;
+    --shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 *{
@@ -34,6 +34,9 @@ html{
 body{
     background-color: var(--bg);
     font-family: 'Arial', sans-serif;
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 /*CONFIG BUTTONS*/
@@ -93,7 +96,7 @@ header{
 
 header h1{
     margin: 0 0 0 20px;
-    font-size: 24px;
+    font-size: 32px;
 }
 
 .column-1{
