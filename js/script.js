@@ -160,6 +160,7 @@ function calcularBalance() {
 
     if (totalBalance < 0) {
         totalBalance = 0
+    
     }
 
     tarjetaBalance.innerText = totalBalance + " €"

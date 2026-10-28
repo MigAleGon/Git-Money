@@ -549,7 +549,6 @@ footer{
     .app-layout{
         grid-template-columns: minmax(0, 1fr);
     }
-
     .barra-lateral{
         flex-direction: row;
         align-items: center;
@@ -557,7 +556,7 @@ footer{
         gap: 16px;
         padding: 16px;
         border-right: 0;
-        border-bottom: var(--line);
+        border-bottom: 1px solid var(--line);
     }
 
     .marca{
