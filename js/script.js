@@ -4,6 +4,7 @@
 const botonIngreso = document.getElementById("btn-ingreso")
 const botonGasto = document.getElementById("btn-gasto")
 const botonCerrar = document.getElementById("btn-cerrar")
+const botonGuardar = document.getElementById("btn-guardar")
 const botonesFiltros = document.querySelectorAll(".btn-filtro")
 const botonUsuario = document.getElementById("boton-usuario")
 const panelUsuario = document.getElementById("panel-usuario")
@@ -17,7 +18,9 @@ const categoriaMovimiento = document.getElementById("categoria-movimiento")
 const concepto = document.getElementById("concepto")
 const importe = document.getElementById("importe")
 const notas = document.getElementById("notas")
-
+const tarjetaBalance = document.getElementById("tarjeta-balance")
+const tarjetaIngresos = document.getElementById("tarjeta-ingresos")
+const tarjetaGastos = document.getElementById("tarjeta-gastos")
 
 // función asincrona, como una normal pero 
 // permite usar await
@@ -74,7 +77,7 @@ const categoriaGasto = [{texto: "Alimentación", valor: "alimentacion"},
                          {texto: "Adicciones", valor: "adicciones"},
                          {texto: "Ocio", valor: "ocio"}]
 
-let Movimiento // ser rellenará al apretar cualquier boton de movimiento
+let tipoMovimiento // ser rellenará al apretar cualquier boton de movimiento
 
 function abrirVentana(textoTitulo, tipo) {
     tipoMovimiento = tipo
@@ -126,12 +129,40 @@ function abrirVentana(textoTitulo, tipo) {
 
 function calcularIngresos(){
     let totalIngresos = 0
+
     for(const movimiento of movimientos){
-        if(movimiento.tipo === "ingreso"){
+        if (movimiento.tipo === "ingreso"){
             totalIngresos += movimiento.importe
+            tarjetaIngresos.innerText = totalIngresos + " €"
         }
     }
-    console.log(totalIngresos)
+
+    tarjetaIngresos.innerText = totalIngresos + " €"
+}
+
+function calcularGastos(){
+    let totalGastos = 0;
+
+    for (const movimiento of movimientos) {
+        if (movimiento.tipo === "gasto") {
+            totalGastos -= movimiento.importe;
+        }
+    }
+
+    tarjetaGastos.innerText = totalGastos + " €";
+}
+
+function calcularBalance() {
+    let ingresos = parseFloat(tarjetaIngresos.innerText)
+    let gastos = parseFloat(tarjetaGastos.innerText)
+
+    let totalBalance = ingresos + gastos
+
+    if (totalBalance < 0) {
+        totalBalance = 0
+    }
+
+    tarjetaBalance.innerText = totalBalance + " €"
 }
 
 // Función para detectar eventos que ocurren en el html
@@ -147,6 +178,12 @@ botonGasto.addEventListener("click", function() {
 botonCerrar.addEventListener("click", function() {
     // Cierra <dialog>
     dialogoMovimiento.close()
+})
+
+botonGuardar.addEventListener("click", function() {
+    calcularIngresos()
+    calcularGastos()
+    calcularBalance()
 })
 
 botonUsuario.addEventListener("click", function() {
@@ -176,7 +213,6 @@ document.addEventListener("click", function(evento) {
         panelUsuario.hidden = true
         botonUsuario.setAttribute("aria-expanded", "false")
     }
-    console.log(evento.target)
 })
 
 // GUARDAR VALORES DEL MOVIMIENTO
@@ -205,6 +241,8 @@ formularioMovimiento.addEventListener("submit", function(evento) {
     movimientos.push(movimiento)
 
     calcularIngresos()
+    calcularGastos()
+    calcularBalance()
     
     console.log(movimientos, movimientos.length)
     dialogoMovimiento.close()
