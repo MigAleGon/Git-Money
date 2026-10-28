@@ -3,8 +3,12 @@
 
 const botonIngreso = document.getElementById("btn-ingreso")
 const botonGasto = document.getElementById("btn-gasto")
-const dialogoMovimiento = document.getElementById("dialogo-movimiento")
 const botonCerrar = document.getElementById("btn-cerrar")
+const botonesFiltros = document.querySelectorAll(".btn-filtro")
+const botonUsuario = document.getElementById("boton-usuario")
+const panelUsuario = document.getElementById("panel-usuario")
+const menuUsuario = document.querySelector(".usuario-menu") // guarda el primer elemento con dicha clase y lo que contiene
+const dialogoMovimiento = document.getElementById("dialogo-movimiento")
 const tituloMovimiento = document.getElementById("titulo-movimiento")
 const formularioMovimiento = document.getElementById("formulario-movimiento")
 const fecha = document.getElementById("fecha")
@@ -13,6 +17,7 @@ const categoriaMovimiento = document.getElementById("categoria-movimiento")
 const concepto = document.getElementById("concepto")
 const importe = document.getElementById("importe")
 const notas = document.getElementById("notas")
+
 
 // función asincrona, como una normal pero 
 // permite usar await
@@ -75,17 +80,19 @@ function abrirVentana(textoTitulo, tipo) {
     tipoMovimiento = tipo
     formularioMovimiento.reset() //limpia el formulario al abrirlo
 
+    dialogoMovimiento.setAttribute("data-tipo", tipo)
+
     //Este obtiene la fecha actual
     const ahora = new Date() 
     // String() convierte un int a texto
     // getFullYear() devuelve el año actual
-    const ano = String(ahora.getFullYear()) 
+    const anio = String(ahora.getFullYear()) 
     // padStart() el primer parámetro es la cantidad de caracteres que va a tener nuestro texto como mínimo y el segundo es el relleno de este
     // getMonth() devuelve el mes actual
     const mes = String(ahora.getMonth() + 1).padStart(2, "0") 
     // getDate() devuelve el día actual
     const dia = String(ahora.getDate()).padStart(2, "0")
-    const fechaActual = ano + "-" + mes + "-" + dia
+    const fechaActual = anio + "-" + mes + "-" + dia
     
     // getHours() devuelve la hora actual
     const horaNum = String(ahora.getHours()).padStart(2, "0")
@@ -117,6 +124,16 @@ function abrirVentana(textoTitulo, tipo) {
     dialogoMovimiento.showModal() // muestra el contenido de <dialog>
 }
 
+function calcularIngresos(){
+    let totalIngresos = 0
+    for(const movimiento of movimientos){
+        if(movimiento.tipo === "ingreso"){
+            totalIngresos += movimiento.importe
+        }
+    }
+    console.log(totalIngresos)
+}
+
 // Función para detectar eventos que ocurren en el html
 
 botonIngreso.addEventListener("click", function() {
@@ -130,6 +147,36 @@ botonGasto.addEventListener("click", function() {
 botonCerrar.addEventListener("click", function() {
     // Cierra <dialog>
     dialogoMovimiento.close()
+})
+
+botonUsuario.addEventListener("click", function() {
+    panelUsuario.hidden = !panelUsuario.hidden
+    // setAttribute modifica atributos del HTML
+    // además convierte el valor automáticamente a string
+    // para que HTML lo pueda leer
+    botonUsuario.setAttribute("aria-expanded", !panelUsuario.hidden) 
+})
+
+// evento es un objeto que pasa el navegador con información de lo que 
+// acaba de ocurrir, en este caso sería pulsar una tecla y en el siguiente
+// el click
+// si hacemos un console.log(evento.target) podemos ver que la consola
+// devuelve el contenedor html donde se ha hecho click si el evento
+// lo que registra son clicks
+document.addEventListener("keydown", function(evento) { 
+    if (evento.key === "Escape" && !panelUsuario.hidden) {
+        panelUsuario.hidden = true
+        botonUsuario.setAttribute("aria-expanded", "false") 
+        botonUsuario.focus()
+    }
+})
+
+document.addEventListener("click", function(evento) {
+    if (!panelUsuario.hidden && !menuUsuario.contains(evento.target)) {
+        panelUsuario.hidden = true
+        botonUsuario.setAttribute("aria-expanded", "false")
+    }
+    console.log(evento.target)
 })
 
 // GUARDAR VALORES DEL MOVIMIENTO
@@ -163,15 +210,14 @@ formularioMovimiento.addEventListener("submit", function(evento) {
     dialogoMovimiento.close()
 })
 
-// Función para calcular el total de ingresos
-function calcularIngresos(){
-    let totalIngresos = 0
-    for(const movimiento of movimientos){
-        if(movimiento.tipo === "ingreso"){
-            totalIngresos += movimiento.importe
+// RECORRER BOTONES FILTRO
+for (const boton of botonesFiltros){
+    boton.addEventListener("click", function() {
+        for(const botonFiltro of botonesFiltros){
+            botonFiltro.setAttribute("aria-pressed", "false")
         }
-    }
-    console.log(totalIngresos)
+        boton.setAttribute("aria-pressed" , "true")
+    })
 }
 
 comprobarServidor()

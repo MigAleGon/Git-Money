@@ -6,12 +6,13 @@
     --grey: #393e46;
     --light-grey: #eeeeee;
     --white: #ffffff;
-    --blue: #0092ca;
-    --light-blue: #93deff;
+    --blue: #184b76;
+    --light-blue: #e2edff;
     --green: #247a60;
+    --light-green: #dff2e7;
     --red: #f94343;
+    --light-red: #ffe3e3;
     --pink: #690e4e;
-
     /* Colores semánticos */
     --bg: #f6f8fa;
     --text: #18212f;
@@ -37,25 +38,165 @@ body{
     color: var(--text);
     font-size: 16px;
     line-height: 1.5;
-}
-
-/*CONFIG BUTTONS*/
-.btn-container{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
-.def-btn{
-    border: none;
+/*CONFIG LAYOUT*/
+
+.app-layout{
+    display: grid;
+    grid-template-columns: 240px minmax(0,1fr);
+    min-height: 100vh;
+}
+
+.contenido-principal{
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.barra-lateral{
+    background-color: var(--panel);
+    border-right: 1px solid var(--line);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+/*CONFIG ASIDE*/
+
+.marca{
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.barra-lateral nav{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.enlace-nav{
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+a.enlace-nav:hover{
+    background-color: var(--bg);
+}
+
+a.enlace-nav:focus-visible{
+    border: 1px solid var(--blue);
+}
+
+.enlace-nav[aria-current="page"]{
+    background-color: var(--light-blue);
+    color: var(--blue);
+    font-weight: 600;
+}
+
+.icono-nav{
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.usuario-menu{
+    margin-top: auto;
+    position: relative;
+}
+
+.usuario-boton{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background-color: var(--panel);
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.usuario-boton:hover{
+    background-color: var(--bg);
+}
+
+
+.usuario-avatar{
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 30px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.usuario-panel{
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 0;
+    right: 0;
+    background-color: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 0;
+    overflow: hidden;
+}
+
+.usuario-opcion{
+    display: block;
+    padding: 10px 12px;
+    color: var(--text);
+}
+
+.usuario-opcion:hover{
+    background-color: var(--bg);
+}
+
+/*CONFIG HEADER*/
+
+header{
+    background-color: var(--panel);
+    color: var(--text);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.titulo-container h1{
+    font-size: 32px;
+}
+
+.titulo-container span{
+    color: var(--muted);
+}
+/*CONFIG BUTTONS*/
+.btn-container{
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.default-btn{
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     color: var(--white);
@@ -83,63 +224,202 @@ body{
     background-color: var(--pink);
 }
 
-/*CONFIG HEADER*/
-
-header{
-    background-color: var(--panel);
-    color: var(--text);
-    padding: 20px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-header h1{
-    margin: 0 0 0 20px;
-    font-size: 32px;
-}
-
-.column-1{
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-}
-
-.column-2{
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-}
-
-.user-info{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 5px 10px;
-    background-color: var(--line);
-}
-
-.user-icon{
-    height: 3vw;
-    width: auto;
-}
-
-.menu-icon{
-    height: 3vw;
-    width: auto;
-}
-
 /*CONFIG MAIN*/
 
 main{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 20px;
     padding: 20px;
-    justify-items: center;
     align-items: start;
+    flex-grow: 1;
+    align-content: start;
+    grid-template-columns: minmax(0, 1fr);
+    container-type: inline-size;
+}
+
+/*CONFIG TARJETAS*/
+
+.resumen-tarjetas{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+    gap: 20px;
+}
+
+.tarjeta-resumen{
+    background-color: var(--panel);
+    border: 1px solid var(--line);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.tarjeta-icono{
+    display: flex;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    /*background-color: #ffe3e3;
+    color: var(--red);*/
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tarjeta-icono svg{
+    width: 32px;
+    height: 32px;
+}
+
+.tarjeta-resumen span{
+    display: block;
+}
+
+.tarjeta-resumen h2{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.tarjeta-balance{
+    background-color: #f5f9ff;
+    border: 1px solid #d6e4ff;
+}
+
+.tarjeta-ingresos{
+    background-color: #f3faf6;
+    border: 1px solid #cce8da;
+}
+
+.tarjeta-gastos{
+    background-color: #fff5f5;
+    border: 1px solid #ffd6d6;
+}
+
+.tarjeta-dinero{
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    white-space: nowrap;
+}
+
+.tarjeta-descripcion{
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.tarjeta-ingresos .tarjeta-dinero{
+    color: var(--green);
+}
+
+.tarjeta-gastos .tarjeta-dinero{
+    color: var(--red);
+}
+
+.tarjeta-balance .tarjeta-icono{
+    background-color: var(--light-blue);
+    color: var(--blue);
+}
+
+.tarjeta-ingresos .tarjeta-icono{
+    background-color: var(--light-green);
+    color: var(--green);
+}
+
+.tarjeta-gastos .tarjeta-icono{
+    background-color: var(--light-red);
+    color: var(--red);
+}
+
+/*CONFIG MOVIMIENTOS RECIENTES*/
+.movimientos-section{
+    background-color: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    min-width: 0;
+}
+
+.movimientos-section h2{
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.filtros-movimientos{
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.btn-filtro{
+    background-color: var(--white);
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.btn-filtro[data-filtro="todos"][aria-pressed="true"]{
+    background-color: var(--light-blue);
+    color: var(--blue);
+}
+
+.btn-filtro[data-filtro="ingreso"][aria-pressed="true"]{
+    background-color: var(--light-green);
+    color: var(--green);
+}
+
+.btn-filtro[data-filtro="gasto"][aria-pressed="true"]{
+    background-color: var(--light-red);
+    color: var(--red);
+}
+
+.tabla-contenedor{
+    overflow-x: auto;
+}
+
+.tabla-movimientos{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-movimientos th, .tabla-movimientos td{
+    padding: 16px;
+}
+
+.tabla-movimientos th{
+    background-color: var(--bg);
+    color: var(--muted);
+    font-size: 14px;
+    text-align: left;
+}
+
+.tabla-movimientos td{
+    border-bottom: 1px solid var(--line);
+}
+
+.tabla-movimientos th:last-child,
+.tabla-movimientos td:last-child {
+    text-align: right;
+}
+
+.tabla-movimientos td:last-child{
+    white-space: nowrap;
+}
+
+.importe-ingreso{
+    color: var(--green);
+    font-weight: 600;
+}
+
+.importe-gasto{
+    color: var(--red);
+    font-weight: 600;
 }
 
 /*CONFIG FOOTER*/
@@ -151,62 +431,6 @@ footer{
     text-align: center;
     font-size: 14px;
     
-}
-
-/*CONFIG DEFAULT SECTION*/
-.def-section{
-    background-color: var(--white);
-    border: 1px solid var(--line);
-    padding: 20px;
-    box-shadow: var(--shadow);
-    width: 320px; /*editar, hacer responsive*/
-    border-radius: 12px;
-}
-
-.def-section:hover{
-    box-shadow: var(--shadow);
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-}
-
-.def-section h3{
-    margin: 0 0 15px 0; /*editar, hacer responsive*/
-    font-size: 15px;
-    color: var(--text);
-}
-
-.def-div{
-    display: flex;
-    margin-bottom: 12px;
-    font-size: 15px;
-    color: var(--text);
-}
-
-.divider {
-    border: none;
-    border-top: 1px solid #dcdcdc;
-    margin: 15px 0;
-}
-
-.positive{
-    color: var(--green);
-    font-weight: 500;
-}
-
-.negative{
-    color: var(--red);
-    font-weight: 500;
-}
-
-/*CONFIG RESUMEN*/
-
-.resumen-div{
-    justify-content: space-between;
-    align-items: center;
-}
-
-.resumen-div span{
-    font-size: 18px;
 }
 
 /* FORMULARIO DE INGRESOS Y GASTOS */
@@ -316,79 +540,121 @@ footer{
     border-color: var(--muted);
 }
 
-.def-btn:focus-visible,
+.default-btn:focus-visible,
 .formulario-movimiento :focus-visible{
-    outline: 3px solid var(--blue);
-    outline-offset: 3px;
+    outline: 0;
 }
 
-.mensaje-movimiento:not(:empty){
-    margin: 0 20px 20px;
-    padding: 12px;
-    border-left: 4px solid var(--blue);
-    background-color: var(--white);
-    line-height: 1.5;
+@media(max-width: 900px){
+    .app-layout{
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .barra-lateral{
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 16px;
+        border-right: 0;
+        border-bottom: var(--line);
+    }
+
+    .marca{
+        margin-bottom: 0;
+    }
+
+    .barra-lateral nav{
+        flex-direction: row;
+    }
+
+    .usuario-panel{
+        bottom: auto;
+        top: calc(100% + 12px);
+        z-index: 10;
+        width: 190px;
+        left: auto;
+        right: 0;
+    }
+
+    .usuario-menu{
+        margin-top: 0;
+        margin-left: auto;
+    }
+
+    .usuario-nombre{
+        display: none;
+    }
+
+    .usuario-boton{
+        padding: 8px;
+        border: none;
+        background-color: transparent;
+        border-radius: 50%;
+    }
+    
 }
 
-/* CONDIF DIALOG*/
+@media(max-width: 600px){
+    .barra-lateral{
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
 
-#dialogo-movimiento {
-    box-sizing: border-box; /* hace que el tamaño
-                             quede como un valor absoluto*/
-    margin: auto;
-    padding: 24px;
-    width: min(440px, calc(100% - 32px));
-    max-height: calc(100vh - 32px);
-    overflow-y: auto; /* Controla qué ocurre cuando 
-                        el contenido desborda un 
-                        elemento verticalmente */
-    border: none;
-    border-radius: 12px;
+    .marca{
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .usuario-menu{
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .barra-lateral nav{
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    header{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-container{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-container .default-btn{
+        flex: 1;
+    }
+
+    .barra-lateral nav{
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .movimientos-section{
+        padding: 16px;
+    }
+
+    .filtros-movimientos{
+        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .btn-filtro{
+        padding: 8px 4px;
+        text-align: center;
+    }
 }
 
-#dialogo-movimiento::backdrop{
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-/* CONFIG FORM */
-
-#formulario-movimiento p{
-    margin-top: 16px;
-}
-
-#formulario-movimiento label {
-    display: block; /* Hace que un elemento participe en la distribución
-                    como un bloque: comienza en una línea nueva y, normalmente,
-                    con ancho automático ocupa el espacio horizontal disponible */
-    margin-bottom: 6px;
-}
-
-#formulario-movimiento input,
-#formulario-movimiento select,
-#formulario-movimiento textarea {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 8px;
-    font: inherit; /* Indica que el elemento debe utilizar las propiedades de
-                     fuente de su elemento padre: familia, tamaño, peso, interlineado, 
-                     etc */
-}
-
-/* CONFIG BOTON CERRAR */
-
-#btn-cerrar{
-    margin-top: 16px;
-    padding: 8px 16px;
-    cursor: pointer;
-}
-
-#btn-guardar{
-    margin-top: 16px;
-    padding: 8px 16px;
-    cursor: pointer;
-}
-
-.botones-movimiento{
-    display: flex;
-    justify-content: space-between;
+@container(740px <= width < 1120px){
+    .tarjeta-balance{
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
 }

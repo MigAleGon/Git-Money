@@ -1,1 +1,8 @@
 INSPO: https://webapp.fastbudget.app/calendar/trial
+
+añadir movimientos html para movimientos con gráficos y capacidad de filtrar por día, semana, mes, año, ingresos, gastos
+tipo análisis financiero
+
+meter un bucaminas
+
+añadir modo oscuro
