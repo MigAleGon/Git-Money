@@ -31,11 +31,18 @@ if (json_last_error() !== JSON_ERROR_NONE){
     echo json_encode($mensaje);
     exit;
 }
-
+if (!isset($datos["concepto"], $datos["importe"])) {
+    http_response_code(400);
+    $mensaje = ["mensaje" => "Los datos introducidos son incorrectos"];
+    echo json_encode($mensaje);
+    exit;
+}
 $respuesta = [
     "metodo" => $_SERVER["REQUEST_METHOD"],
     "conceptoRecibido" => $datos["concepto"],
     "importeRecibido" => $datos["importe"]
 ];
+
+
 
 echo json_encode($respuesta);
