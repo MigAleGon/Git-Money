@@ -39,14 +39,14 @@
                     <span class="usuario-opcion">Ayuda</span>
                     <span class="usuario-opcion">Salir</span>
                 </div>
-                <button 
-                type="button" 
-                class="usuario-boton" 
-                id="boton-usuario"
-                aria-expanded="false"
-                aria-controls="panel-usuario"
-                aria-label="Abrir opciones de usuario">
-                    <img src="img/user.png" class="usuario-avatar">
+                <button
+                    type="button"
+                    class="usuario-boton"
+                    id="boton-usuario"
+                    aria-expanded="false"
+                    aria-controls="panel-usuario"
+                    aria-label="Abrir opciones de usuario">
+                    <img src="img/user.png" class="usuario-avatar" alt="">
                     <span class="usuario-nombre">PorretaJacoso</span>
                 </button>
             </div>
@@ -60,15 +60,15 @@
                 </div>
                 <div class="btn-container">
                     <button
-                        id="btn-ingreso" 
+                        id="btn-ingreso"
                         class="default-btn green"
-                        type="button" 
-                        aria-label="Añadir ingreso" 
+                        type="button"
+                        aria-label="Añadir ingreso"
                     >+ Ingreso</button>
-                    <button 
-                        id="btn-gasto" 
-                        class="default-btn red" 
-                        type="button" 
+                    <button
+                        id="btn-gasto"
+                        class="default-btn red"
+                        type="button"
                         aria-label="Añadir gasto"
                     >- Gasto</button>
                 </div>
@@ -126,31 +126,31 @@
                 </div>
 
                 <section class="movimientos-section">
-                    <h2>Movimientos recientes</h2>
+                    <h2 id="movimientos-recientes">Movimientos recientes</h2>
 
                     <div class="filtros-movimientos">
-                        <button 
-                        class="btn-filtro"
-                        type="button"
-                        aria-pressed="true"
-                        data-filtro="todos"
+                        <button
+                            class="btn-filtro"
+                            type="button"
+                            aria-pressed="true"
+                            data-filtro="todos"
                         >Todos</button>
-                        <button 
-                        class="btn-filtro"
-                        type="button"
-                        aria-pressed="false"
-                        data-filtro="ingreso"
+                        <button
+                            class="btn-filtro"
+                            type="button"
+                            aria-pressed="false"
+                            data-filtro="ingreso"
                         >Ingresos</button>
-                        <button 
-                        class="btn-filtro"
-                        type="button"
-                        aria-pressed="false"
-                        data-filtro="gasto"
+                        <button
+                            class="btn-filtro"
+                            type="button"
+                            aria-pressed="false"
+                            data-filtro="gasto"
                         >Gastos</button>
                     </div>
 
                     <div class="tabla-contenedor">
-                        <table class="tabla-movimientos">
+                        <table class="tabla-movimientos" aria-labelledby="movimientos-recientes">
                             <thead>
                                 <tr>
                                     <th scope="col">Concepto</th>
@@ -184,9 +184,8 @@
             </footer>
         </div>
     </div>
-    
 
-    <dialog id="dialogo-movimiento" class="dialogo-movimiento" aria-labelledby="titulo-movimiento" alt="avatar">
+    <dialog id="dialogo-movimiento" class="dialogo-movimiento" aria-labelledby="titulo-movimiento">
         <h2 id="titulo-movimiento">Añadir ingreso</h2>
 
         <form id="formulario-movimiento" class="formulario-movimiento">
@@ -196,6 +195,7 @@
                     id="concepto"
                     name="concepto"
                     type="text"
+                    maxlength="100"
                     required
                 >
             </p>
@@ -215,10 +215,6 @@
             <p>
                 <label for="categoria-movimiento">Categoría:</label>
                 <select id="categoria-movimiento" name="categoria" required>
-                    <option value="">Selecciona una categoría</option>
-                    <option value="nomina">Nómina</option>
-                    <option value="venta">Venta</option>
-                    <option value="otros">Otros</option>
                 </select>
             </p>
             <div class="fecha-hora">
@@ -239,7 +235,7 @@
                 <label for="notas">Notas (opcional)</label>
                 <textarea id="notas" name="notas" rows="3"></textarea>
             </p>
-            
+
             <div class="acciones-formulario">
                 <button id="btn-cerrar" class="boton-formulario boton-cancelar" type="button">Cancelar</button>
                 <button id="btn-guardar" class="boton-formulario"  type="submit">Guardar</button>
