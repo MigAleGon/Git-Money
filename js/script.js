@@ -21,6 +21,7 @@ const notas = document.getElementById("notas")
 const tarjetaBalance = document.getElementById("tarjeta-balance")
 const tarjetaIngresos = document.getElementById("tarjeta-ingresos")
 const tarjetaGastos = document.getElementById("tarjeta-gastos")
+const cuerpoTabla = document.querySelector("tbody")
 
 // función asincrona, como una normal pero 
 // permite usar await
@@ -127,43 +128,40 @@ function abrirVentana(textoTitulo, tipo) {
     dialogoMovimiento.showModal() // muestra el contenido de <dialog>
 }
 
-function calcularIngresos(){
+function calcularMovimiento() {
     let totalIngresos = 0
+    let totalGastos = 0
+    let totalBalance = 0
+    const ahora = new Date()
 
     for(const movimiento of movimientos){
-        if (movimiento.tipo === "ingreso"){
-            totalIngresos += movimiento.importe
-            tarjetaIngresos.innerText = totalIngresos + " €"
+        // split divide en un array un texto y lo separa en función
+        // del caracter que le indiquemos
+        const anio = movimiento.fecha.split("-")[0] 
+        const mes = movimiento.fecha.split("-")[1]
+
+        if(anio === String(ahora.getFullYear()) && 
+           mes === String((ahora.getMonth() + 1)).padStart(2, "0")) {
+            if (movimiento.tipo === "ingreso"){
+                totalIngresos += movimiento.importe
+            } else if (movimiento.tipo === "gasto"){
+                totalGastos -= movimiento.importe
+            }
+        }
+
+        if(movimiento.tipo === "ingreso"){
+            totalBalance += movimiento.importe
+        } else if(movimiento.tipo === "gasto"){
+            totalBalance -= movimiento.importe
         }
     }
 
-    tarjetaIngresos.innerText = totalIngresos + " €"
-}
 
-function calcularGastos(){
-    let totalGastos = 0;
-
-    for (const movimiento of movimientos) {
-        if (movimiento.tipo === "gasto") {
-            totalGastos -= movimiento.importe;
-        }
-    }
-
-    tarjetaGastos.innerText = totalGastos + " €";
-}
-
-function calcularBalance() {
-    let ingresos = parseFloat(tarjetaIngresos.innerText)
-    let gastos = parseFloat(tarjetaGastos.innerText)
-
-    let totalBalance = ingresos + gastos
-
-    if (totalBalance < 0) {
-        totalBalance = 0
-    
-    }
-
-    tarjetaBalance.innerText = totalBalance + " €"
+    // toFixed establece el número de decimales que tendrá
+    // también lo convierte a String
+    tarjetaIngresos.textContent = totalIngresos.toFixed(2) + " €"
+    tarjetaGastos.textContent = totalGastos.toFixed(2) + " €"
+    tarjetaBalance.textContent = totalBalance.toFixed(2) + " €"
 }
 
 // Función para detectar eventos que ocurren en el html
@@ -179,12 +177,6 @@ botonGasto.addEventListener("click", function() {
 botonCerrar.addEventListener("click", function() {
     // Cierra <dialog>
     dialogoMovimiento.close()
-})
-
-botonGuardar.addEventListener("click", function() {
-    calcularIngresos()
-    calcularGastos()
-    calcularBalance()
 })
 
 botonUsuario.addEventListener("click", function() {
@@ -221,13 +213,18 @@ const movimientos = []
 
 formularioMovimiento.addEventListener("submit", function(evento) {
     evento.preventDefault()
-    const conceptoValor = concepto.value
+    const conceptoValor = concepto.value.trim()
     const importeValor = Number(importe.value)
     const categoriaValor = categoriaMovimiento.value
     const fechaValor = fecha.value
     const horaValor = hora.value
     const notasValor = notas.value
     
+    if(conceptoValor === "") {
+        alert("El concepto no puede estar vacío.")
+        return 
+    }
+
     const movimiento = {
         concepto: conceptoValor,
         importe: importeValor,
@@ -237,15 +234,12 @@ formularioMovimiento.addEventListener("submit", function(evento) {
         notas: notasValor,
         tipo: tipoMovimiento
     }
-
     // Push añade el elemento al array
     movimientos.push(movimiento)
 
-    calcularIngresos()
-    calcularGastos()
-    calcularBalance()
+    calcularMovimiento()
+    mostrarMovimientos()
     
-    console.log(movimientos, movimientos.length)
     dialogoMovimiento.close()
 })
 
@@ -259,5 +253,60 @@ for (const boton of botonesFiltros){
     })
 }
 
+// AÑADE MOVIMIENTOS A LA TABLA
+function mostrarMovimientos(){
+    cuerpoTabla.replaceChildren()
+
+    for(const movimiento of movimientos){
+        const fila = document.createElement("tr") //crea un elemento HTML
+        const celdaConcepto = document.createElement("td")
+        const celdaCategoria = document.createElement("td")
+        const celdaFecha = document.createElement("td")
+        const celdaImporte = document.createElement("td")
+        
+        const partesFecha = movimiento.fecha.split("-")
+        const anio = partesFecha[0]
+        const mes = partesFecha[1]
+        const dia = partesFecha[2]
+        const fechaFormateada = dia + "/" + mes + "/" + anio
+
+        let categoriaEncontrada
+        if(movimiento.tipo === "ingreso"){
+            // finde busca en un array lo que le indiquemos y devuelve el primer elemento
+            // que cumple con la condición
+            categoriaEncontrada = categoriaIngreso.find(function(valor) {
+                return valor.valor === movimiento.categoria
+            })
+        } else if(movimiento.tipo === "gasto"){
+            categoriaEncontrada = categoriaGasto.find(function(valor){
+                return valor.valor === movimiento.categoria
+            })
+        }
+
+        celdaConcepto.textContent = movimiento.concepto
+        celdaCategoria.textContent = categoriaEncontrada.texto
+        celdaFecha.textContent = fechaFormateada
+
+
+        if(movimiento.tipo === "ingreso"){
+            celdaImporte.textContent = "+" + movimiento.importe.toFixed(2) + " €"
+            // classList.add() le añade una clase a el objeto html que indiquemos
+            celdaImporte.classList.add("importe-ingreso")
+        } else if(movimiento.tipo === "gasto"){
+            celdaImporte.textContent = "-" + movimiento.importe.toFixed(2) + " €"
+            celdaImporte.classList.add("importe-gasto")
+        }
+
+        // append añade al contenedor lo que indiquemos en los parentesis
+        fila.append(celdaConcepto)
+        fila.append(celdaCategoria)
+        fila.append(celdaFecha)
+        fila.append(celdaImporte)
+
+        cuerpoTabla.append(fila)
+    }
+}
+
 comprobarServidor()
 probarEnvio()
+mostrarMovimientos()
