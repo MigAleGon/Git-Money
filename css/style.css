@@ -408,7 +408,15 @@ main{
 
 .tabla-movimientos td:last-child{
     white-space: nowrap;
+    position: relative;
 }
+
+.tabla-movimientos td:last-child :hover{
+    white-space: nowrap;
+    position: relative;
+    opacity: 0;
+}
+
 
 .tabla-movimientos td.celda-vacia{
     text-align: center;
@@ -422,6 +430,25 @@ main{
 .importe-gasto{
     color: var(--red);
     font-weight: 600;
+}
+
+.tabla-movimientos span{
+    position: absolute;
+    opacity: 0;
+}
+
+.tabla-movimientos span:hover{
+    opacity: 100%;
+}
+
+.boton-tabla{
+    background-color: var(--white);
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font: inherit;
+    cursor: pointer;
 }
 
 /*CONFIG FOOTER*/

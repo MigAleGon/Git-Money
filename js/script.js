@@ -264,15 +264,34 @@ for (const boton of botonesFiltros){
 
 // AÑADE MOVIMIENTOS A LA TABLA
 function mostrarMovimientos(){
-    cuerpoTabla.replaceChildren()
+    //cuerpoTabla.replaceChildren()
 
-    for(const movimiento of movimientos){
+    let movimientosCopia = movimientos.slice()
+
+    movimientosCopia.sort(function(a, b) {
+        const fechaHoraA = a.fecha + "T" + a.hora
+        const fechaHoraB = b.fecha + "T" + b.hora
+
+        if(fechaHoraA > fechaHoraB) {
+            return -1
+        } else if(fechaHoraA < fechaHoraB) {
+            return 1
+        } else {
+            return 0
+        }
+    })
+
+    for(const movimiento of movimientosCopia){
         if(datosFiltro === "todos" || datosFiltro === movimiento.tipo){
             const fila = document.createElement("tr") //crea un elemento HTML
+            const botonesContenedor = document.createElement("span")
             const celdaConcepto = document.createElement("td")
             const celdaCategoria = document.createElement("td")
             const celdaFecha = document.createElement("td")
+            const celdaHora = document.createElement("td")
             const celdaImporte = document.createElement("td")
+            const botonEditar = document.createElement("button")
+            const botonBorrar = document.createElement("button")
             
             const partesFecha = movimiento.fecha.split("-")
             const anio = partesFecha[0]
@@ -296,7 +315,13 @@ function mostrarMovimientos(){
             celdaConcepto.textContent = movimiento.concepto
             celdaCategoria.textContent = categoriaEncontrada.texto
             celdaFecha.textContent = fechaFormateada
-
+            celdaHora.textContent = movimiento.hora
+            botonEditar.textContent = "Editar"
+            botonEditar.classList.add("boton-tabla")
+            botonBorrar.textContent = "borrar"
+            botonEditar.classList.add("boton-tabla")
+            
+            
 
             if(movimiento.tipo === "ingreso"){
                 celdaImporte.textContent = "+" + movimiento.importe.toFixed(2) + " €"
@@ -308,9 +333,13 @@ function mostrarMovimientos(){
             }
 
             // append añade al contenedor lo que indiquemos en los parentesis
+            botonesContenedor.append(botonEditar)
+            botonesContenedor.append(botonBorrar)
+            celdaImporte.append(botonesContenedor)
             fila.append(celdaConcepto)
             fila.append(celdaCategoria)
             fila.append(celdaFecha)
+            fila.append(celdaHora)
             fila.append(celdaImporte)
 
             cuerpoTabla.append(fila)
@@ -323,7 +352,6 @@ function mostrarMovimientos(){
 
         celdaVacia.colSpan = 4
         celdaVacia.classList.add("celda-vacia")
-        console.log(celdaVacia.className)
         celdaVacia.textContent = "Aún no se han registrado movimientos"
 
         filaVacia.append(celdaVacia)
