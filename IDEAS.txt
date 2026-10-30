@@ -6,3 +6,7 @@ tipo análisis financiero
 meter un bucaminas
 
 añadir modo oscuro
+
+añadir y editar y eliminar movimientos
+
+permitir filtrar movimientos por fecha

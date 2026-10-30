@@ -410,6 +410,10 @@ main{
     white-space: nowrap;
 }
 
+.tabla-movimientos td.celda-vacia{
+    text-align: center;
+}
+
 .importe-ingreso{
     color: var(--green);
     font-weight: 600;

@@ -244,12 +244,21 @@ formularioMovimiento.addEventListener("submit", function(evento) {
 })
 
 // RECORRER BOTONES FILTRO
+
+let datosFiltro = "todos"
+
 for (const boton of botonesFiltros){
     boton.addEventListener("click", function() {
         for(const botonFiltro of botonesFiltros){
             botonFiltro.setAttribute("aria-pressed", "false")
         }
         boton.setAttribute("aria-pressed" , "true")
+
+        // dataset toma el valor que tengamos puesto en el atributo data
+        // de la étiqueta html
+        datosFiltro = boton.dataset.filtro
+        console.log(datosFiltro)
+        mostrarMovimientos()
     })
 }
 
@@ -258,52 +267,67 @@ function mostrarMovimientos(){
     cuerpoTabla.replaceChildren()
 
     for(const movimiento of movimientos){
-        const fila = document.createElement("tr") //crea un elemento HTML
-        const celdaConcepto = document.createElement("td")
-        const celdaCategoria = document.createElement("td")
-        const celdaFecha = document.createElement("td")
-        const celdaImporte = document.createElement("td")
-        
-        const partesFecha = movimiento.fecha.split("-")
-        const anio = partesFecha[0]
-        const mes = partesFecha[1]
-        const dia = partesFecha[2]
-        const fechaFormateada = dia + "/" + mes + "/" + anio
+        if(datosFiltro === "todos" || datosFiltro === movimiento.tipo){
+            const fila = document.createElement("tr") //crea un elemento HTML
+            const celdaConcepto = document.createElement("td")
+            const celdaCategoria = document.createElement("td")
+            const celdaFecha = document.createElement("td")
+            const celdaImporte = document.createElement("td")
+            
+            const partesFecha = movimiento.fecha.split("-")
+            const anio = partesFecha[0]
+            const mes = partesFecha[1]
+            const dia = partesFecha[2]
+            const fechaFormateada = dia + "/" + mes + "/" + anio
 
-        let categoriaEncontrada
-        if(movimiento.tipo === "ingreso"){
-            // finde busca en un array lo que le indiquemos y devuelve el primer elemento
-            // que cumple con la condición
-            categoriaEncontrada = categoriaIngreso.find(function(valor) {
-                return valor.valor === movimiento.categoria
-            })
-        } else if(movimiento.tipo === "gasto"){
-            categoriaEncontrada = categoriaGasto.find(function(valor){
-                return valor.valor === movimiento.categoria
-            })
-        }
+            let categoriaEncontrada
+            if(movimiento.tipo === "ingreso"){
+                // finde busca en un array lo que le indiquemos y devuelve el primer elemento
+                // que cumple con la condición
+                categoriaEncontrada = categoriaIngreso.find(function(valor) {
+                    return valor.valor === movimiento.categoria
+                })
+            } else if(movimiento.tipo === "gasto"){
+                categoriaEncontrada = categoriaGasto.find(function(valor){
+                    return valor.valor === movimiento.categoria
+                })
+            }
 
-        celdaConcepto.textContent = movimiento.concepto
-        celdaCategoria.textContent = categoriaEncontrada.texto
-        celdaFecha.textContent = fechaFormateada
+            celdaConcepto.textContent = movimiento.concepto
+            celdaCategoria.textContent = categoriaEncontrada.texto
+            celdaFecha.textContent = fechaFormateada
 
 
-        if(movimiento.tipo === "ingreso"){
-            celdaImporte.textContent = "+" + movimiento.importe.toFixed(2) + " €"
-            // classList.add() le añade una clase a el objeto html que indiquemos
-            celdaImporte.classList.add("importe-ingreso")
-        } else if(movimiento.tipo === "gasto"){
-            celdaImporte.textContent = "-" + movimiento.importe.toFixed(2) + " €"
-            celdaImporte.classList.add("importe-gasto")
-        }
+            if(movimiento.tipo === "ingreso"){
+                celdaImporte.textContent = "+" + movimiento.importe.toFixed(2) + " €"
+                // classList.add() le añade una clase a el objeto html que indiquemos
+                celdaImporte.classList.add("importe-ingreso")
+            } else if(movimiento.tipo === "gasto"){
+                celdaImporte.textContent = "-" + movimiento.importe.toFixed(2) + " €"
+                celdaImporte.classList.add("importe-gasto")
+            }
 
-        // append añade al contenedor lo que indiquemos en los parentesis
-        fila.append(celdaConcepto)
-        fila.append(celdaCategoria)
-        fila.append(celdaFecha)
-        fila.append(celdaImporte)
+            // append añade al contenedor lo que indiquemos en los parentesis
+            fila.append(celdaConcepto)
+            fila.append(celdaCategoria)
+            fila.append(celdaFecha)
+            fila.append(celdaImporte)
 
-        cuerpoTabla.append(fila)
+            cuerpoTabla.append(fila)
+        }   
+    }
+
+    if(cuerpoTabla.children.length === 0){
+        const filaVacia = document.createElement("tr")
+        const celdaVacia = document.createElement("td")
+
+        celdaVacia.colSpan = 4
+        celdaVacia.classList.add("celda-vacia")
+        console.log(celdaVacia.className)
+        celdaVacia.textContent = "Aún no se han registrado movimientos"
+
+        filaVacia.append(celdaVacia)
+        cuerpoTabla.append(filaVacia)
     }
 }
 
