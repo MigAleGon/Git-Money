@@ -264,7 +264,7 @@ for (const boton of botonesFiltros){
 
 // AÑADE MOVIMIENTOS A LA TABLA
 function mostrarMovimientos(){
-    //cuerpoTabla.replaceChildren()
+    cuerpoTabla.replaceChildren()
 
     let movimientosCopia = movimientos.slice()
 
@@ -358,6 +358,8 @@ function mostrarMovimientos(){
         cuerpoTabla.append(filaVacia)
     }
 }
+
+
 
 comprobarServidor()
 probarEnvio()

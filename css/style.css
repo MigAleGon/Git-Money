@@ -422,6 +422,10 @@ main{
     text-align: center;
 }
 
+.tabla-movimientos td.mensaje-vacio {
+    text-align: center;
+}
+
 .importe-ingreso{
     color: var(--green);
     font-weight: 600;
