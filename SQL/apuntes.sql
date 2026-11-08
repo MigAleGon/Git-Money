@@ -1,3 +1,5 @@
+-- NO EJECUTAR ESTE CÓDIGO --
+
 /*
 SELECT permite consultar información
 version() devuelve la versión del PostgreSQL
@@ -18,3 +20,21 @@ CREATE TABLE movimientos (
 	concepto VARCHAR(100) NOT NULL,
 	importe NUMERIC (12, 2)
 );
+
+-- ALTER TABLE PERMITE MODIFICAR
+-- CAMPOS DE LA TABLA
+
+ALTER TABLE movimientos
+ALTER COLUMN importe SET NOT NULL;
+
+-- así se añaden valores al atributo
+INSERT INTO usuario (nombre,
+	correoElectronico,
+	hashContrasenia,
+	apellidos)
+VALUES ('Miguel',
+	'percha@gmail.com',
+	'aaa', 'Aleman');
+
+-- Para ver la tabla
+SELECT * FROM USUARIO

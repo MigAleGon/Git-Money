@@ -30,7 +30,7 @@ async function comprobarServidor() {
     try{
         // await espera una respuesta del servidor
         // fetch hace la petición al servidor
-        const respuesta = await fetch("estado.php")
+        const respuesta = await fetch("php/estado.php")
         // .ok indica si el servidor respondió exitosamente
         if (!respuesta.ok){
             // Crea un mensaje de error personalizado
@@ -49,7 +49,7 @@ async function probarEnvio() {
             "concepto": "Prueba ingreso",
             "importe": 25
         }
-        const respuesta = await fetch("guardar-movimiento.php", {
+        const respuesta = await fetch("php/guardar-movimiento.php", {
             method: "POST", // Indica al PHP que el método será POST
             headers: {"Content-Type": "application/json"}, // Indica el encabezado del php
             body: JSON.stringify(movimientoPrueba) // convierte el objeto en json
