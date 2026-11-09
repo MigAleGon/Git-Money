@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $puerto = "5432";
-$baseDatos = "git_money";
+$baseDatos = "git_money_pruebas";
 $usuario = "postgres";
 
 // para conectar con PDO (herramienta para trabajar con otras bbdd)

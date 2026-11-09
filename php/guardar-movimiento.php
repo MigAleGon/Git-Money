@@ -31,17 +31,86 @@ if (json_last_error() !== JSON_ERROR_NONE){
     echo json_encode($mensaje);
     exit;
 }
-if (!isset($datos["concepto"], $datos["importe"])) {
+if (!isset($datos["concepto"], $datos["importe"], $datos["categoria"], $datos["fecha"], $datos["hora"], $datos["tipo"])) {
+    http_response_code(400);
+    $mensaje = ["mensaje" => "Faltan datos"];
+    echo json_encode($mensaje);
+    exit;
+}
+if(!is_numeric($datos["importe"]) || $datos["importe"] <= 0){
     http_response_code(400);
     $mensaje = ["mensaje" => "Los datos introducidos son incorrectos"];
     echo json_encode($mensaje);
     exit;
 }
-$respuesta = [
-    "metodo" => $_SERVER["REQUEST_METHOD"],
-    "conceptoRecibido" => $datos["concepto"],
-    "importeRecibido" => $datos["importe"]
-];
+if($datos["tipo"] !== "ingreso" && $datos["tipo"] !== "gasto"){
+    http_response_code(400);
+    $mensaje = ["mensaje" => "El movimiento no tiene un tipo válido"];
+    echo json_encode($mensaje);
+    exit;
+}
+if(!is_string($datos["concepto"]) || trim($datos["concepto"]) === ""){
+    http_response_code(400);
+    $mensaje = ["mensaje" => "El concepto no es válido"];
+    echo json_encode($mensaje);
+    exit;
+}
+
+try {
+    require_once __DIR__ . "/conexion.php";
+
+    $IDCuenta = 1;
+    $IDUsuario = 1;
+
+    if ($datos["tipo"] === "ingreso") {
+        $procedencia = "prueba";
+        $medioPago = null;
+    } else {
+        $medioPago = "efectivo";
+        $procedencia = null;
+    }
+    
+    // comando para insertar filas en sql
+    $sql = "INSERT INTO movimiento (concepto, importe, fecha, hora, nota, procedencia, medioPago, tipo, IDCuenta, IDCategoria, IDUsuario)
+            VALUES (:concepto, :importe, :fecha, :hora, :nota, :procedencia, :medioPago, :tipo, :IDCuenta, :IDCategoria, :IDUsuario)";
+    // prepara la conexion con la bd
+    $consulta = $conexion->prepare($sql);
+
+    // ejecuta el comando en sql
+    $consulta->execute([
+        "concepto" => trim($datos["concepto"]),
+        "importe" => $datos["importe"],
+        "fecha" => $datos["fecha"],
+        "hora" => $datos["hora"],
+        "nota" => $datos["notas"] ?? null,
+        "procedencia" => $procedencia,
+        "medioPago" => $medioPago,
+        "tipo" => $datos["tipo"],
+        "IDCuenta" => $IDCuenta,
+        "IDCategoria" => $datos["categoria"],
+        "IDUsuario" => $IDUsuario
+    ]);
+
+
+    $respuesta = [
+        "metodo" => $_SERVER["REQUEST_METHOD"],
+        "conceptoRecibido" => $datos["concepto"],
+        "importeRecibido" => $datos["importe"],
+        "procedencia" => $procedencia,
+        "medioPago" => $medioPago,
+        "idCuenta" => $IDCuenta,
+        "idUsuario" => $IDUsuario
+    ];
+} catch (Throwable $error) {
+    error_log($error->getMessage());
+    http_response_code(500);
+    $respuesta = [
+        "correcto" => false,
+        "mensaje" => "No se ha podido enviar los datos al servidor"
+    ];
+}
+
+
 
 
 

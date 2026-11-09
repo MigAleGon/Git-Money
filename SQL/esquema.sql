@@ -18,20 +18,22 @@ CREATE TABLE cuenta (
 CREATE TABLE categoria (
 	id SERIAL PRIMARY KEY,
 	nombre VARCHAR(50) NOT NULL,
+	tipo VARCHAR(7) NOT NULL,
 	IDUsuario INTEGER NOT NULL REFERENCES usuario(id),
-	UNIQUE (id, IDUsuario)
+	UNIQUE (id, IDUsuario),
+	CHECK (tipo IN ('ingreso', 'gasto'))
 );
 
 CREATE TABLE movimiento (
 	id SERIAL PRIMARY KEY,
-	tipo VARCHAR(7) NOT NULL,
+	concepto VARCHAR(200) NOT NULL,
+	importe DECIMAL(12, 2) NOT NULL CHECK(importe > 0),
 	fecha DATE NOT NULL,
 	hora TIME NOT NULL,
-	importe DECIMAL(12, 2) NOT NULL CHECK(importe > 0),
-	concepto VARCHAR(200) NOT NULL,
 	nota VARCHAR(500),
 	procedencia VARCHAR(50),
 	medioPago VARCHAR(100),
+	tipo VARCHAR(7) NOT NULL,
 	IDCuenta INTEGER NOT NULL REFERENCES cuenta(id),
 	IDCategoria INTEGER NOT NULL REFERENCES categoria(id),
 	IDUsuario INTEGER NOT NULL,

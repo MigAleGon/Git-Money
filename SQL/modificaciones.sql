@@ -21,7 +21,7 @@ ADD CONSTRAINT cuenta_id_usuario_unique
 UNIQUE (id, IDUsuario);
 
 ALTER TABLE categoria
-ADD CONSTRAINT categoria_id_usuario_unique
+ADD COLUMN tipo VARCHAR(7)
 UNIQUE (id, IDUsuario);
 
 ALTER TABLE movimiento
@@ -33,3 +33,9 @@ ALTER TABLE movimiento
 ADD CONSTRAINT movimiento_categoria_usuario_fk
 FOREIGN KEY (IDCategoria, IDUsuario)
 REFERENCES categoria (id, IDUsuario);
+
+UPDATE categoria
+SET tipo = ''
+
+INSERT INTO categoria(nombre, IDUsuario, tipo)
+VALUES ('Nómina', 1, 'ingreso')

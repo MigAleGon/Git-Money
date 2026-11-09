@@ -4,13 +4,14 @@
 header("Content-Type: application/json; charset=utf-8");
 
 try {
+    // require_one carga otro archivo php una única vez
     require_once __DIR__ . "/conexion.php";
     $respuesta = [ 
         "correcto" => true,
         "mensaje" => "PHP conectado con Git Money"
     ];
 } catch (Throwable $error) {
-    //getMessage() obtiene el motivo concreto del fallo
+    // getMessage() obtiene el motivo concreto del fallo
     //  y error_log() lo escribe en la terminal donde
     //  está funcionando el servidor.
     error_log($error->getMessage());

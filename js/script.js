@@ -38,21 +38,44 @@ async function comprobarServidor() {
         } 
         // .json() lee el cuerpo del php y lo interpreta como json
         const datos = await respuesta.json()
-        console.log(datos.mensaje)
     // catch se ejecuta si el try dio error
     } catch(error){console.log(error.message)}
 }
 
-async function probarEnvio() {
-    try{
-        const movimientoPrueba = {
-            "concepto": "Prueba ingreso",
-            "importe": 25
+let categorias = []
+
+async function cargarCategorias() {
+    try {
+        const respuesta = await fetch("php/listar-categorias.php")
+        
+        if(!respuesta.ok){
+            throw new Error("No se ha podido conectar con el servidor")
         }
+
+        categorias = await respuesta.json()
+    } catch(error){console.log(error.message)}
+}
+
+async function cargarMovimientos() {
+    try {
+        const respuesta = await fetch("php/listar-movimientos.php")
+
+        if(!respuesta.ok){
+            throw new Error("No se ha podido conectar con el servidor")
+        }
+
+        const datos = await respuesta.json()
+        movimientos = datos
+        console.log(datos)
+    } catch(error){console.log(error.message)}
+}
+
+async function enviarMovimiento(movimiento) {
+    try{
         const respuesta = await fetch("php/guardar-movimiento.php", {
             method: "POST", // Indica al PHP que el método será POST
             headers: {"Content-Type": "application/json"}, // Indica el encabezado del php
-            body: JSON.stringify(movimientoPrueba) // convierte el objeto en json
+            body: JSON.stringify(movimiento) // convierte el objeto en json
         })
         
         if(!respuesta.ok){
@@ -60,7 +83,7 @@ async function probarEnvio() {
         }
 
         const datos = await respuesta.json()
-        console.log(datos.metodo)
+        console.log(datos)
 
     } catch (error){console.log(error.message)}
 }
@@ -110,18 +133,14 @@ function abrirVentana(textoTitulo, tipo) {
 
     categoriaMovimiento.replaceChildren() // Elimina las opciones por defecto
     const opcionDef = new Option("Selecciona una categoría", "") // crea una nueva opcion
-
-    let categoriasDisponibles
-    
     categoriaMovimiento.add(opcionDef)
-    if(tipo === "ingreso"){
-        categoriasDisponibles = categoriaIngreso
-    } else{
-        categoriasDisponibles = categoriaGasto
-    }
 
+    const categoriasDisponibles = categorias.filter(function(categoria) {
+        // devuelve true cuando el tipo de la categoria es el mismo que el de la ventana
+        return categoria.tipo === tipo
+    })
     for(const categoria of categoriasDisponibles){
-        const opcion = new Option(categoria.texto, categoria.valor)
+        const opcion = new Option(categoria.nombre, categoria.id)
         categoriaMovimiento.add(opcion)
     }
 
@@ -209,7 +228,7 @@ document.addEventListener("click", function(evento) {
 })
 
 // GUARDAR VALORES DEL MOVIMIENTO
-const movimientos = []
+let movimientos = []
 
 formularioMovimiento.addEventListener("submit", function(evento) {
     evento.preventDefault()
@@ -234,6 +253,8 @@ formularioMovimiento.addEventListener("submit", function(evento) {
         notas: notasValor,
         tipo: tipoMovimiento
     }
+    enviarMovimiento(movimiento)
+
     // Push añade el elemento al array
     movimientos.push(movimiento)
 
@@ -257,7 +278,6 @@ for (const boton of botonesFiltros){
         // dataset toma el valor que tengamos puesto en el atributo data
         // de la étiqueta html
         datosFiltro = boton.dataset.filtro
-        console.log(datosFiltro)
         mostrarMovimientos()
     })
 }
@@ -299,21 +319,12 @@ function mostrarMovimientos(){
             const dia = partesFecha[2]
             const fechaFormateada = dia + "/" + mes + "/" + anio
 
-            let categoriaEncontrada
-            if(movimiento.tipo === "ingreso"){
-                // finde busca en un array lo que le indiquemos y devuelve el primer elemento
-                // que cumple con la condición
-                categoriaEncontrada = categoriaIngreso.find(function(valor) {
-                    return valor.valor === movimiento.categoria
-                })
-            } else if(movimiento.tipo === "gasto"){
-                categoriaEncontrada = categoriaGasto.find(function(valor){
-                    return valor.valor === movimiento.categoria
-                })
-            }
+            let categoriaEncontrada = categorias.find(function(categoria){
+                return String(categoria.id) === movimiento.categoria
+            })
 
             celdaConcepto.textContent = movimiento.concepto
-            celdaCategoria.textContent = categoriaEncontrada.texto
+            celdaCategoria.textContent = categoriaEncontrada.nombre
             celdaFecha.textContent = fechaFormateada
             celdaHora.textContent = movimiento.hora
             botonEditar.textContent = "Editar"
@@ -362,5 +373,6 @@ function mostrarMovimientos(){
 
 
 comprobarServidor()
-probarEnvio()
 mostrarMovimientos()
+cargarCategorias()
+cargarMovimientos()
