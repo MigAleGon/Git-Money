@@ -9,8 +9,8 @@ Revisión inicial: 10 de noviembre de 2026. Basada en los archivos del proyecto;
 Estos seis objetivos definen el alcance prioritario. Los objetivos secundarios no amplían los requisitos de esta primera versión. Si alguna tarea secundaria es necesaria para completar un objetivo principal, se abordará como parte de ese objetivo.
 
 - [ ] Registrar ingresos y gastos en PostgreSQL.
-- [ ] Recuperar los movimientos correctamente al recargar la página.
-- [ ] Mostrar categorías, ingresos, gastos y balance.
+- [x] Recuperar los movimientos correctamente al recargar la página. Carga desde PostgreSQL confirmada por el usuario en el navegador el 10 de noviembre de 2026; no se han verificado los casos de error.
+- [x] Mostrar categorías, ingresos, gastos y balance. El usuario confirma la carga correcta de movimientos y la coincidencia de las tarjetas con los datos guardados el 10 de noviembre de 2026. No se han comprobado los casos de error.
 - [ ] Editar y eliminar movimientos.
 - [ ] Filtrar movimientos por tipo y por fechas.
 - [ ] Tener una interfaz usable y mensajes claros cuando algo falle.
@@ -21,13 +21,14 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 
 ### 1. Sincronización de la interfaz y persistencia
 
-- [ ] Mostrar movimientos y recalcular tarjetas después de cargar los datos del servidor.
-- [ ] Coordinar la carga de categorías y movimientos antes de dibujar la tabla.
-- [ ] Normalizar importes e identificadores recibidos para evitar errores de cálculo, formato y comparación.
+- [x] Mostrar movimientos y recalcular tarjetas después de cargar los datos del servidor. Verificado por el usuario en el navegador el 10 de noviembre de 2026.
+- [x] Coordinar la carga de categorías y movimientos antes de dibujar la tabla. iniciarPagina() espera ambas cargas en orden; el usuario confirma que los movimientos se muestran correctamente al recargar.
+- [x] Normalizar importes e identificadores recibidos para evitar errores de cálculo, formato y comparación. Revisado en cargarMovimientos(): importe con Number() y categoría con String(). El usuario confirma la carga de movimientos y los totales de las tarjetas en el navegador.
 - [ ] Gestionar categorías no encontradas sin interrumpir el dibujado de la tabla.
-- [ ] Esperar la confirmación del guardado antes de añadir el movimiento a la interfaz y cerrar el formulario.
+- [x] Esperar la confirmación del guardado antes de añadir el movimiento a la interfaz y cerrar el formulario. El usuario confirma las pruebas de guardado correcto y servidor detenido el 10 de noviembre de 2026: si falla, se conserva el formulario y no se añade la fila.
 - [ ] Devolver y conservar el ID del movimiento creado.
-- [ ] Mostrar errores de carga y guardado en pantalla, conservar el formulario si falla y evitar envíos repetidos durante la petición.
+- [ ] Mostrar errores de carga y guardado en pantalla, conservar el formulario si falla y evitar envíos repetidos durante la petición. El usuario confirma el aviso de fallo de guardado, la conservación del formulario y la disponibilidad del botón para reintentar. Revisado el bloqueo con disabled durante el envío; pendientes los errores de carga y una prueba específica de envíos repetidos con respuesta lenta.
+- [x] Mantener el formato HH:mm de la hora antes y después de recargar. cargarMovimientos() aplica slice(0, 5); corrección confirmada por el usuario el 10 de noviembre de 2026.
 
 ### 2. Gestión de movimientos
 

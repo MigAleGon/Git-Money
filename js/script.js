@@ -49,6 +49,11 @@ async function cargarMovimientos() {
 
         const datos = await respuesta.json()
         movimientos = datos
+        for (const movimiento of movimientos){
+            movimiento.importe = Number(movimiento.importe)
+            movimiento.categoria = String(movimiento.categoria)
+            movimiento.hora = movimiento.hora.slice(0, 5)
+        }
         console.log(datos)
     } catch(error){console.log(error.message)}
 }
@@ -68,7 +73,12 @@ async function enviarMovimiento(movimiento) {
 
         const datos = await respuesta.json()
         console.log(datos)
-    } catch (error){console.log(error.message)}
+
+        return true
+    } catch (error){
+        console.log(error.message)
+        return false
+    }
 }
 
 // Reutiliza el formulario para ingresos y gastos, reiniciando sus valores.
@@ -183,8 +193,13 @@ document.addEventListener("click", function(evento) {
 */
 
 // Recoge el formulario, envía los datos y actualiza la vista local.
-formularioMovimiento.addEventListener("submit", function(evento) {
+formularioMovimiento.addEventListener("submit", async function(evento) {
     evento.preventDefault()
+    
+    if(botonGuardar.disabled === true){
+        return
+    }
+
     const conceptoValor = concepto.value.trim()
     const importeValor = Number(importe.value)
     const categoriaValor = categoriaMovimiento.value
@@ -206,7 +221,16 @@ formularioMovimiento.addEventListener("submit", function(evento) {
         notas: notasValor,
         tipo: tipoMovimiento
     }
-    enviarMovimiento(movimiento)
+    botonGuardar.disabled = true
+
+    const guardado = await enviarMovimiento(movimiento)
+
+    botonGuardar.disabled = false
+
+    if(guardado === false){
+        alert("El movimiento no se pudo guardar")
+        return
+    }
 
     movimientos.push(movimiento)
 
@@ -318,6 +342,13 @@ function mostrarMovimientos(){
 }
 
 // Dibuja el estado inicial e inicia las peticiones de datos.
-mostrarMovimientos()
-cargarCategorias()
-cargarMovimientos()
+
+async function iniciarPagina(){
+    await cargarCategorias()
+    await cargarMovimientos()
+    mostrarMovimientos()
+    calcularMovimiento()
+}
+
+
+iniciarPagina()
