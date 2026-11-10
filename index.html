@@ -207,6 +207,23 @@
                 <select id="categoria-movimiento" name="categoria" required>
                 </select>
             </p>
+
+            <p id="campo-procedencia">
+                <label for="procedencia">Procedencia:</label>
+                <input id="procedencia" name="procedencia" type="text">
+            </p>
+
+            <p id="campo-medio-pago">
+                <label for="medioPago">Medio de pago:</label>
+                <select id="medioPago" name="medioPago">
+                    <option value="">Selecciona un medio de pago</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="tarjeta">Tarjeta</option>
+                    <option value="transferencia">Transferencia</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </p>
+
             <div class="fecha-hora">
                 <div>
                     <p>
@@ -221,6 +238,7 @@
                     </p>
                 </div>
             </div>
+            
             <p>
                 <label for="notas">Notas (opcional)</label>
                 <textarea id="notas" name="notas" rows="3" maxlength="500"></textarea>

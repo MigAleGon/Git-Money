@@ -47,7 +47,24 @@ if(!is_string($datos["concepto"]) || trim($datos["concepto"]) === ""){
     echo json_encode($mensaje);
     exit;
 }
-
+if($datos["tipo"] === "ingreso"){
+    if(!isset($datos["procedencia"]) || !is_string($datos["procedencia"]) || trim($datos["procedencia"]) === ""){
+        http_response_code(400);
+        $mensaje = ["mensaje" => "La procedencia no es válido"];
+        echo json_encode($mensaje);
+        exit;
+    }
+}
+if($datos["tipo"] === "gasto"){
+    // in_array($variable, [arrayobjetivo], true)
+    // revisa que en el array que le hemos indicado exista algun elemento del array objetivo, sí cumple la condición devuelve true
+    if(!isset($datos["medioPago"]) || !in_array($datos["medioPago"]), ["efectivo", "tarjeta", "transferencia", "otro"], true){
+        http_response_code(400);
+        $mensaje = ["mensaje" => "El medio de pago no es válido"];
+        echo json_encode($mensaje);
+        exit;
+    }
+}
 try {
     require_once __DIR__ . "/conexion.php";
 
@@ -65,7 +82,8 @@ try {
     }
 
     $sql = "INSERT INTO movimiento (concepto, importe, fecha, hora, nota, procedencia, medioPago, tipo, IDCuenta, IDCategoria, IDUsuario)
-            VALUES (:concepto, :importe, :fecha, :hora, :nota, :procedencia, :medioPago, :tipo, :IDCuenta, :IDCategoria, :IDUsuario)";
+            VALUES (:concepto, :importe, :fecha, :hora, :nota, :procedencia, :medioPago, :tipo, :IDCuenta, :IDCategoria, :IDUsuario)
+            RETURNING id";
 
     // Vincula los datos a parámetros para no concatenarlos en la consulta SQL.
     $consulta = $conexion->prepare($sql);
@@ -84,8 +102,12 @@ try {
         "IDUsuario" => $IDUsuario
     ]);
 
+    // obtiene el valor de la primera columna que devuelve el resultado
+    $idMovimiento = $consulta->fetchColumn();
+
     $respuesta = [
         "metodo" => $_SERVER["REQUEST_METHOD"],
+        "id" => $idMovimiento,
         "conceptoRecibido" => $datos["concepto"],
         "importeRecibido" => $datos["importe"],
         "procedencia" => $procedencia,

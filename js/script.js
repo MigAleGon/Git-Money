@@ -8,6 +8,10 @@ const botonesFiltros = document.querySelectorAll(".btn-filtro")
 const dialogoMovimiento = document.getElementById("dialogo-movimiento")
 const tituloMovimiento = document.getElementById("titulo-movimiento")
 const formularioMovimiento = document.getElementById("formulario-movimiento")
+const campoProcedencia = document.getElementById("campo-procedencia")
+const procedencia = document.getElementById("procedencia")
+const campoMedioPago = document.getElementById("campo-medio-pago")
+const medioPago = document.getElementById("medioPago")
 const fecha = document.getElementById("fecha")
 const hora = document.getElementById("hora")
 const categoriaMovimiento = document.getElementById("categoria-movimiento")
@@ -54,7 +58,6 @@ async function cargarMovimientos() {
             movimiento.categoria = String(movimiento.categoria)
             movimiento.hora = movimiento.hora.slice(0, 5)
         }
-        console.log(datos)
     } catch(error){console.log(error.message)}
 }
 
@@ -74,7 +77,7 @@ async function enviarMovimiento(movimiento) {
         const datos = await respuesta.json()
         console.log(datos)
 
-        return true
+        return datos
     } catch (error){
         console.log(error.message)
         return false
@@ -87,6 +90,22 @@ function abrirVentana(textoTitulo, tipo) {
     formularioMovimiento.reset()
 
     dialogoMovimiento.setAttribute("data-tipo", tipo)
+
+    if (tipo === "ingreso") {
+        campoProcedencia.hidden = false
+        procedencia.disabled = false
+        procedencia.required = true
+        campoMedioPago.hidden = true
+        medioPago.disabled = true
+        medioPago.required = false
+    } else if (tipo === "gasto") {
+        campoProcedencia.hidden = true
+        procedencia.disabled = true
+        procedencia.required = false
+        campoMedioPago.hidden = false
+        medioPago.disabled = false
+        medioPago.required = true
+    }
 
     // Usa la fecha y hora locales para rellenar los campos del formulario.
     const ahora = new Date()
@@ -206,10 +225,20 @@ formularioMovimiento.addEventListener("submit", async function(evento) {
     const fechaValor = fecha.value
     const horaValor = hora.value
     const notasValor = notas.value
+    let procedenciaValor
+    let medioPagoValor
 
     if(conceptoValor === "") {
         alert("El concepto no puede estar vacío.")
         return
+    }
+
+    if (tipoMovimiento === "ingreso") {
+        procedenciaValor = procedencia.value.trim()
+        medioPagoValor = null
+    } else if (tipoMovimiento === "gasto") {
+        procedenciaValor = null
+        medioPagoValor = medioPago.value
     }
 
     const movimiento = {
@@ -218,6 +247,8 @@ formularioMovimiento.addEventListener("submit", async function(evento) {
         categoria: categoriaValor,
         fecha: fechaValor,
         hora: horaValor,
+        procedencia: procedenciaValor,
+        medioPago: medioPagoValor,
         notas: notasValor,
         tipo: tipoMovimiento
     }
@@ -231,6 +262,8 @@ formularioMovimiento.addEventListener("submit", async function(evento) {
         alert("El movimiento no se pudo guardar")
         return
     }
+
+    movimiento.id = guardado.id
 
     movimientos.push(movimiento)
 
