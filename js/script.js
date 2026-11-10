@@ -1,14 +1,10 @@
-// variables constantes que detectan el 
-// elemento con ese id en el HTML(document)
-
+// Referencias a los elementos de la interfaz.
 const botonIngreso = document.getElementById("btn-ingreso")
 const botonGasto = document.getElementById("btn-gasto")
 const botonCerrar = document.getElementById("btn-cerrar")
 const botonGuardar = document.getElementById("btn-guardar")
 const botonesFiltros = document.querySelectorAll(".btn-filtro")
-const botonUsuario = document.getElementById("boton-usuario")
-const panelUsuario = document.getElementById("panel-usuario")
-const menuUsuario = document.querySelector(".usuario-menu") // guarda el primer elemento con dicha clase y lo que contiene
+
 const dialogoMovimiento = document.getElementById("dialogo-movimiento")
 const tituloMovimiento = document.getElementById("titulo-movimiento")
 const formularioMovimiento = document.getElementById("formulario-movimiento")
@@ -23,31 +19,17 @@ const tarjetaIngresos = document.getElementById("tarjeta-ingresos")
 const tarjetaGastos = document.getElementById("tarjeta-gastos")
 const cuerpoTabla = document.querySelector("tbody")
 
-// función asincrona, como una normal pero 
-// permite usar await
-async function comprobarServidor() {
-    // try y catch sirve para tener los errores controlados
-    try{
-        // await espera una respuesta del servidor
-        // fetch hace la petición al servidor
-        const respuesta = await fetch("php/estado.php")
-        // .ok indica si el servidor respondió exitosamente
-        if (!respuesta.ok){
-            // Crea un mensaje de error personalizado
-            throw new Error("No se ha podido conectar con el servidor")
-        } 
-        // .json() lee el cuerpo del php y lo interpreta como json
-        const datos = await respuesta.json()
-    // catch se ejecuta si el try dio error
-    } catch(error){console.log(error.message)}
-}
-
+// Datos del servidor y selección actual de la interfaz.
 let categorias = []
+let movimientos = []
+let tipoMovimiento
+let datosFiltro = "todos"
 
+// Carga las categorías que utiliza el formulario y la tabla.
 async function cargarCategorias() {
     try {
         const respuesta = await fetch("php/listar-categorias.php")
-        
+
         if(!respuesta.ok){
             throw new Error("No se ha podido conectar con el servidor")
         }
@@ -56,6 +38,7 @@ async function cargarCategorias() {
     } catch(error){console.log(error.message)}
 }
 
+// Recupera los movimientos guardados y sustituye la lista en memoria.
 async function cargarMovimientos() {
     try {
         const respuesta = await fetch("php/listar-movimientos.php")
@@ -70,73 +53,52 @@ async function cargarMovimientos() {
     } catch(error){console.log(error.message)}
 }
 
+// Envía el movimiento al servidor en formato JSON.
 async function enviarMovimiento(movimiento) {
     try{
         const respuesta = await fetch("php/guardar-movimiento.php", {
-            method: "POST", // Indica al PHP que el método será POST
-            headers: {"Content-Type": "application/json"}, // Indica el encabezado del php
-            body: JSON.stringify(movimiento) // convierte el objeto en json
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(movimiento)
         })
-        
+
         if(!respuesta.ok){
-            throw new Error("La prueba del envío fallo exitosamente")
+            throw new Error("La prueba del envío ha fallado.")
         }
 
         const datos = await respuesta.json()
         console.log(datos)
-
     } catch (error){console.log(error.message)}
 }
 
-// DISTINCIÓN DE VENTANAS DE BOTONES
-// objetos de categorías
-const categoriaIngreso = [{texto: "Nómina", valor: "nomina"},
-                          {texto: "Bizum", valor: "bizum"},
-                          {texto: "Transacción", valor: "transaccion"},
-                          {texto: "Venta", valor: "venta"},
-                          {texto: "Regalo", valor: "regalo"}]
-const categoriaGasto = [{texto: "Alimentación", valor: "alimentacion"},
-                         {texto: "Alquiler", valor: "alquiler"},
-                         {texto: "Coche", valor: "coche"},
-                         {texto: "Adicciones", valor: "adicciones"},
-                         {texto: "Ocio", valor: "ocio"}]
-
-let tipoMovimiento // ser rellenará al apretar cualquier boton de movimiento
-
+// Reutiliza el formulario para ingresos y gastos, reiniciando sus valores.
 function abrirVentana(textoTitulo, tipo) {
     tipoMovimiento = tipo
-    formularioMovimiento.reset() //limpia el formulario al abrirlo
+    formularioMovimiento.reset()
 
     dialogoMovimiento.setAttribute("data-tipo", tipo)
 
-    //Este obtiene la fecha actual
-    const ahora = new Date() 
-    // String() convierte un int a texto
-    // getFullYear() devuelve el año actual
-    const anio = String(ahora.getFullYear()) 
-    // padStart() el primer parámetro es la cantidad de caracteres que va a tener nuestro texto como mínimo y el segundo es el relleno de este
-    // getMonth() devuelve el mes actual
-    const mes = String(ahora.getMonth() + 1).padStart(2, "0") 
-    // getDate() devuelve el día actual
+    // Usa la fecha y hora locales para rellenar los campos del formulario.
+    const ahora = new Date()
+    const anio = String(ahora.getFullYear())
+    const mes = String(ahora.getMonth() + 1).padStart(2, "0")
     const dia = String(ahora.getDate()).padStart(2, "0")
     const fechaActual = anio + "-" + mes + "-" + dia
-    
-    // getHours() devuelve la hora actual
+
     const horaNum = String(ahora.getHours()).padStart(2, "0")
-    // getMinutes() devuelve los minutos actuales
     const minutos = String(ahora.getMinutes()).padStart(2, "0")
     const horaActual = horaNum + ":" + minutos
 
-    tituloMovimiento.textContent = textoTitulo // textContent cambia el contenido del texto
-    fecha.value = fechaActual // value cambia el valor que tiene 
+    tituloMovimiento.textContent = textoTitulo
+    fecha.value = fechaActual
     hora.value = horaActual
 
-    categoriaMovimiento.replaceChildren() // Elimina las opciones por defecto
-    const opcionDef = new Option("Selecciona una categoría", "") // crea una nueva opcion
+    categoriaMovimiento.replaceChildren()
+    const opcionDef = new Option("Selecciona una categoría", "")
     categoriaMovimiento.add(opcionDef)
 
+    // Ofrece únicamente categorías del mismo tipo que el movimiento.
     const categoriasDisponibles = categorias.filter(function(categoria) {
-        // devuelve true cuando el tipo de la categoria es el mismo que el de la ventana
         return categoria.tipo === tipo
     })
     for(const categoria of categoriasDisponibles){
@@ -144,9 +106,10 @@ function abrirVentana(textoTitulo, tipo) {
         categoriaMovimiento.add(opcion)
     }
 
-    dialogoMovimiento.showModal() // muestra el contenido de <dialog>
+    dialogoMovimiento.showModal()
 }
 
+// Calcula ingresos y gastos del mes actual, y el balance de todo el historial.
 function calcularMovimiento() {
     let totalIngresos = 0
     let totalGastos = 0
@@ -154,12 +117,10 @@ function calcularMovimiento() {
     const ahora = new Date()
 
     for(const movimiento of movimientos){
-        // split divide en un array un texto y lo separa en función
-        // del caracter que le indiquemos
-        const anio = movimiento.fecha.split("-")[0] 
+        const anio = movimiento.fecha.split("-")[0]
         const mes = movimiento.fecha.split("-")[1]
 
-        if(anio === String(ahora.getFullYear()) && 
+        if(anio === String(ahora.getFullYear()) &&
            mes === String((ahora.getMonth() + 1)).padStart(2, "0")) {
             if (movimiento.tipo === "ingreso"){
                 totalIngresos += movimiento.importe
@@ -175,16 +136,12 @@ function calcularMovimiento() {
         }
     }
 
-
-    // toFixed establece el número de decimales que tendrá
-    // también lo convierte a String
     tarjetaIngresos.textContent = totalIngresos.toFixed(2) + " €"
     tarjetaGastos.textContent = totalGastos.toFixed(2) + " €"
     tarjetaBalance.textContent = totalBalance.toFixed(2) + " €"
 }
 
-// Función para detectar eventos que ocurren en el html
-
+// Apertura y cierre del formulario.
 botonIngreso.addEventListener("click", function() {
     abrirVentana("Registrar ingreso" , "ingreso")
 })
@@ -194,28 +151,25 @@ botonGasto.addEventListener("click", function() {
 })
 
 botonCerrar.addEventListener("click", function() {
-    // Cierra <dialog>
     dialogoMovimiento.close()
 })
 
+// Menú de usuario aparcado: sus elementos HTML también están comentados.
+/*
+const botonUsuario = document.getElementById("boton-usuario")
+const panelUsuario = document.getElementById("panel-usuario")
+const menuUsuario = document.querySelector(".usuario-menu")
+
 botonUsuario.addEventListener("click", function() {
     panelUsuario.hidden = !panelUsuario.hidden
-    // setAttribute modifica atributos del HTML
-    // además convierte el valor automáticamente a string
-    // para que HTML lo pueda leer
-    botonUsuario.setAttribute("aria-expanded", !panelUsuario.hidden) 
+
+    botonUsuario.setAttribute("aria-expanded", !panelUsuario.hidden)
 })
 
-// evento es un objeto que pasa el navegador con información de lo que 
-// acaba de ocurrir, en este caso sería pulsar una tecla y en el siguiente
-// el click
-// si hacemos un console.log(evento.target) podemos ver que la consola
-// devuelve el contenedor html donde se ha hecho click si el evento
-// lo que registra son clicks
-document.addEventListener("keydown", function(evento) { 
+document.addEventListener("keydown", function(evento) {
     if (evento.key === "Escape" && !panelUsuario.hidden) {
         panelUsuario.hidden = true
-        botonUsuario.setAttribute("aria-expanded", "false") 
+        botonUsuario.setAttribute("aria-expanded", "false")
         botonUsuario.focus()
     }
 })
@@ -226,10 +180,9 @@ document.addEventListener("click", function(evento) {
         botonUsuario.setAttribute("aria-expanded", "false")
     }
 })
+*/
 
-// GUARDAR VALORES DEL MOVIMIENTO
-let movimientos = []
-
+// Recoge el formulario, envía los datos y actualiza la vista local.
 formularioMovimiento.addEventListener("submit", function(evento) {
     evento.preventDefault()
     const conceptoValor = concepto.value.trim()
@@ -238,10 +191,10 @@ formularioMovimiento.addEventListener("submit", function(evento) {
     const fechaValor = fecha.value
     const horaValor = hora.value
     const notasValor = notas.value
-    
+
     if(conceptoValor === "") {
         alert("El concepto no puede estar vacío.")
-        return 
+        return
     }
 
     const movimiento = {
@@ -255,19 +208,15 @@ formularioMovimiento.addEventListener("submit", function(evento) {
     }
     enviarMovimiento(movimiento)
 
-    // Push añade el elemento al array
     movimientos.push(movimiento)
 
     calcularMovimiento()
     mostrarMovimientos()
-    
+
     dialogoMovimiento.close()
 })
 
-// RECORRER BOTONES FILTRO
-
-let datosFiltro = "todos"
-
+// Mantiene un único filtro activo y vuelve a dibujar la tabla.
 for (const boton of botonesFiltros){
     boton.addEventListener("click", function() {
         for(const botonFiltro of botonesFiltros){
@@ -275,17 +224,16 @@ for (const boton of botonesFiltros){
         }
         boton.setAttribute("aria-pressed" , "true")
 
-        // dataset toma el valor que tengamos puesto en el atributo data
-        // de la étiqueta html
         datosFiltro = boton.dataset.filtro
         mostrarMovimientos()
     })
 }
 
-// AÑADE MOVIMIENTOS A LA TABLA
+// Reconstruye la tabla según el filtro, con los movimientos más recientes primero.
 function mostrarMovimientos(){
     cuerpoTabla.replaceChildren()
 
+    // Ordena una copia para conservar el orden de la lista original.
     let movimientosCopia = movimientos.slice()
 
     movimientosCopia.sort(function(a, b) {
@@ -303,7 +251,7 @@ function mostrarMovimientos(){
 
     for(const movimiento of movimientosCopia){
         if(datosFiltro === "todos" || datosFiltro === movimiento.tipo){
-            const fila = document.createElement("tr") //crea un elemento HTML
+            const fila = document.createElement("tr")
             const botonesContenedor = document.createElement("span")
             const celdaConcepto = document.createElement("td")
             const celdaCategoria = document.createElement("td")
@@ -312,7 +260,8 @@ function mostrarMovimientos(){
             const celdaImporte = document.createElement("td")
             const botonEditar = document.createElement("button")
             const botonBorrar = document.createElement("button")
-            
+
+            // Convierte la fecha ISO (AAAA-MM-DD) al formato DD/MM/AAAA.
             const partesFecha = movimiento.fecha.split("-")
             const anio = partesFecha[0]
             const mes = partesFecha[1]
@@ -331,19 +280,16 @@ function mostrarMovimientos(){
             botonEditar.classList.add("boton-tabla")
             botonBorrar.textContent = "borrar"
             botonEditar.classList.add("boton-tabla")
-            
-            
 
             if(movimiento.tipo === "ingreso"){
                 celdaImporte.textContent = "+" + movimiento.importe.toFixed(2) + " €"
-                // classList.add() le añade una clase a el objeto html que indiquemos
+
                 celdaImporte.classList.add("importe-ingreso")
             } else if(movimiento.tipo === "gasto"){
                 celdaImporte.textContent = "-" + movimiento.importe.toFixed(2) + " €"
                 celdaImporte.classList.add("importe-gasto")
             }
 
-            // append añade al contenedor lo que indiquemos en los parentesis
             botonesContenedor.append(botonEditar)
             botonesContenedor.append(botonBorrar)
             celdaImporte.append(botonesContenedor)
@@ -354,9 +300,10 @@ function mostrarMovimientos(){
             fila.append(celdaImporte)
 
             cuerpoTabla.append(fila)
-        }   
+        }
     }
 
+    // Muestra un mensaje cuando el filtro no produce filas.
     if(cuerpoTabla.children.length === 0){
         const filaVacia = document.createElement("tr")
         const celdaVacia = document.createElement("td")
@@ -370,9 +317,7 @@ function mostrarMovimientos(){
     }
 }
 
-
-
-comprobarServidor()
+// Dibuja el estado inicial e inicia las peticiones de datos.
 mostrarMovimientos()
 cargarCategorias()
 cargarMovimientos()

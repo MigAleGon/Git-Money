@@ -10,3 +10,5 @@ añadir modo oscuro
 añadir y editar y eliminar movimientos
 
 permitir filtrar movimientos por fecha
+
+conectar con enable bank API

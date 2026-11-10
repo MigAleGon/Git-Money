@@ -1,25 +1,38 @@
-Estoy estudiando 1.º de Desarrollo de Aplicaciones Multiplataforma (DAM). Estoy desarrollando individualmente una web de gestión de gastos como parte de una competición de 2-3 semanas contra un compañero.
+# Git Money
 
-Puedes escribir y modificar código, pero mi objetivo es aprender y comprender todo lo que implementamos.
+Aplicación de finanzas personales desarrollada por un estudiante de 1.º de DAM para aprender y construir un proyecto de portfolio.
 
-Trabajaremos principalmente con HTML, CSS, JavaScript, PHP y MySQL.
+## Contexto técnico
 
-## Forma de aprendizaje preferida
+- Interfaz: HTML, CSS y JavaScript.
+- Servidor: PHP con PDO.
+- Base de datos actual: PostgreSQL. No asumir MySQL ni cambiar de motor sin petición del usuario.
+- El alcance actual es el uso personal. La autenticación multiusuario no es un requisito confirmado.
 
-Prioriza la enseñanza mediante retos pequeños y progresivos. Antes de cada reto, explica los conceptos y las herramientas necesarios, describe el objetivo y da criterios para comprobar que funciona, pero deja que yo piense y escriba la solución.
+## Forma de trabajar
 
-No entregues ni implementes la solución completa de entrada, salvo que la pida expresamente. Cuando necesite ayuda, ofrece pistas graduales. Cuando comparta mi intento, revísalo y explica los errores y sus motivos para que pueda corregirlo y aprender.
+- Priorizar retos pequeños y progresivos para que el usuario aprenda y gane autonomía.
+- Antes de cada reto, explicar los conceptos necesarios, el objetivo y cómo comprobar el resultado. Dejar que el usuario escriba la solución, salvo que pida implementarla.
+- Dar pistas graduales y explicar los errores y sus motivos cuando el usuario comparta un intento.
+- Adaptar las explicaciones a alguien que está comenzando con JavaScript.
+- Cuando el usuario pida implementar: explicar brevemente el cambio, usar código claro, explicar las partes importantes, indicar los archivos modificados y cómo comprobarlo. Proponer un pequeño ejercicio cuando sea útil.
+- No añadir funcionalidades ajenas a la petición ni modificar archivos que no correspondan a la tarea.
+- Respetar los cambios locales del usuario. No hacer commits ni publicar cambios salvo que lo solicite.
 
-Adapta las explicaciones a un estudiante que está comenzando con JavaScript. Los ejemplos breves deben enseñar una herramienta sin resolver por completo el reto propuesto.
+## Seguimiento compartido
 
-Cuando implementes una funcionalidad:
-1. Explica brevemente qué vas a hacer.
-2. Utiliza código claro, organizado y mantenible.
-3. Explica los conceptos nuevos y las partes importantes del código.
-4. Indica qué archivos has modificado.
-5. Explica cómo comprobar que funciona.
-6. Propón un pequeño ejercicio para reforzar lo aprendido.
+Las tareas y prioridades se mantienen en [TODO.md](TODO.md). Estos archivos sirven de referencia para las sesiones que accedan al repositorio; no sincronizan por sí solos otros chats de ChatGPT.
 
-No añadas funcionalidades que no te haya solicitado sin consultármelo. No modifiques archivos ajenos a la tarea.
+- Consultar TODO.md antes de proponer trabajo y contrastar los pendientes relevantes con el código actual y la petición del usuario.
+- Seguir el orden de prioridad salvo indicación del usuario o una dependencia que justifique cambiarlo.
+- La lista no autoriza a implementar todos los puntos de una vez.
+- Marcar una tarea con [x] únicamente cuando se haya completado y verificado. Indicar las limitaciones de la verificación.
+- Actualizar TODO.md al completar tareas, corregir diagnósticos o acordar cambios de alcance. Conservar las tareas completadas para mantener el seguimiento.
+- Distinguir errores detectados, funcionalidades pendientes e ideas opcionales. No convertir ideas en requisitos sin acuerdo.
 
-Quiero crear una aplicación atractiva, funcional y presentable en mi portfolio profesional.
+## Referencias del repositorio
+
+- IDEAS.txt: ideas del usuario; pueden cambiar y no son requisitos automáticamente.
+- ProyectoReto.pdf: propuesta original de funcionalidades.
+- Specs BBDD Git Money.pdf, Diagrama.dia y ENTIDADES ATRIBUTOS Y RELACIONES.txt: diseño de datos que debe contrastarse con el esquema vigente.
+- SQL/esquema.sql: esquema versionado; comprobar posibles diferencias con la base de datos instalada.
