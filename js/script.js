@@ -27,6 +27,7 @@ const cuerpoTabla = document.querySelector("tbody")
 let categorias = []
 let movimientos = []
 let tipoMovimiento
+let idMovimientoEditar = null
 let datosFiltro = "todos"
 
 // Carga las categorías que utiliza el formulario y la tabla.
@@ -106,8 +107,30 @@ async function enviarBorrado(id) {
     }
 }
 
+async function enviarEdicion(movimiento) {
+    try{
+        const respuesta = await fetch("php/editar-movimiento.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(movimiento)
+        })
+
+        if(!respuesta.ok){
+            throw new Error("La prueba del envío ha fallado.")
+        }
+
+        const datos = await respuesta.json()
+        console.log(datos)
+
+        return datos
+    } catch (error){
+        console.log(error.message)
+        return false
+    }
+}
+
 // Reutiliza el formulario para ingresos y gastos, reiniciando sus valores.
-function abrirVentana(textoTitulo, tipo) {
+function abrirVentana(textoTitulo, tipo, movimientoEditar = null) {
     tipoMovimiento = tipo
     formularioMovimiento.reset()
 
@@ -155,6 +178,24 @@ function abrirVentana(textoTitulo, tipo) {
     for(const categoria of categoriasDisponibles){
         const opcion = new Option(categoria.nombre, categoria.id)
         categoriaMovimiento.add(opcion)
+    }
+
+    if (movimientoEditar !== null) {
+        idMovimientoEditar = movimientoEditar.id
+        concepto.value = movimientoEditar.concepto
+        importe.value = movimientoEditar.importe
+        categoriaMovimiento.value = movimientoEditar.categoria
+        fecha.value = movimientoEditar.fecha
+        hora.value = movimientoEditar.hora
+        notas.value = movimientoEditar.notas ?? ""
+
+        if (tipoMovimiento === "ingreso"){
+            procedencia.value = movimientoEditar.procedencia
+        } else if (tipoMovimiento === "gasto") {
+            medioPago.value = movimientoEditar.medioPago
+        }
+    } else {
+        idMovimientoEditar = null
     }
 
     dialogoMovimiento.showModal()
@@ -274,6 +315,42 @@ formularioMovimiento.addEventListener("submit", async function(evento) {
         notas: notasValor,
         tipo: tipoMovimiento
     }
+
+    if (idMovimientoEditar !== null) {
+        movimiento.id = idMovimientoEditar
+        const enviado = await enviarEdicion(movimiento)
+
+        if (enviado === false) {
+            alert("No se ha podido editar el movimiento")
+            return
+        } else {
+            const movimientoEncontrado = movimientos.find(function(otroMovimiento) {
+                return otroMovimiento.id === enviado.id
+            })
+
+            movimientoEncontrado.concepto = enviado.concepto
+            movimientoEncontrado.importe = Number(enviado.importe)
+            movimientoEncontrado.notas = enviado.notas
+            movimientoEncontrado.fecha = enviado.fecha
+            movimientoEncontrado.hora = enviado.hora
+            movimientoEncontrado.categoria = String(enviado.categoria)
+
+            if (tipoMovimiento === "ingreso") {
+                movimientoEncontrado.procedencia = enviado.procedencia
+                movimientoEncontrado.medioPago = null
+            } else if (tipoMovimiento === "gasto") {
+                movimientoEncontrado.medioPago = enviado.medioPago
+                movimientoEncontrado.procedencia = null
+            }
+
+            calcularMovimiento()
+            mostrarMovimientos()
+            dialogoMovimiento.close()
+        }
+
+        return
+    }
+
     botonGuardar.disabled = true
 
     const guardado = await enviarMovimiento(movimiento)
@@ -395,6 +472,10 @@ function mostrarMovimientos(){
 
                 mostrarMovimientos()
                 calcularMovimiento()
+            })
+
+            botonEditar.addEventListener("click", function() {
+                abrirVentana("Editar movimiento", movimiento.tipo, movimiento)
             })
 
             if(movimiento.tipo === "ingreso"){

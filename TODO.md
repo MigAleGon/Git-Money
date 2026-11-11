@@ -11,7 +11,7 @@ Estos seis objetivos definen el alcance prioritario. Los objetivos secundarios n
 - [x] Registrar ingresos y gastos en PostgreSQL.
 - [x] Recuperar los movimientos correctamente al recargar la página. Carga desde PostgreSQL confirmada por el usuario en el navegador el 10 de noviembre de 2026; no se han verificado los casos de error.
 - [x] Mostrar categorías, ingresos, gastos y balance. El usuario confirma la carga correcta de movimientos y la coincidencia de las tarjetas con los datos guardados el 10 de noviembre de 2026. No se han comprobado los casos de error.
-- [ ] Editar y eliminar movimientos.
+- [x] Editar y eliminar movimientos.
 - [x] Filtrar movimientos por tipo.
 - [ ] Filtrar movimientos por fechas.
 - [ ] Tener una interfaz usable y mensajes claros cuando algo falle.
@@ -33,15 +33,15 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 
 ### 2. Gestión de movimientos
 
-- [ ] Implementar la edición de movimientos con persistencia en la base de datos.
+- [x] Implementar la edición de movimientos con persistencia en la base de datos. El usuario comprobó el guardado de ingresos y gastos en el navegador. Se revisó en código que el ajuste final usa los mismos valores de procedencia y medio de pago en el `UPDATE` y en la respuesta, y PHP pasó la comprobación de sintaxis.
 - [x] Implementar la eliminación con confirmación y actualización de tabla y totales. El usuario verificó el borrado en PostgreSQL, la respuesta 404 para un ID ya borrado y la actualización de la interfaz.
 - [x] Aplicar la clase compartida `boton-tabla` a Editar y Borrar. Verificado en JavaScript.
 - [x] Conectar el evento de Borrar.
-- [ ] Conectar el evento de Editar.
+- [x] Conectar el evento de Editar para abrir el formulario con los datos básicos de la fila. Comprobado por el usuario en el navegador.
 - [x] Mostrar las acciones sobre el importe al pasar el ratón por la fila. Comprobado por el usuario en el navegador.
 - [ ] Comprobar que las acciones aparecen al llegar a sus botones con Tab. El selector con `:focus-visible` ya está implementado.
-- [ ] Adaptar los botones de Editar y Borrar a móvil y pantallas táctiles (tarea secundaria).
-- [ ] Recuperar las notas para los detalles o la edición; no es necesario añadirlas a la tabla principal.
+- [ ] Adaptar los botones de Editar y Borrar a móvil y pantallas táctiles.
+- [x] Recuperar las notas guardadas para rellenar el formulario de edición. Comprobado por el usuario tras recargar la página.
 - [ ] Corregir el colSpan del estado vacío de cuatro a cinco columnas y distinguir ausencia de movimientos de ausencia de resultados del filtro.
 
 ### 3. Cuentas, categorías y validaciones

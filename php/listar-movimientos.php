@@ -7,7 +7,8 @@ try{
 
     // Consulta el usuario provisional y ordena por fecha, hora e ID descendentes.
     $resultado = $conexion->query("SELECT id, concepto, idcategoria AS categoria,
-                                          fecha, hora, importe, tipo
+                                          fecha, hora, importe, tipo, procedencia, 
+                                          nota AS notas, medioPago AS \"medioPago\"
                                    FROM movimiento
                                    WHERE idusuario = 1
                                    ORDER BY fecha DESC, hora DESC, id DESC");
