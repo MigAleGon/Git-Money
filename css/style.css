@@ -411,13 +411,6 @@ main{
     position: relative;
 }
 
-.tabla-movimientos td:last-child :hover{
-    white-space: nowrap;
-    position: relative;
-    opacity: 0;
-}
-
-
 .tabla-movimientos td.celda-vacia{
     text-align: center;
 }
@@ -436,23 +429,51 @@ main{
     font-weight: 600;
 }
 
-.tabla-movimientos span{
+.acciones-movimiento{
     position: absolute;
+    inset: 0;
+    background-color: var(--panel);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
     opacity: 0;
+    pointer-events: none;
 }
 
-.tabla-movimientos span:hover{
-    opacity: 100%;
+.tabla-movimientos tbody tr:hover .acciones-movimiento,
+.tabla-movimientos tbody tr:has(.boton-tabla:focus-visible) .acciones-movimiento {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .boton-tabla{
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
     background-color: var(--white);
     border: 1px solid var(--line);
     color: var(--text);
-    padding: 8px 20px;
+    padding: 0;
     border-radius: 999px;
     font: inherit;
     cursor: pointer;
+    transition: filter 120ms ease-out;
+}
+
+.boton-tabla:active{
+    filter: brightness(0.9);
+}
+
+.boton-editar{
+    background-color: #edf4fb;
+    color: #365d80;
+}
+
+.boton-borrar{
+    background-color: #fff0f0;
+    color: #a13e46;
 }
 
 /*CONFIG FOOTER*/

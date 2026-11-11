@@ -84,6 +84,28 @@ async function enviarMovimiento(movimiento) {
     }
 }
 
+async function enviarBorrado(id) {
+     try{
+        const respuesta = await fetch("php/borrar-movimiento.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({id: id})
+        })
+
+        if(!respuesta.ok){
+            throw new Error("La prueba del envío ha fallado.")
+        }
+
+        const datos = await respuesta.json()
+        console.log(datos)
+
+        return datos
+    } catch (error){
+        console.log(error.message)
+        return false
+    }
+}
+
 // Reutiliza el formulario para ingresos y gastos, reiniciando sus valores.
 function abrirVentana(textoTitulo, tipo) {
     tipoMovimiento = tipo
@@ -333,10 +355,47 @@ function mostrarMovimientos(){
             celdaCategoria.textContent = categoriaEncontrada.nombre
             celdaFecha.textContent = fechaFormateada
             celdaHora.textContent = movimiento.hora
-            botonEditar.textContent = "Editar"
-            botonEditar.classList.add("boton-tabla")
-            botonBorrar.textContent = "borrar"
-            botonEditar.classList.add("boton-tabla")
+            botonEditar.setAttribute("aria-label", "Editar movimiento")
+            botonEditar.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                            aria-hidden="true">
+                            <path d="M4 16l-1 5 5-1L21 7l-4-4L4 16Z M14 6l4 4"/>
+                        </svg>
+                    `
+            botonEditar.classList.add("boton-tabla", "boton-editar")
+            botonBorrar.setAttribute("aria-label", "Borrar movimiento")
+            botonBorrar.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linejoin="round"
+                            aria-hidden="true">
+                            <path d="M3 6h18 M9 6V3h6v3 M5 6l1 15h12l1-15 M10 10v7 M14 10v7"/>
+                        </svg>
+                    `
+            botonBorrar.classList.add("boton-tabla", "boton-borrar")
+            botonesContenedor.classList.add("acciones-movimiento")
+
+            botonBorrar.addEventListener("click", async function() {
+                const confirmado = confirm("Seguo que quieres eliminar el movimiento?") // pide una confirmación antes de ejecutar la acción
+
+                if (!confirmado) {
+                    return
+                }
+
+                const resultado = await enviarBorrado(movimiento.id)
+
+                if (resultado === false){
+                    alert("No se pudo borrar el movimiento.")
+                    return
+                }
+
+                movimientos = movimientos.filter(function(otroMovimiento) {
+                    return movimiento.id !== otroMovimiento.id
+                })
+
+                mostrarMovimientos()
+                calcularMovimiento()
+            })
 
             if(movimiento.tipo === "ingreso"){
                 celdaImporte.textContent = "+" + movimiento.importe.toFixed(2) + " €"

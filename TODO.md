@@ -34,9 +34,13 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 ### 2. Gestión de movimientos
 
 - [ ] Implementar la edición de movimientos con persistencia en la base de datos.
-- [ ] Implementar la eliminación con confirmación y actualización de tabla y totales.
-- [ ] Conectar los eventos de Editar y Borrar y corregir la clase que se aplica dos veces a Editar.
-- [ ] Revisar la visibilidad de las acciones y permitir su uso con ratón, teclado y pantalla táctil.
+- [x] Implementar la eliminación con confirmación y actualización de tabla y totales. El usuario verificó el borrado en PostgreSQL, la respuesta 404 para un ID ya borrado y la actualización de la interfaz.
+- [x] Aplicar la clase compartida `boton-tabla` a Editar y Borrar. Verificado en JavaScript.
+- [x] Conectar el evento de Borrar.
+- [ ] Conectar el evento de Editar.
+- [x] Mostrar las acciones sobre el importe al pasar el ratón por la fila. Comprobado por el usuario en el navegador.
+- [ ] Comprobar que las acciones aparecen al llegar a sus botones con Tab. El selector con `:focus-visible` ya está implementado.
+- [ ] Adaptar los botones de Editar y Borrar a móvil y pantallas táctiles (tarea secundaria).
 - [ ] Recuperar las notas para los detalles o la edición; no es necesario añadirlas a la tabla principal.
 - [ ] Corregir el colSpan del estado vacío de cuatro a cinco columnas y distinguir ausencia de movimientos de ausencia de resultados del filtro.
 
@@ -48,7 +52,7 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 - [ ] Filtrar las categorías por el usuario correspondiente en PHP.
 - [ ] Validar en el servidor que la categoría corresponde al tipo de movimiento y al usuario.
 - [ ] Completar las validaciones del servidor: fecha, hora, identificadores, longitudes, notas y límites del importe.
-- [ ] Conservar procedencia y medio de pago según la decisión del usuario; definir cómo recogerlos sin complicar la primera versión y sustituir los valores fijos de prueba. No es necesario mostrar estos campos en la tabla principal.
+- [x] Recoger la procedencia del ingreso y el medio de pago del gasto en el formulario, validarlos en PHP y guardar los valores elegidos en PostgreSQL. El usuario confirmó la prueba de guardado de ambos tipos el 11 de noviembre de 2026. No es necesario mostrar estos campos en la tabla principal.
 
 ### 4. Pantallas y funciones previstas
 

@@ -58,13 +58,14 @@ if($datos["tipo"] === "ingreso"){
 if($datos["tipo"] === "gasto"){
     // in_array($variable, [arrayobjetivo], true)
     // revisa que en el array que le hemos indicado exista algun elemento del array objetivo, sí cumple la condición devuelve true
-    if(!isset($datos["medioPago"]) || !in_array($datos["medioPago"]), ["efectivo", "tarjeta", "transferencia", "otro"], true){
+    if(!isset($datos["medioPago"]) || !in_array($datos["medioPago"], ["efectivo", "tarjeta", "transferencia", "otro"], true)){
         http_response_code(400);
         $mensaje = ["mensaje" => "El medio de pago no es válido"];
         echo json_encode($mensaje);
         exit;
     }
 }
+
 try {
     require_once __DIR__ . "/conexion.php";
 
@@ -74,10 +75,10 @@ try {
 
     // Valores provisionales: el campo ajeno al tipo queda en NULL por la regla SQL.
     if ($datos["tipo"] === "ingreso") {
-        $procedencia = "prueba";
+        $procedencia = trim($datos["procedencia"]);
         $medioPago = null;
     } else {
-        $medioPago = "efectivo";
+        $medioPago = $datos["medioPago"];
         $procedencia = null;
     }
 
