@@ -155,6 +155,21 @@ Objetivo confirmado el 12 de noviembre de 2026: empezar a enlazar Git Money con 
 - [ ] Gestionar errores, caducidad y renovación del consentimiento y desconexión del banco.
 - [ ] Probar el flujo completo antes de habilitarlo para otros usuarios.
 
+## Fase posterior a Enable Banking: aprender y desarrollar una IA propia en Python
+
+Objetivo confirmado el 12 de noviembre de 2026: después de la integración bancaria, empezar a estudiar cómo desarrollar una IA propia en Python y valorar su incorporación a Git Money. Priorizar el aprendizaje progresivo, con ejercicios pequeños que el usuario implemente y comprenda. La función concreta, el enfoque y la estimación de tiempo quedan pendientes de estudio.
+
+- [ ] Definir un primer problema concreto de Git Money que pueda resolver un modelo. Valorar, como ejemplo y no como requisito cerrado, sugerir categorías a partir del concepto de un movimiento.
+- [ ] Preparar una ruta de aprendizaje adaptada al nivel de Python del usuario: tratamiento de datos, fundamentos de aprendizaje automático, entrenamiento y evaluación.
+- [ ] Aclarar qué partes se implementarán como ejercicio desde cero y qué bibliotecas se usarán, manteniendo como objetivo comprender y entrenar un modelo propio.
+- [ ] Preparar datos de práctica sintéticos o autorizados y separar los datos de entrenamiento de los de evaluación. No usar datos de otros usuarios sin su autorización.
+- [ ] Construir primero una solución sencilla de referencia y después un pequeño modelo en Python, explicando cada paso.
+- [ ] Evaluar el modelo con datos que no haya visto, analizar errores y comprobar si mejora la solución de referencia.
+- [ ] Crear un prototipo independiente antes de conectarlo a la web.
+- [ ] Estudiar la integración del servicio Python con Git Money, conservando la autenticación y el aislamiento de datos entre usuarios.
+- [ ] Mostrar las predicciones inicialmente como sugerencias que el usuario pueda aceptar o corregir.
+- [ ] Documentar el aprendizaje, las limitaciones y los resultados antes de ampliar la funcionalidad.
+
 ## Ideas opcionales, sin prioridad comprometida
 
 - [ ] Modo oscuro.
