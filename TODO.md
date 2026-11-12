@@ -11,8 +11,7 @@ Actualizado el 12 de noviembre de 2026. Git Money debe ser útil para controlar 
 1. Completar el multiusuario con autenticación, aislamiento de datos e invitaciones, verificando la privacidad antes de compartir la aplicación.
 2. Conectar Enable Banking y conseguir una sincronización bancaria fiable para el uso cotidiano. La gestión de cuentas necesaria para esa conexión forma parte de esta prioridad.
 3. Mantener como objetivos confirmados crear, editar y eliminar categorías e iniciar sesión con Google. Pueden desarrollarse tras el núcleo multiusuario, pero no deben retrasar la conexión bancaria salvo dependencia real. Los gráficos, presupuestos y demás ampliaciones tampoco bloquean estas prioridades.
-4. Una vez resueltas las prioridades prácticas, desarrollar la IA como un proyecto de aprendizaje amplio e independiente en Python.
-5. Integrar la IA en Git Money cuando esté terminada o suficientemente avanzada y evaluada, para hacer más cómodo el uso de la aplicación.
+4. El proyecto de IA se planifica y desarrolla por separado. Cuando esté terminado o suficientemente avanzado y evaluado, integrarlo mediante una API propia en Python para hacer más cómodo el uso de Git Money.
 
 Git Money debe seguir siendo útil y funcional sin IA. No es necesario completar todas las mejoras secundarias antes de empezar el proyecto de IA.
 
@@ -176,80 +175,15 @@ Objetivo confirmado el 12 de noviembre de 2026: conectar los bancos después de 
 - [ ] Verificar importaciones repetidas, movimientos pendientes y confirmados, transferencias entre cuentas propias y conservación de correcciones del usuario para evitar duplicados y totales engañosos.
 - [ ] Probar el flujo completo antes de habilitarlo para otros usuarios.
 
-## Prioridad 3: proyecto independiente de IA en Python
+## Integración futura con el proyecto independiente de IA
 
-Objetivo: formarse con profundidad en inteligencia artificial como preparación para el curso de especialización y una futura dedicación profesional a esta área. La IA será un proyecto amplio con objetivos, código, datos, experimentos y documentación propios; su integración en Git Money llegará después. El full-stack será una herramienta de apoyo. No reducir esta fase a conectar una API externa o añadir una función rápida a la web.
+El aprendizaje de Python, los retos, los modelos y su planificación se trasladan al documento independiente `Proyecto_IA_Python.md`, para otro proyecto de ChatGPT. Mantener aquí únicamente el trabajo de integración de Git Money.
 
-Empezar esta fase después de resolver las prioridades de privacidad y conexión bancaria. El alcance concreto y la estimación de horas se definirán al preparar el proyecto; el rango anterior de 50–100 horas para un modelo pequeño no representa este objetivo ampliado.
-
-### Punto de partida y continuidad del aprendizaje
-
-Referencia: extracto reconstruido de la conversación sobre aprendizaje de Python e IA, aportado por el usuario el 12 de noviembre de 2026. No es una exportación íntegra; distinguir los avances documentados de las recomendaciones del asistente.
-
-- El usuario cursa 1.º de DAM, ha visto el curso completo de Python de Píldoras Informáticas y quiere comprender los modelos de IA además de crear aplicaciones que los utilicen. Haber visto el curso no equivale a dominar todos sus contenidos: comprobar la práctica antes de repetir teoría.
-- Base matemática declarada: nivel de bachillerato, con experiencia previa en matemáticas, física y estudios universitarios. Repasar según las necesidades del aprendizaje, sin dar por dominado el temario.
-- Mantener como trayectoria principal la especialización en IA después de DAM; el full-stack es apoyo. Las propuestas anteriores de React, TypeScript, Node.js, Next.js, Laravel o ciberseguridad no constituyen requisitos de este itinerario.
-- Método: explicación breve, un reto cada vez, solución escrita por el usuario, pistas graduales y revisión razonada. Evitar dar de entrada la solución completa y la generación automática que sustituya la práctica; conservar el autocompletado convencional si resulta útil.
-- Adaptar la dedicación a DAM y sus evaluaciones, sin fijar todavía un calendario ni alterar las prioridades prácticas de Git Money.
-
-### Progreso previo en Python y siguiente reto
-
-Los dos retos completados se registran a partir del código corregido y de la confirmación incluida en el extracto; no se han vuelto a ejecutar sus archivos originales en esta revisión.
-
-- [x] Reto 1: calculadora financiera con funciones, parámetros, listas de diccionarios, bucles, condicionales, acumuladores y return. Corregida la inicialización del acumulador fuera del bucle; resultado documentado: 400.
-- [x] Reto 2: análisis de ingresos, gastos, balance y cantidad. Corregidas la inicialización de acumuladores y la devolución de un diccionario clave: valor en lugar de un set. Resultados documentados: ingresos 1500, gastos 280, balance 1220 y cantidad 5.
-- [ ] Retomar el Reto 3: corregir agrupar_gastos(movimientos) para devolver un único diccionario de totales por categoría, sin categorías escritas manualmente ni una lista global.
-- [ ] Antes de resolver el Reto 3, explicar qué comprueba `if "categoria" in movimiento` y distinguirlo de buscar el valor de esa categoría entre las claves del diccionario acumulador.
-- [ ] Conservar el diccionario acumulador dentro de la función y decidir cuándo crear una categoría y cuándo sumar al importe existente. Resultado esperado del ejemplo: comida 50, ocio 30 y transporte 40. Dar pistas, no la solución completa.
-- [ ] Consolidar snake_case, claves de diccionario sin espacios sobrantes y la diferencia entre list, dict y set.
-
-### Ruta técnica propuesta, adaptable al progreso
-
-Esta secuencia recoge recomendaciones formativas del chat, no tecnologías ya aprendidas ni una arquitectura obligatoria para Git Money.
-
-- [ ] Consolidar Python con ejercicios y lectura de archivos; avanzar a un pequeño análisis de un CSV financiero cuando el Reto 3 esté comprendido.
-- [ ] Aprender NumPy para operaciones numéricas, pandas para tratamiento de datos y Matplotlib para visualización mediante prácticas progresivas.
-- [ ] Repasar álgebra lineal, estadística, probabilidad, cálculo y optimización de forma conectada a los modelos estudiados.
-- [ ] Abordar aprendizaje automático clásico con scikit-learn: entrenamiento, comparación y evaluación. Valorar un clasificador de gastos como primer experimento, manteniendo abierto el alcance del proyecto independiente.
-- [ ] Estudiar redes neuronales con PyTorch cuando estén asentados los fundamentos; elegir el momento y la utilidad según el proyecto.
-- [ ] Valorar FastAPI para exponer el prototipo Python como servicio cuando esté listo para esa etapa; la conexión a Git Money sigue sujeta a los criterios de integración de la prioridad 4.
-- [ ] Revisar la orientación y los siguientes proyectos de especialización según la experiencia adquirida, combinando comprensión de modelos y desarrollo de aplicaciones de IA.
-
-### 1. Definir el proyecto y la ruta de aprendizaje
-
-- [ ] Definir qué problema resolverá la IA y qué resultados permitirán evaluar su utilidad. La clasificación de movimientos es una opción inicial, no el alcance definitivo.
-- [ ] Preparar una ruta progresiva adaptada al nivel del usuario: Python, tratamiento de datos, estadística, probabilidad, álgebra lineal y fundamentos de aprendizaje automático.
-- [ ] Organizar el proyecto de forma independiente de la web, con entorno Python, dependencias, control de versiones, documentación y seguimiento propios.
-- [ ] Aprender mediante ejercicios pequeños escritos y comprendidos por el usuario; explicar los conceptos y revisar sus intentos antes de avanzar.
-- [ ] Decidir qué algoritmos implementar desde cero con fines didácticos y qué bibliotecas utilizar para entrenar modelos y comparar resultados.
-
-### 2. Datos y experimentación
-
-- [ ] Definir y preparar datos sintéticos, públicos adecuados o propios autorizados; documentar su procedencia y limitaciones. No utilizar información de otros usuarios sin autorización.
-- [ ] Explorar, limpiar y transformar los datos y comprender las representaciones utilizadas.
-- [ ] Separar entrenamiento, validación y prueba evitando que información de evaluación se filtre al entrenamiento.
-- [ ] Crear una solución sencilla de referencia para comparar los modelos.
-- [ ] Entrenar y comparar modelos adecuados al problema, estudiando sus fundamentos, parámetros y costes.
-- [ ] Elegir métricas acordes con el objetivo y analizar errores, sobreajuste, sesgos de los datos y casos con poca información.
-- [ ] Registrar los experimentos y hacer reproducibles el entrenamiento y la evaluación.
-- [ ] Ampliar la dificultad y estudiar técnicas más avanzadas cuando los resultados y el aprendizaje lo justifiquen, sin fijar de antemano una arquitectura.
-
-### 3. Prototipo independiente y criterios para integrar
-
-- [ ] Construir un prototipo utilizable sin Git Money y probarlo con ejemplos nuevos.
-- [ ] Documentar lo aprendido, los resultados medidos y las limitaciones del modelo.
-- [ ] Definir criterios de preparación: utilidad frente a la solución de referencia, calidad en datos nuevos, tiempos de respuesta y tratamiento de errores.
-- [ ] Considerar la integración cuando el proyecto esté finalizado o en una etapa avanzada que cumpla esos criterios; mantener el desarrollo y las pruebas independientes.
-
-## Prioridad 4: integrar la IA para facilitar el uso de Git Money
-
-- [ ] Elegir las funciones del modelo que aporten comodidad real al usuario y definir cómo aparecerán en la interfaz.
-- [ ] Diseñar e implementar la comunicación entre Git Money y el servicio Python, manteniendo autenticación, permisos y aislamiento de datos.
-- [ ] Distinguir entrenamiento y uso del modelo; versionar el modelo desplegado y permitir volver a una versión anterior.
-- [ ] Presentar inicialmente los resultados como sugerencias que se puedan aceptar o corregir, sin modificar movimientos automáticamente.
-- [ ] Mantener el registro manual y la sincronización bancaria operativos si el servicio de IA está detenido o falla.
-- [ ] Probar la integración, la privacidad y la utilidad con casos reales autorizados antes de extenderla a otros usuarios.
-- [ ] Recoger correcciones de forma controlada y evaluar futuras mejoras del modelo sin mezclar datos de usuarios sin autorización.
+- [ ] Integrar el modelo cuando el proyecto independiente esté terminado o suficientemente avanzado y evaluado.
+- [ ] Conectar Git Money mediante una API propia en Python, diseñada e implementada como parte del aprendizaje del proyecto de IA.
+- [ ] Definir el contrato entre PHP y la API, con autenticación, permisos, validación y tratamiento de errores.
+- [ ] Mostrar inicialmente sugerencias que el usuario pueda aceptar o corregir.
+- [ ] Mantener Git Money y la sincronización bancaria operativos si la API de IA falla o está detenida.
 
 ## Ideas opcionales, sin prioridad comprometida
 
