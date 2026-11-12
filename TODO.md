@@ -50,7 +50,7 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 
 - [ ] Permitir seleccionar la cuenta del movimiento en lugar de fijar su ID en 1.
 - [ ] Gestionar cuentas y calcular saldos incluyendo el saldo inicial.
-- [ ] Permitir gestionar categorías desde la aplicación.
+La gestión de categorías y su aislamiento por usuario pasan a la siguiente fase prioritaria, detallada más abajo.
 - [ ] Filtrar las categorías por el usuario correspondiente en PHP.
 - [ ] Validar en el servidor que la categoría corresponde al tipo de movimiento y al usuario.
 - [ ] Completar las validaciones del servidor: fecha, hora, identificadores, longitudes, notas y límites del importe.
@@ -77,27 +77,88 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 - [ ] Resolver las opciones provisionales de Configuración, Ayuda y Salir, y los datos de usuario de ejemplo según el alcance acordado.
 - [ ] Verificar el flujo completo de guardar, recargar, filtrar, editar y eliminar, incluyendo errores de conexión y revisión en móvil.
 
-## Fase futura: Git Money multiusuario
+## Siguiente fase prioritaria: multiusuario, categorías y acceso con Google
 
-Objetivo: permitir que un grupo reducido de personas
-autorizadas utilice Git Money de forma privada y gratuita.
+Alcance confirmado el 12 de noviembre de 2026: permitir que un grupo reducido de personas autorizadas utilice Git Money de forma privada y gratuita, con datos independientes. Completar esta fase antes de empezar la integración con Enable Banking. Los pendientes secundarios ajenos a esta fase no bloquean este orden.
 
-- [ ] Crear cuentas de usuario.
-- [ ] Implementar inicio y cierre de sesión.
-- [ ] Permitir el acceso únicamente por invitación.
-- [ ] Asociar movimientos y categorías a cada usuario.
-- [ ] Impedir el acceso a datos de otros usuarios.
-- [ ] Proteger los endpoints PHP con autenticación.
-- [ ] Implementar un sistema sencillo de gestión de usuarios.
-- [ ] Permitir revocar el acceso a cualquier usuario.
-- [ ] Revisar la seguridad antes de invitar a otras personas.
+Estimación orientativa del multiusuario básico con explicaciones y pruebas: 15–25 horas de trabajo efectivo. Esta estimación no incluye la gestión completa de categorías, el acceso con Google ni Enable Banking; revisar el total al concretar estas ampliaciones.
+
+### 1. Preparar y conservar los datos (1–2 h)
+
+- [ ] Hacer una copia de seguridad y contrastar el esquema versionado con la base de datos instalada.
+- [ ] Preparar la migración conservando los movimientos, cuentas y categorías actuales asociados al usuario propietario.
+- [ ] Revisar la tabla de usuarios y el almacenamiento de hashes de contraseñas.
+
+### 2. Inicio y cierre de sesión (3–4 h)
+
+- [ ] Implementar inicio de sesión con correo y contraseña y cierre de sesión.
+- [ ] Gestionar la identidad desde la sesión del servidor, sin confiar en un ID de usuario enviado por el navegador.
+- [ ] Proteger los endpoints PHP que leen o modifican datos privados y rechazar solicitudes sin sesión válida.
+
+### 3. Separar los datos de cada usuario (2–4 h)
+
+- [ ] Sustituir el usuario fijo 1 en listar, guardar, editar y borrar movimientos por el usuario autenticado.
+- [ ] Filtrar las categorías por el usuario autenticado.
+- [ ] Validar en el servidor la propiedad de cuentas, categorías y movimientos y la correspondencia entre categoría y tipo de movimiento.
+- [ ] Resolver la cuenta de cada usuario sin utilizar la cuenta fija 1. Empezar con una cuenta financiera inicial por usuario; la gestión de varias cuentas queda en los objetivos secundarios.
+
+### 4. Altas privadas y gestión de usuarios (3–5 h)
+
+- [ ] Crear cuentas de usuario únicamente mediante invitaciones de un solo uso y con caducidad.
+- [ ] Crear una cuenta financiera y categorías iniciales propias para cada nuevo usuario.
+- [ ] Implementar una gestión sencilla de usuarios e invitaciones.
+- [ ] Permitir revocar el acceso a un usuario, incluyendo sus sesiones activas.
+
+### 5. Adaptar la interfaz (2–3 h)
+
+- [ ] Crear la pantalla de acceso, mostrar el nombre del usuario y conectar el botón Salir.
+- [ ] Gestionar sesiones caducadas y limpiar los datos visibles del usuario al cerrar o cambiar de sesión.
+- [ ] Comprobar los nuevos formularios y mensajes en móvil.
+
+### 6. Seguridad, pruebas y despliegue (4–7 h)
+
+- [ ] Configurar las sesiones y cookies de forma segura, revisar HTTPS y añadir protección CSRF a las operaciones que modifican datos.
+- [ ] Limitar los intentos de inicio de sesión y comprobar los mensajes de error.
+- [ ] Probar con dos usuarios que ninguno puede listar, crear, editar o borrar datos utilizando cuentas, categorías o movimientos ajenos, incluso manipulando los IDs de las peticiones.
+- [ ] Comprobar las solicitudes sin autenticar, las sesiones caducadas y el acceso revocado.
+- [ ] Verificar guardar, recargar, filtrar, editar y borrar con ambas cuentas, conservando los datos existentes.
+- [ ] Desplegar y verificar la versión multiusuario antes de dar acceso a amigos.
+
+### 7. Crear, editar y eliminar categorías
+
+- [ ] Añadir la interfaz y los endpoints para crear categorías propias de ingreso o gasto.
+- [ ] Permitir editar las categorías propias con validación del nombre y del tipo.
+- [ ] Permitir eliminar categorías propias con confirmación.
+- [ ] Definir y aplicar el tratamiento de categorías con movimientos: bloquear el borrado o exigir reasignación compatible, sin eliminar movimientos.
+- [ ] Impedir cambios de tipo incompatibles con movimientos existentes.
+- [ ] Actualizar los selectores y la tabla tras los cambios y comprobar el aislamiento entre usuarios.
+
+### 8. Iniciar sesión con Google
+
+- [ ] Configurar el acceso con Google y las direcciones de retorno para el entorno de desarrollo y el despliegue.
+- [ ] Implementar y validar la identidad de Google en el servidor y asociarla de forma segura a una cuenta local.
+- [ ] Definir la vinculación de Google con cuentas existentes evitando duplicados y vinculaciones basadas únicamente en un correo recibido del navegador.
+- [ ] Mantener el acceso por invitación: iniciar sesión con Google no debe permitir registrarse sin autorización.
+- [ ] Aplicar las mismas reglas de sesión, aislamiento y revocación que al acceso con correo y contraseña.
+- [ ] Probar el primer acceso, accesos posteriores, cancelaciones, errores y usuarios no invitados.
+
+## Fase posterior: integración con Enable Banking
+
+Objetivo confirmado el 12 de noviembre de 2026: empezar a enlazar Git Money con Enable Banking después de completar multiusuario, gestión de categorías e inicio de sesión con Google.
+
+- [ ] Verificar las condiciones vigentes de Enable Banking: disponibilidad de BBVA y Revolut, requisitos de acceso, costes, entorno de pruebas y viabilidad para una aplicación privada con varios usuarios.
+- [ ] Definir el alcance inicial de lectura de cuentas, saldos y movimientos y su correspondencia con los datos actuales de Git Money.
+- [ ] Realizar una primera prueba en el entorno de pruebas antes de conectar cuentas reales.
+- [ ] Implementar la autorización y el consentimiento bancario de cada usuario, almacenando credenciales y tokens únicamente en el servidor.
+- [ ] Asociar cada conexión y cuenta bancaria a su propietario y garantizar el aislamiento entre usuarios.
+- [ ] Importar movimientos sin duplicarlos al repetir la sincronización y definir cómo convivirán con los registros manuales.
+- [ ] Gestionar errores, caducidad y renovación del consentimiento y desconexión del banco.
+- [ ] Probar el flujo completo antes de habilitarlo para otros usuarios.
 
 ## Ideas opcionales, sin prioridad comprometida
 
 - [ ] Modo oscuro.
-- [ ] Integración bancaria con Enable Banking, tras estabilizar el registro manual y definir el alcance.
 - [ ] Buscaminas como extra independiente.
-- [ ] Autenticación y sesiones si el usuario confirma que las necesita según el despliegue o el uso de la aplicación.
 
 ## Apuntes de aprendizaje
 
