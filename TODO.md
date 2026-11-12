@@ -4,6 +4,18 @@ Seguimiento de pendientes por prioridad. Las instrucciones de trabajo están en 
 
 Revisión inicial: 10 de noviembre de 2026. Basada en los archivos del proyecto; no se ejecutaron PHP ni consultas contra la base de datos. La comprobación de sintaxis de JavaScript pasó. Contrastar siempre este diagnóstico con el código vigente.
 
+## Objetivo y orden de trabajo acordados
+
+Actualizado el 12 de noviembre de 2026. Git Money debe ser útil para controlar el dinero del usuario: proteger sus datos frente a otros usuarios y reducir la introducción manual de movimientos. Su objetivo profesional principal es la inteligencia artificial y el curso de especialización en IA; el desarrollo full-stack sirve de apoyo para construir y utilizar sus soluciones.
+
+1. Completar el multiusuario con autenticación, aislamiento de datos e invitaciones, verificando la privacidad antes de compartir la aplicación.
+2. Conectar Enable Banking y conseguir una sincronización bancaria fiable para el uso cotidiano. La gestión de cuentas necesaria para esa conexión forma parte de esta prioridad.
+3. Mantener como objetivos confirmados crear, editar y eliminar categorías e iniciar sesión con Google. Pueden desarrollarse tras el núcleo multiusuario, pero no deben retrasar la conexión bancaria salvo dependencia real. Los gráficos, presupuestos y demás ampliaciones tampoco bloquean estas prioridades.
+4. Una vez resueltas las prioridades prácticas, desarrollar la IA como un proyecto de aprendizaje amplio e independiente en Python.
+5. Integrar la IA en Git Money cuando esté terminada o suficientemente avanzada y evaluada, para hacer más cómodo el uso de la aplicación.
+
+Git Money debe seguir siendo útil y funcional sin IA. No es necesario completar todas las mejoras secundarias antes de empezar el proyecto de IA.
+
 ## Objetivos principales de la primera versión
 
 Estos objetivos definen el alcance prioritario. Los objetivos secundarios no amplían los requisitos de esta primera versión. Si alguna tarea secundaria es necesaria para completar un objetivo principal, se abordará como parte de ese objetivo.
@@ -50,7 +62,9 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 
 - [ ] Permitir seleccionar la cuenta del movimiento en lugar de fijar su ID en 1.
 - [ ] Gestionar cuentas y calcular saldos incluyendo el saldo inicial.
-La gestión de categorías y su aislamiento por usuario pasan a la siguiente fase prioritaria, detallada más abajo.
+
+La gestión de categorías se detalla más abajo; su aislamiento por usuario forma parte del núcleo multiusuario.
+
 - [ ] Filtrar las categorías por el usuario correspondiente en PHP.
 - [ ] Validar en el servidor que la categoría corresponde al tipo de movimiento y al usuario.
 - [ ] Completar las validaciones del servidor: fecha, hora, identificadores, longitudes, notas y límites del importe.
@@ -77,9 +91,9 @@ La gestión de categorías y su aislamiento por usuario pasan a la siguiente fas
 - [ ] Resolver las opciones provisionales de Configuración, Ayuda y Salir, y los datos de usuario de ejemplo según el alcance acordado.
 - [ ] Verificar el flujo completo de guardar, recargar, filtrar, editar y eliminar, incluyendo errores de conexión y revisión en móvil.
 
-## Siguiente fase prioritaria: multiusuario, categorías y acceso con Google
+## Prioridad 1: privacidad y núcleo multiusuario
 
-Alcance confirmado el 12 de noviembre de 2026: permitir que un grupo reducido de personas autorizadas utilice Git Money de forma privada y gratuita, con datos independientes. Completar esta fase antes de empezar la integración con Enable Banking. Los pendientes secundarios ajenos a esta fase no bloquean este orden.
+Alcance confirmado el 12 de noviembre de 2026: permitir que un grupo reducido de personas autorizadas utilice Git Money de forma privada y gratuita, con datos independientes. Completar y verificar el núcleo multiusuario (etapas 1–6) antes de conectar datos bancarios reales. Las categorías y Google se conservan como ampliaciones confirmadas, sin bloquear Enable Banking salvo dependencia técnica.
 
 Estimación orientativa del multiusuario básico con explicaciones y pruebas: 15–25 horas de trabajo efectivo. Esta estimación no incluye la gestión completa de categorías, el acceso con Google ni Enable Banking; revisar el total al concretar estas ampliaciones.
 
@@ -100,7 +114,7 @@ Estimación orientativa del multiusuario básico con explicaciones y pruebas: 15
 - [ ] Sustituir el usuario fijo 1 en listar, guardar, editar y borrar movimientos por el usuario autenticado.
 - [ ] Filtrar las categorías por el usuario autenticado.
 - [ ] Validar en el servidor la propiedad de cuentas, categorías y movimientos y la correspondencia entre categoría y tipo de movimiento.
-- [ ] Resolver la cuenta de cada usuario sin utilizar la cuenta fija 1. Empezar con una cuenta financiera inicial por usuario; la gestión de varias cuentas queda en los objetivos secundarios.
+- [ ] Resolver la cuenta de cada usuario sin utilizar la cuenta fija 1. Empezar con una cuenta financiera inicial por usuario; la gestión de varias cuentas necesaria para Enable Banking se abordará en la fase bancaria.
 
 ### 4. Altas privadas y gestión de usuarios (3–5 h)
 
@@ -124,7 +138,11 @@ Estimación orientativa del multiusuario básico con explicaciones y pruebas: 15
 - [ ] Verificar guardar, recargar, filtrar, editar y borrar con ambas cuentas, conservando los datos existentes.
 - [ ] Desplegar y verificar la versión multiusuario antes de dar acceso a amigos.
 
-### 7. Crear, editar y eliminar categorías
+## Ampliaciones confirmadas: categorías y acceso con Google
+
+Estas funciones siguen previstas; la privacidad y la sincronización bancaria tienen prioridad. Implementar antes de la conexión bancaria solo lo que sea necesario para utilizarla correctamente.
+
+### Crear, editar y eliminar categorías
 
 - [ ] Añadir la interfaz y los endpoints para crear categorías propias de ingreso o gasto.
 - [ ] Permitir editar las categorías propias con validación del nombre y del tipo.
@@ -133,7 +151,7 @@ Estimación orientativa del multiusuario básico con explicaciones y pruebas: 15
 - [ ] Impedir cambios de tipo incompatibles con movimientos existentes.
 - [ ] Actualizar los selectores y la tabla tras los cambios y comprobar el aislamiento entre usuarios.
 
-### 8. Iniciar sesión con Google
+### Iniciar sesión con Google
 
 - [ ] Configurar el acceso con Google y las direcciones de retorno para el entorno de desarrollo y el despliegue.
 - [ ] Implementar y validar la identidad de Google en el servidor y asociarla de forma segura a una cuenta local.
@@ -142,33 +160,63 @@ Estimación orientativa del multiusuario básico con explicaciones y pruebas: 15
 - [ ] Aplicar las mismas reglas de sesión, aislamiento y revocación que al acceso con correo y contraseña.
 - [ ] Probar el primer acceso, accesos posteriores, cancelaciones, errores y usuarios no invitados.
 
-## Fase posterior: integración con Enable Banking
+## Prioridad 2: integración con Enable Banking
 
-Objetivo confirmado el 12 de noviembre de 2026: empezar a enlazar Git Money con Enable Banking después de completar multiusuario, gestión de categorías e inicio de sesión con Google.
+Objetivo confirmado el 12 de noviembre de 2026: conectar los bancos después de verificar el núcleo multiusuario, para controlar el dinero sin introducir manualmente cada movimiento. La disponibilidad y las condiciones del proveedor deben comprobarse antes de comprometer la integración.
 
 - [ ] Verificar las condiciones vigentes de Enable Banking: disponibilidad de BBVA y Revolut, requisitos de acceso, costes, entorno de pruebas y viabilidad para una aplicación privada con varios usuarios.
 - [ ] Definir el alcance inicial de lectura de cuentas, saldos y movimientos y su correspondencia con los datos actuales de Git Money.
+- [ ] Adaptar la gestión de cuentas y saldos a varias cuentas bancarias por usuario, distinguiendo saldos del banco y cálculos internos.
 - [ ] Realizar una primera prueba en el entorno de pruebas antes de conectar cuentas reales.
 - [ ] Implementar la autorización y el consentimiento bancario de cada usuario, almacenando credenciales y tokens únicamente en el servidor.
 - [ ] Asociar cada conexión y cuenta bancaria a su propietario y garantizar el aislamiento entre usuarios.
 - [ ] Importar movimientos sin duplicarlos al repetir la sincronización y definir cómo convivirán con los registros manuales.
+- [ ] Definir e implementar la sincronización periódica de movimientos dentro de los límites del proveedor, con actualización manual y fecha de última sincronización visible. Tener en cuenta que el servidor local debe estar encendido.
 - [ ] Gestionar errores, caducidad y renovación del consentimiento y desconexión del banco.
+- [ ] Verificar importaciones repetidas, movimientos pendientes y confirmados, transferencias entre cuentas propias y conservación de correcciones del usuario para evitar duplicados y totales engañosos.
 - [ ] Probar el flujo completo antes de habilitarlo para otros usuarios.
 
-## Fase posterior a Enable Banking: aprender y desarrollar una IA propia en Python
+## Prioridad 3: proyecto independiente de IA en Python
 
-Objetivo confirmado el 12 de noviembre de 2026: después de la integración bancaria, empezar a estudiar cómo desarrollar una IA propia en Python y valorar su incorporación a Git Money. Priorizar el aprendizaje progresivo, con ejercicios pequeños que el usuario implemente y comprenda. La función concreta, el enfoque y la estimación de tiempo quedan pendientes de estudio.
+Objetivo: formarse con profundidad en inteligencia artificial como preparación para el curso de especialización y una futura dedicación profesional a esta área. La IA será un proyecto amplio con objetivos, código, datos, experimentos y documentación propios; su integración en Git Money llegará después. El full-stack será una herramienta de apoyo. No reducir esta fase a conectar una API externa o añadir una función rápida a la web.
 
-- [ ] Definir un primer problema concreto de Git Money que pueda resolver un modelo. Valorar, como ejemplo y no como requisito cerrado, sugerir categorías a partir del concepto de un movimiento.
-- [ ] Preparar una ruta de aprendizaje adaptada al nivel de Python del usuario: tratamiento de datos, fundamentos de aprendizaje automático, entrenamiento y evaluación.
-- [ ] Aclarar qué partes se implementarán como ejercicio desde cero y qué bibliotecas se usarán, manteniendo como objetivo comprender y entrenar un modelo propio.
-- [ ] Preparar datos de práctica sintéticos o autorizados y separar los datos de entrenamiento de los de evaluación. No usar datos de otros usuarios sin su autorización.
-- [ ] Construir primero una solución sencilla de referencia y después un pequeño modelo en Python, explicando cada paso.
-- [ ] Evaluar el modelo con datos que no haya visto, analizar errores y comprobar si mejora la solución de referencia.
-- [ ] Crear un prototipo independiente antes de conectarlo a la web.
-- [ ] Estudiar la integración del servicio Python con Git Money, conservando la autenticación y el aislamiento de datos entre usuarios.
-- [ ] Mostrar las predicciones inicialmente como sugerencias que el usuario pueda aceptar o corregir.
-- [ ] Documentar el aprendizaje, las limitaciones y los resultados antes de ampliar la funcionalidad.
+Empezar esta fase después de resolver las prioridades de privacidad y conexión bancaria. El alcance concreto y la estimación de horas se definirán al preparar el proyecto; el rango anterior de 50–100 horas para un modelo pequeño no representa este objetivo ampliado.
+
+### 1. Definir el proyecto y la ruta de aprendizaje
+
+- [ ] Definir qué problema resolverá la IA y qué resultados permitirán evaluar su utilidad. La clasificación de movimientos es una opción inicial, no el alcance definitivo.
+- [ ] Preparar una ruta progresiva adaptada al nivel del usuario: Python, tratamiento de datos, estadística, probabilidad, álgebra lineal y fundamentos de aprendizaje automático.
+- [ ] Organizar el proyecto de forma independiente de la web, con entorno Python, dependencias, control de versiones, documentación y seguimiento propios.
+- [ ] Aprender mediante ejercicios pequeños escritos y comprendidos por el usuario; explicar los conceptos y revisar sus intentos antes de avanzar.
+- [ ] Decidir qué algoritmos implementar desde cero con fines didácticos y qué bibliotecas utilizar para entrenar modelos y comparar resultados.
+
+### 2. Datos y experimentación
+
+- [ ] Definir y preparar datos sintéticos, públicos adecuados o propios autorizados; documentar su procedencia y limitaciones. No utilizar información de otros usuarios sin autorización.
+- [ ] Explorar, limpiar y transformar los datos y comprender las representaciones utilizadas.
+- [ ] Separar entrenamiento, validación y prueba evitando que información de evaluación se filtre al entrenamiento.
+- [ ] Crear una solución sencilla de referencia para comparar los modelos.
+- [ ] Entrenar y comparar modelos adecuados al problema, estudiando sus fundamentos, parámetros y costes.
+- [ ] Elegir métricas acordes con el objetivo y analizar errores, sobreajuste, sesgos de los datos y casos con poca información.
+- [ ] Registrar los experimentos y hacer reproducibles el entrenamiento y la evaluación.
+- [ ] Ampliar la dificultad y estudiar técnicas más avanzadas cuando los resultados y el aprendizaje lo justifiquen, sin fijar de antemano una arquitectura.
+
+### 3. Prototipo independiente y criterios para integrar
+
+- [ ] Construir un prototipo utilizable sin Git Money y probarlo con ejemplos nuevos.
+- [ ] Documentar lo aprendido, los resultados medidos y las limitaciones del modelo.
+- [ ] Definir criterios de preparación: utilidad frente a la solución de referencia, calidad en datos nuevos, tiempos de respuesta y tratamiento de errores.
+- [ ] Considerar la integración cuando el proyecto esté finalizado o en una etapa avanzada que cumpla esos criterios; mantener el desarrollo y las pruebas independientes.
+
+## Prioridad 4: integrar la IA para facilitar el uso de Git Money
+
+- [ ] Elegir las funciones del modelo que aporten comodidad real al usuario y definir cómo aparecerán en la interfaz.
+- [ ] Diseñar e implementar la comunicación entre Git Money y el servicio Python, manteniendo autenticación, permisos y aislamiento de datos.
+- [ ] Distinguir entrenamiento y uso del modelo; versionar el modelo desplegado y permitir volver a una versión anterior.
+- [ ] Presentar inicialmente los resultados como sugerencias que se puedan aceptar o corregir, sin modificar movimientos automáticamente.
+- [ ] Mantener el registro manual y la sincronización bancaria operativos si el servicio de IA está detenido o falla.
+- [ ] Probar la integración, la privacidad y la utilidad con casos reales autorizados antes de extenderla a otros usuarios.
+- [ ] Recoger correcciones de forma controlada y evaluar futuras mejoras del modelo sin mezclar datos de usuarios sin autorización.
 
 ## Ideas opcionales, sin prioridad comprometida
 
