@@ -6,15 +6,16 @@ Revisión inicial: 10 de noviembre de 2026. Basada en los archivos del proyecto;
 
 ## Objetivos principales de la primera versión
 
-Estos seis objetivos definen el alcance prioritario. Los objetivos secundarios no amplían los requisitos de esta primera versión. Si alguna tarea secundaria es necesaria para completar un objetivo principal, se abordará como parte de ese objetivo.
+Estos objetivos definen el alcance prioritario. Los objetivos secundarios no amplían los requisitos de esta primera versión. Si alguna tarea secundaria es necesaria para completar un objetivo principal, se abordará como parte de ese objetivo.
 
 - [x] Registrar ingresos y gastos en PostgreSQL.
 - [x] Recuperar los movimientos correctamente al recargar la página. Carga desde PostgreSQL confirmada por el usuario en el navegador el 10 de noviembre de 2026; no se han verificado los casos de error.
 - [x] Mostrar categorías, ingresos, gastos y balance. El usuario confirma la carga correcta de movimientos y la coincidencia de las tarjetas con los datos guardados el 10 de noviembre de 2026. No se han comprobado los casos de error.
 - [x] Editar y eliminar movimientos.
 - [x] Filtrar movimientos por tipo.
-- [ ] Filtrar movimientos por fechas.
-- [ ] Tener una interfaz usable y mensajes claros cuando algo falle.
+- [x] Filtrar movimientos por fechas. El usuario comprobó el filtro Desde/Hasta y su estado sin coincidencias en el navegador.
+- [x] Tener una interfaz usable y mensajes claros cuando algo falle. Avisos en la página y el formulario, conservación de los datos ante un error y bloqueo de peticiones repetidas. Verificado con fallos simulados.
+- [x] Adaptar Git Money a móvil. Resumen, filtros, movimientos y formularios adaptados a pantallas pequeñas, con Editar y Borrar siempre visibles en móvil y pantallas táctiles. Verificado en Chrome a 320, 390 y 600 px con respuestas simuladas. Queda la comprobación en un teléfono físico.
 
 ## Objetivos secundarios
 
@@ -25,10 +26,10 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 - [x] Mostrar movimientos y recalcular tarjetas después de cargar los datos del servidor. Verificado por el usuario en el navegador el 10 de noviembre de 2026.
 - [x] Coordinar la carga de categorías y movimientos antes de dibujar la tabla. iniciarPagina() espera ambas cargas en orden; el usuario confirma que los movimientos se muestran correctamente al recargar.
 - [x] Normalizar importes e identificadores recibidos para evitar errores de cálculo, formato y comparación. Revisado en cargarMovimientos(): importe con Number() y categoría con String(). El usuario confirma la carga de movimientos y los totales de las tarjetas en el navegador.
-- [ ] Gestionar categorías no encontradas sin interrumpir el dibujado de la tabla.
+- [x] Gestionar categorías no encontradas sin interrumpir el dibujado de la tabla. Comprobado con una categoría ausente en una prueba simulada.
 - [x] Esperar la confirmación del guardado antes de añadir el movimiento a la interfaz y cerrar el formulario. El usuario confirma las pruebas de guardado correcto y servidor detenido el 10 de noviembre de 2026: si falla, se conserva el formulario y no se añade la fila.
 - [x] Devolver y conservar el ID del movimiento creado.
-- [ ] Mostrar errores de carga y guardado en pantalla, conservar el formulario si falla y evitar envíos repetidos durante la petición. El usuario confirma el aviso de fallo de guardado, la conservación del formulario y la disponibilidad del botón para reintentar. Revisado el bloqueo con disabled durante el envío; pendientes los errores de carga y una prueba específica de envíos repetidos con respuesta lenta.
+- [x] Mostrar errores de carga, guardado, edición y borrado en pantalla, conservar el formulario si falla y evitar envíos repetidos durante la petición. Comprobado con fallos de red, respuestas HTTP de error y peticiones pendientes simuladas.
 - [x] Mantener el formato HH:mm de la hora antes y después de recargar. cargarMovimientos() aplica slice(0, 5); corrección confirmada por el usuario el 10 de noviembre de 2026.
 
 ### 2. Gestión de movimientos
@@ -40,9 +41,10 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 - [x] Conectar el evento de Editar para abrir el formulario con los datos básicos de la fila. Comprobado por el usuario en el navegador.
 - [x] Mostrar las acciones sobre el importe al pasar el ratón por la fila. Comprobado por el usuario en el navegador.
 - [ ] Comprobar que las acciones aparecen al llegar a sus botones con Tab. El selector con `:focus-visible` ya está implementado.
-- [ ] Adaptar los botones de Editar y Borrar a móvil y pantallas táctiles.
+- [x] Adaptar los botones de Editar y Borrar a móvil y pantallas táctiles. Controles visibles y de al menos 44 px de ancho en las pruebas de Chrome con pantalla estrecha.
 - [x] Recuperar las notas guardadas para rellenar el formulario de edición. Comprobado por el usuario tras recargar la página.
-- [ ] Corregir el colSpan del estado vacío de cuatro a cinco columnas y distinguir ausencia de movimientos de ausencia de resultados del filtro.
+- [x] Distinguir la ausencia de movimientos de la ausencia de resultados del filtro.
+- [x] Hacer que el mensaje de tabla vacía ocupe las cinco columnas. Verificado en JavaScript.
 
 ### 3. Cuentas, categorías y validaciones
 
@@ -57,7 +59,8 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 ### 4. Pantallas y funciones previstas
 
 - [ ] Crear la pantalla Movimientos y conectar la navegación.
-- [ ] Añadir filtros por día, semana, mes, año o intervalo de fechas.
+- [x] Añadir un filtro por intervalo de fechas.
+- [ ] Añadir filtros rápidos por día, semana, mes o año.
 - [ ] Añadir un selector de periodo y definir su efecto sobre los resúmenes.
 - [ ] Añadir gráficos y desglose de gastos por categoría. La propuesta original plantea Canvas o SVG sin librerías externas.
 - [ ] Añadir presupuestos por categoría y alertas de límite de gasto, previstos en la propuesta original.

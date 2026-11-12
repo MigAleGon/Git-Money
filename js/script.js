@@ -4,6 +4,8 @@ const botonGasto = document.getElementById("btn-gasto")
 const botonCerrar = document.getElementById("btn-cerrar")
 const botonGuardar = document.getElementById("btn-guardar")
 const botonesFiltros = document.querySelectorAll(".btn-filtro")
+const botonDesde = document.getElementById("boton-desde")
+const botonHasta = document.getElementById("boton-hasta")
 
 const dialogoMovimiento = document.getElementById("dialogo-movimiento")
 const tituloMovimiento = document.getElementById("titulo-movimiento")
@@ -23,109 +25,92 @@ const tarjetaIngresos = document.getElementById("tarjeta-ingresos")
 const tarjetaGastos = document.getElementById("tarjeta-gastos")
 const cuerpoTabla = document.querySelector("tbody")
 
+const errorCargaMovimientos = document.getElementById("error-carga-movimientos")
+const errorTabla = document.getElementById("error-tabla")
+const errorFormulario = document.getElementById("error-formulario")
+
 // Datos del servidor y selección actual de la interfaz.
 let categorias = []
 let movimientos = []
 let tipoMovimiento
 let idMovimientoEditar = null
 let datosFiltro = "todos"
+let datosCargados = false
+const borradosEnCurso = new Set()
 
-// Carga las categorías que utiliza el formulario y la tabla.
+function mostrarAviso(aviso, mensaje = "") {
+    aviso.hidden = mensaje === ""
+    aviso.textContent = mensaje
+}
+
+// Sin datos se hace un GET. Con datos se envía un POST en JSON.
+async function solicitarJson(ruta, mensajeError, datos) {
+    const opciones = datos === undefined
+        ? undefined
+        : {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(datos)
+        }
+
+    let respuesta
+    let contenido
+    try {
+        respuesta = await fetch(ruta, opciones)
+        contenido = await respuesta.json()
+    } catch {
+        throw new Error(mensajeError)
+    }
+
+    if (!respuesta.ok) {
+        if (respuesta.status >= 400 && respuesta.status < 500 && contenido?.mensaje) {
+            //los backticks `` permiten escribir un error personalizado
+            throw new Error(`${mensajeError} ${contenido.mensaje}`)
+        }
+        throw new Error(mensajeError)
+    }
+
+    return contenido
+}
+
 async function cargarCategorias() {
-    try {
-        const respuesta = await fetch("php/listar-categorias.php")
+    const mensaje = "No se pudieron cargar las categorías. Recarga la página para reintentar."
+    const datos = await solicitarJson("php/listar-categorias.php", mensaje)
+    
+    // Array.isArray comprueba si el parámetro es un array
+    if (!Array.isArray(datos)) {
+        throw new Error(mensaje)
+    }
 
-        if(!respuesta.ok){
-            throw new Error("No se ha podido conectar con el servidor")
-        }
-
-        categorias = await respuesta.json()
-    } catch(error){console.log(error.message)}
+    return datos
 }
 
-// Recupera los movimientos guardados y sustituye la lista en memoria.
 async function cargarMovimientos() {
-    try {
-        const respuesta = await fetch("php/listar-movimientos.php")
-
-        if(!respuesta.ok){
-            throw new Error("No se ha podido conectar con el servidor")
-        }
-
-        const datos = await respuesta.json()
-        movimientos = datos
-        for (const movimiento of movimientos){
-            movimiento.importe = Number(movimiento.importe)
-            movimiento.categoria = String(movimiento.categoria)
-            movimiento.hora = movimiento.hora.slice(0, 5)
-        }
-    } catch(error){console.log(error.message)}
-}
-
-// Envía el movimiento al servidor en formato JSON.
-async function enviarMovimiento(movimiento) {
-    try{
-        const respuesta = await fetch("php/guardar-movimiento.php", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(movimiento)
-        })
-
-        if(!respuesta.ok){
-            throw new Error("La prueba del envío ha fallado.")
-        }
-
-        const datos = await respuesta.json()
-        console.log(datos)
-
-        return datos
-    } catch (error){
-        console.log(error.message)
-        return false
+    const mensaje = "No se pudieron cargar los movimientos. Recarga la página para reintentar."
+    const datos = await solicitarJson("php/listar-movimientos.php", mensaje)
+   
+    // some() comprueba si al menos 1 de los elementos 
+    // del array cumple la condición
+    // movimiento => es una función, la flecha equivale a un return
+    // ? evita que se produzca un error si movimiento es null o undefined
+    if (!Array.isArray(datos) || datos.some(movimiento => typeof movimiento?.hora !== "string")) {
+        throw new Error(mensaje)
     }
+
+    // map() recorre un array, aplica una función a cada elemento
+    // y devuelve otro array con los resultados
+    return datos.map(normalizarMovimiento)
 }
 
-async function enviarBorrado(id) {
-     try{
-        const respuesta = await fetch("php/borrar-movimiento.php", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({id: id})
-        })
-
-        if(!respuesta.ok){
-            throw new Error("La prueba del envío ha fallado.")
-        }
-
-        const datos = await respuesta.json()
-        console.log(datos)
-
-        return datos
-    } catch (error){
-        console.log(error.message)
-        return false
-    }
-}
-
-async function enviarEdicion(movimiento) {
-    try{
-        const respuesta = await fetch("php/editar-movimiento.php", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(movimiento)
-        })
-
-        if(!respuesta.ok){
-            throw new Error("La prueba del envío ha fallado.")
-        }
-
-        const datos = await respuesta.json()
-        console.log(datos)
-
-        return datos
-    } catch (error){
-        console.log(error.message)
-        return false
+function normalizarMovimiento(movimiento) {
+    return {
+        // ... tiene las propiedades restantes de movimiento
+        // también crea un objeto identico a movimiento
+        ...movimiento,
+        id: Number(movimiento.id),
+        importe: Number(movimiento.importe),
+        categoria: String(movimiento.categoria),
+        hora: movimiento.hora.slice(0, 5)
     }
 }
 
@@ -133,6 +118,7 @@ async function enviarEdicion(movimiento) {
 function abrirVentana(textoTitulo, tipo, movimientoEditar = null) {
     tipoMovimiento = tipo
     formularioMovimiento.reset()
+    mostrarAviso(errorFormulario)
 
     dialogoMovimiento.setAttribute("data-tipo", tipo)
 
@@ -246,6 +232,12 @@ botonCerrar.addEventListener("click", function() {
     dialogoMovimiento.close()
 })
 
+dialogoMovimiento.addEventListener("cancel", function(evento) {
+    if (botonGuardar.disabled) {
+        evento.preventDefault()
+    }
+})
+
 // Menú de usuario aparcado: sus elementos HTML también están comentados.
 /*
 const botonUsuario = document.getElementById("boton-usuario")
@@ -274,14 +266,22 @@ document.addEventListener("click", function(evento) {
 })
 */
 
+botonDesde.addEventListener("change", function(){
+    mostrarMovimientos()
+})
+
+botonHasta.addEventListener("change", function(){
+    mostrarMovimientos()
+})
 // Recoge el formulario, envía los datos y actualiza la vista local.
 formularioMovimiento.addEventListener("submit", async function(evento) {
     evento.preventDefault()
-    
-    if(botonGuardar.disabled === true){
+
+    if (!datosCargados || botonGuardar.disabled) {
         return
     }
 
+    mostrarAviso(errorFormulario)
     const conceptoValor = concepto.value.trim()
     const importeValor = Number(importe.value)
     const categoriaValor = categoriaMovimiento.value
@@ -292,7 +292,10 @@ formularioMovimiento.addEventListener("submit", async function(evento) {
     let medioPagoValor
 
     if(conceptoValor === "") {
-        alert("El concepto no puede estar vacío.")
+        mostrarAviso(errorFormulario, "Escribe un concepto para el movimiento.")
+        
+        // coloca el foco (tab) en el concepto
+        concepto.focus()
         return
     }
 
@@ -316,55 +319,52 @@ formularioMovimiento.addEventListener("submit", async function(evento) {
         tipo: tipoMovimiento
     }
 
-    if (idMovimientoEditar !== null) {
+    const esEdicion = idMovimientoEditar !== null
+    if (esEdicion) {
         movimiento.id = idMovimientoEditar
-        const enviado = await enviarEdicion(movimiento)
-
-        if (enviado === false) {
-            alert("No se ha podido editar el movimiento")
-            return
-        } else {
-            const movimientoEncontrado = movimientos.find(function(otroMovimiento) {
-                return otroMovimiento.id === enviado.id
-            })
-
-            movimientoEncontrado.concepto = enviado.concepto
-            movimientoEncontrado.importe = Number(enviado.importe)
-            movimientoEncontrado.notas = enviado.notas
-            movimientoEncontrado.fecha = enviado.fecha
-            movimientoEncontrado.hora = enviado.hora
-            movimientoEncontrado.categoria = String(enviado.categoria)
-
-            if (tipoMovimiento === "ingreso") {
-                movimientoEncontrado.procedencia = enviado.procedencia
-                movimientoEncontrado.medioPago = null
-            } else if (tipoMovimiento === "gasto") {
-                movimientoEncontrado.medioPago = enviado.medioPago
-                movimientoEncontrado.procedencia = null
-            }
-
-            calcularMovimiento()
-            mostrarMovimientos()
-            dialogoMovimiento.close()
-        }
-
-        return
     }
 
+    const ruta = esEdicion ? "php/editar-movimiento.php" : "php/guardar-movimiento.php"
+    const mensajeError = esEdicion ? "No se pudo editar el movimiento." : "No se pudo guardar el movimiento."
     botonGuardar.disabled = true
+    botonCerrar.disabled = true
+    botonGuardar.textContent = "Guardando…"
 
-    const guardado = await enviarMovimiento(movimiento)
+    let guardado
+    try {
+        const respuesta = await solicitarJson(ruta, mensajeError, movimiento)
+        const id = Number(respuesta?.id)
 
-    botonGuardar.disabled = false
-
-    if(guardado === false){
-        alert("El movimiento no se pudo guardar")
+        // comprueba que un valor sea un número entero 
+        // dentro del rango de enteros que JavaScript puede representar con precisión
+        if (!Number.isSafeInteger(id) || id <= 0 || (esEdicion && id !== movimiento.id)) {
+            throw new Error(mensajeError)
+        }
+        guardado = esEdicion
+            ? normalizarMovimiento({...movimiento, ...respuesta})
+            : {...movimiento, id}
+    } catch (error) {
+        mostrarAviso(errorFormulario, error.message)
         return
+    } finally {
+        botonGuardar.disabled = false
+        botonCerrar.disabled = false
+        botonGuardar.textContent = "Guardar"
     }
 
-    movimiento.id = guardado.id
+    if (esEdicion) {
+        const original = movimientos.find(elemento => elemento.id === guardado.id)
+        if (original) {
 
-    movimientos.push(movimiento)
+            // toma como parámetros dos objetos
+            // compara el primero con el segundo
+            // el primero lo copia y le añade las propiedades del segundo,
+            // si existen dos claves iguales, las del segundo sobreescriben las del primero
+            Object.assign(original, guardado)
+        }
+    } else {
+        movimientos.push(guardado)
+    }
 
     calcularMovimiento()
     mostrarMovimientos()
@@ -387,6 +387,10 @@ for (const boton of botonesFiltros){
 
 // Reconstruye la tabla según el filtro, con los movimientos más recientes primero.
 function mostrarMovimientos(){
+    if (!datosCargados) {
+        return
+    }
+
     cuerpoTabla.replaceChildren()
 
     // Ordena una copia para conservar el orden de la lista original.
@@ -405,8 +409,14 @@ function mostrarMovimientos(){
         }
     })
 
+    const desde = botonDesde.value
+    const hasta = botonHasta.value
+
     for(const movimiento of movimientosCopia){
-        if(datosFiltro === "todos" || datosFiltro === movimiento.tipo){
+        const rangoFecha = (desde === "" || movimiento.fecha >= desde) &&
+            (hasta === "" || movimiento.fecha <= hasta)
+
+        if((datosFiltro === "todos" || datosFiltro === movimiento.tipo) && rangoFecha){
             const fila = document.createElement("tr")
             const botonesContenedor = document.createElement("span")
             const celdaConcepto = document.createElement("td")
@@ -424,15 +434,28 @@ function mostrarMovimientos(){
             const dia = partesFecha[2]
             const fechaFormateada = dia + "/" + mes + "/" + anio
 
-            let categoriaEncontrada = categorias.find(function(categoria){
+            const categoriaEncontrada = categorias.find(function(categoria){
                 return String(categoria.id) === movimiento.categoria
             })
 
+            fila.classList.add("fila-movimiento")
+            fila.setAttribute("role", "row")
+            const celdas = [celdaConcepto, celdaCategoria, celdaFecha, celdaHora, celdaImporte]
+            for (const celda of celdas) {
+                celda.setAttribute("role", "cell")
+            }
+            celdaConcepto.classList.add("movimiento-concepto")
+            celdaCategoria.classList.add("movimiento-categoria")
+            celdaFecha.classList.add("movimiento-fecha")
+            celdaHora.classList.add("movimiento-hora")
+            celdaImporte.classList.add("movimiento-importe")
+
             celdaConcepto.textContent = movimiento.concepto
-            celdaCategoria.textContent = categoriaEncontrada.nombre
+            celdaCategoria.textContent = categoriaEncontrada?.nombre ?? "Categoría no disponible"
             celdaFecha.textContent = fechaFormateada
             celdaHora.textContent = movimiento.hora
             botonEditar.setAttribute("aria-label", "Editar movimiento")
+            botonEditar.type = "button"
             botonEditar.innerHTML = `
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
@@ -442,6 +465,7 @@ function mostrarMovimientos(){
                     `
             botonEditar.classList.add("boton-tabla", "boton-editar")
             botonBorrar.setAttribute("aria-label", "Borrar movimiento")
+            botonBorrar.type = "button"
             botonBorrar.innerHTML = `
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linejoin="round"
@@ -453,17 +477,21 @@ function mostrarMovimientos(){
             botonesContenedor.classList.add("acciones-movimiento")
 
             botonBorrar.addEventListener("click", async function() {
-                const confirmado = confirm("Seguo que quieres eliminar el movimiento?") // pide una confirmación antes de ejecutar la acción
-
-                if (!confirmado) {
+                if (borradosEnCurso.has(movimiento.id) || !confirm("¿Seguro que quieres borrar este movimiento?")) {
                     return
                 }
 
-                const resultado = await enviarBorrado(movimiento.id)
-
-                if (resultado === false){
-                    alert("No se pudo borrar el movimiento.")
+                mostrarAviso(errorTabla)
+                borradosEnCurso.add(movimiento.id)
+                botonBorrar.disabled = true
+                try {
+                    await solicitarJson("php/borrar-movimiento.php", "No se pudo borrar el movimiento.", {id: movimiento.id})
+                } catch (error) {
+                    mostrarAviso(errorTabla, error.message)
                     return
+                } finally {
+                    borradosEnCurso.delete(movimiento.id)
+                    botonBorrar.disabled = false
                 }
 
                 movimientos = movimientos.filter(function(otroMovimiento) {
@@ -475,7 +503,9 @@ function mostrarMovimientos(){
             })
 
             botonEditar.addEventListener("click", function() {
-                abrirVentana("Editar movimiento", movimiento.tipo, movimiento)
+                if (!borradosEnCurso.has(movimiento.id)) {
+                    abrirVentana("Editar movimiento", movimiento.tipo, movimiento)
+                }
             })
 
             if(movimiento.tipo === "ingreso"){
@@ -490,11 +520,7 @@ function mostrarMovimientos(){
             botonesContenedor.append(botonEditar)
             botonesContenedor.append(botonBorrar)
             celdaImporte.append(botonesContenedor)
-            fila.append(celdaConcepto)
-            fila.append(celdaCategoria)
-            fila.append(celdaFecha)
-            fila.append(celdaHora)
-            fila.append(celdaImporte)
+            fila.append(...celdas)
 
             cuerpoTabla.append(fila)
         }
@@ -505,9 +531,17 @@ function mostrarMovimientos(){
         const filaVacia = document.createElement("tr")
         const celdaVacia = document.createElement("td")
 
-        celdaVacia.colSpan = 4
+        filaVacia.classList.add("fila-vacia")
+        filaVacia.setAttribute("role", "row")
+        celdaVacia.colSpan = 5
+        celdaVacia.setAttribute("role", "cell")
         celdaVacia.classList.add("celda-vacia")
-        celdaVacia.textContent = "Aún no se han registrado movimientos"
+
+        if (movimientos.length === 0) {
+            celdaVacia.textContent = "Aún no se han registrado movimientos"
+        } else {
+            celdaVacia.textContent = "No hay movimientos que coincidan con los filtros"
+        }
 
         filaVacia.append(celdaVacia)
         cuerpoTabla.append(filaVacia)
@@ -517,8 +551,26 @@ function mostrarMovimientos(){
 // Dibuja el estado inicial e inicia las peticiones de datos.
 
 async function iniciarPagina(){
-    await cargarCategorias()
-    await cargarMovimientos()
+    try {
+        const [categoriasGuardadas, movimientosGuardados] = 
+        // En lugar de esperar a que inicie una y luego otra como haríamos con await
+        // Aquí inician las dos a la vez
+        // como hacer los await simultaneamente
+        // luego devuelve un array con los resultados de las funciones
+            await Promise.all([
+                cargarCategorias(), 
+                cargarMovimientos()
+            ])
+        categorias = categoriasGuardadas
+        movimientos = movimientosGuardados
+    } catch (error) {
+        mostrarAviso(errorCargaMovimientos, error.message)
+        return
+    }
+
+    datosCargados = true
+    botonIngreso.disabled = false
+    botonGasto.disabled = false
     mostrarMovimientos()
     calcularMovimiento()
 }

@@ -63,12 +63,14 @@
                         id="btn-ingreso"
                         class="default-btn green"
                         type="button"
+                        disabled
                         aria-label="Añadir ingreso"
                     >+ Ingreso</button>
                     <button
                         id="btn-gasto"
                         class="default-btn red"
                         type="button"
+                        disabled
                         aria-label="Añadir gasto"
                     >- Gasto</button>
                 </div>
@@ -88,7 +90,7 @@
                         </div>
                         <div class="tarjeta-contenido">
                             <h2>Balance</h2>
-                            <span class="tarjeta-dinero" id="tarjeta-balance">0 €</span>
+                            <span class="tarjeta-dinero" id="tarjeta-balance">—</span>
                             <span class="tarjeta-descripcion">Tu balance actual</span>
                         </div>
                     </div>
@@ -104,7 +106,7 @@
                         </div>
                         <div class="tarjeta-contenido">
                             <h2>Ingresos</h2>
-                            <span class="tarjeta-dinero" id="tarjeta-ingresos">0 €</span>
+                            <span class="tarjeta-dinero" id="tarjeta-ingresos">—</span>
                             <span class="tarjeta-descripcion">Total de ingresos este mes</span>
                         </div>
                     </div>
@@ -119,7 +121,7 @@
                         </div>
                         <div class="tarjeta-contenido">
                             <h2>Gastos</h2>
-                            <span class="tarjeta-dinero" id="tarjeta-gastos">0 €</span>
+                            <span class="tarjeta-dinero" id="tarjeta-gastos">—</span>
                             <span class="tarjeta-descripcion">Total de gastos este mes</span>
                         </div>
                     </div>
@@ -128,29 +130,42 @@
                 <section class="movimientos-section">
                     <h2 id="movimientos-recientes">Movimientos recientes</h2>
 
-                    <div class="filtros-movimientos">
-                        <button
-                            class="btn-filtro"
-                            type="button"
-                            aria-pressed="true"
-                            data-filtro="todos"
-                        >Todos</button>
-                        <button
-                            class="btn-filtro"
-                            type="button"
-                            aria-pressed="false"
-                            data-filtro="ingreso"
-                        >Ingresos</button>
-                        <button
-                            class="btn-filtro"
-                            type="button"
-                            aria-pressed="false"
-                            data-filtro="gasto"
-                        >Gastos</button>
+                    <div class="barra-filtros">
+                        <div class="filtros-movimientos">
+                            <button
+                                class="btn-filtro"
+                                type="button"
+                                aria-pressed="true"
+                                data-filtro="todos"
+                            >Todos</button>
+                            <button
+                                class="btn-filtro"
+                                type="button"
+                                aria-pressed="false"
+                                data-filtro="ingreso"
+                            >Ingresos</button>
+                            <button
+                                class="btn-filtro"
+                                type="button"
+                                aria-pressed="false"
+                                data-filtro="gasto"
+                            >Gastos</button>
+                        </div>
+
+                        <div class="filtros-fecha">
+                            <label for="boton-desde">Desde</label>
+                            <input type="date" id="boton-desde">
+
+                            <label for="boton-hasta">Hasta</label>
+                            <input type="date" id="boton-hasta">
+                        </div>
                     </div>
 
+                    <p id="error-carga-movimientos" class="aviso-error" role="alert" hidden></p>
+                    <p id="error-tabla" class="aviso-error" role="alert" hidden></p>
+
                     <div class="tabla-contenedor">
-                        <table class="tabla-movimientos" aria-labelledby="movimientos-recientes">
+                        <table class="tabla-movimientos" role="table" aria-labelledby="movimientos-recientes">
                             <thead>
                                 <tr>
                                     <th scope="col">Concepto</th>
@@ -160,7 +175,7 @@
                                     <th scope="col">Importe</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody role="rowgroup">
                                 
                             </tbody>
                         </table>
@@ -243,6 +258,8 @@
                 <label for="notas">Notas (opcional)</label>
                 <textarea id="notas" name="notas" rows="3" maxlength="500"></textarea>
             </p>
+
+            <p id="error-formulario" class="aviso-error" role="alert" hidden></p>
 
             <div class="acciones-formulario">
                 <button id="btn-cerrar" class="boton-formulario boton-cancelar" type="button">Cancelar</button>

@@ -93,10 +93,6 @@ a.enlace-nav:hover{
     background-color: var(--bg);
 }
 
-a.enlace-nav:focus-visible{
-    border: 1px solid var(--blue);
-}
-
 .enlace-nav[aria-current="page"]{
     background-color: var(--light-blue);
     color: var(--blue);
@@ -346,10 +342,18 @@ main{
     margin-bottom: 20px;
 }
 
+.barra-filtros{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
 .filtros-movimientos{
     display: flex;
     gap: 12px;
-    margin-bottom: 24px;
 }
 
 .btn-filtro{
@@ -375,6 +379,40 @@ main{
 .btn-filtro[data-filtro="gasto"][aria-pressed="true"]{
     background-color: var(--light-red);
     color: var(--red);
+}
+
+.filtros-fecha{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filtros-fecha input[type="date"]{
+    background-color: var(--white);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font: inherit;
+    padding: 8px 10px;
+    border-radius: 8px;
+}
+
+.filtros-fecha label{
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.aviso-error{
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border: 1px solid #edb6bb;
+    border-radius: 8px;
+    background-color: #fff0f0;
+    color: #842d36;
+    overflow-wrap: anywhere;
+}
+
+.formulario-movimiento .aviso-error{
+    margin-bottom: 0;
 }
 
 .tabla-contenedor{
@@ -594,9 +632,29 @@ footer{
     border-color: var(--muted);
 }
 
-.default-btn:focus-visible,
-.formulario-movimiento :focus-visible{
-    outline: 0;
+:where(a, button, input, select, textarea):focus-visible{
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+}
+
+button:disabled{
+    cursor: default;
+    opacity: .65;
+}
+
+@media (max-width: 600px), (hover: none), (pointer: coarse){
+    .acciones-movimiento{
+        position: static;
+        margin-top: 6px;
+        opacity: 1;
+        pointer-events: auto;
+        background-color: transparent;
+    }
+
+    .boton-tabla{
+        width: 44px;
+        height: 44px;
+    }
 }
 
 @media(max-width: 900px){
@@ -688,20 +746,152 @@ footer{
         flex-wrap: wrap;
     }
 
+    main{
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .resumen-tarjetas{
+        gap: 12px;
+    }
+
+    .tarjeta-resumen{
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .tarjeta-icono{
+        width: 40px;
+        height: 40px;
+    }
+
+    .tarjeta-icono svg{
+        width: 22px;
+        height: 22px;
+    }
+
+    .tarjeta-contenido{
+        min-width: 0;
+    }
+
+    .tarjeta-dinero{
+        font-size: 26px;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
     .movimientos-section{
         padding: 16px;
     }
 
     .filtros-movimientos{
-        flex-wrap: wrap;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 8px;
+        width: 100%;
     }
 
     .btn-filtro{
         padding: 8px 4px;
         text-align: center;
+        min-height: 44px;
+    }
+
+    .filtros-fecha{
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        width: 100%;
+    }
+
+    .filtros-fecha input[type="date"]{
+        box-sizing: border-box;
+        min-width: 0;
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .tabla-movimientos,
+    .tabla-movimientos tbody,
+    .tabla-movimientos .fila-vacia{
+        display: block;
+    }
+
+    /* Las cabeceras siguen disponibles para lectores de pantalla. */
+    .tabla-movimientos thead{
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .fila-movimiento{
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas: "concepto importe" "categoria importe" "fecha hora";
+        gap: 4px 10px;
+        padding: 12px 2px;
+        border-top: 1px solid var(--line);
+    }
+
+    .tabla-movimientos .fila-movimiento td{
+        padding: 0;
+        border: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .movimiento-concepto{
+        grid-area: concepto;
+        font-weight: 600;
+    }
+
+    .movimiento-categoria{
+        grid-area: categoria;
+    }
+
+    .movimiento-fecha{
+        grid-area: fecha;
+    }
+
+    .movimiento-hora{
+        grid-area: hora;
+        text-align: right;
+    }
+
+    .movimiento-categoria,
+    .movimiento-fecha,
+    .movimiento-hora{
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .tabla-movimientos td.movimiento-importe{
+        grid-area: importe;
+        white-space: normal;
+    }
+
+    .tabla-movimientos td.celda-vacia{
+        display: block;
+        padding: 12px 2px;
+        white-space: normal;
+    }
+
+    .dialogo-movimiento{
+        padding: 16px;
+    }
+
+    .formulario-movimiento input,
+    .formulario-movimiento select,
+    .formulario-movimiento textarea{
+        font-size: 16px;
+    }
+
+    .formulario-movimiento input,
+    .formulario-movimiento select,
+    .boton-formulario{
+        min-height: 44px;
     }
 }
 
