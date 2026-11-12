@@ -77,6 +77,21 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 - [ ] Resolver las opciones provisionales de Configuración, Ayuda y Salir, y los datos de usuario de ejemplo según el alcance acordado.
 - [ ] Verificar el flujo completo de guardar, recargar, filtrar, editar y eliminar, incluyendo errores de conexión y revisión en móvil.
 
+## Fase futura: Git Money multiusuario
+
+Objetivo: permitir que un grupo reducido de personas
+autorizadas utilice Git Money de forma privada y gratuita.
+
+- [ ] Crear cuentas de usuario.
+- [ ] Implementar inicio y cierre de sesión.
+- [ ] Permitir el acceso únicamente por invitación.
+- [ ] Asociar movimientos y categorías a cada usuario.
+- [ ] Impedir el acceso a datos de otros usuarios.
+- [ ] Proteger los endpoints PHP con autenticación.
+- [ ] Implementar un sistema sencillo de gestión de usuarios.
+- [ ] Permitir revocar el acceso a cualquier usuario.
+- [ ] Revisar la seguridad antes de invitar a otras personas.
+
 ## Ideas opcionales, sin prioridad comprometida
 
 - [ ] Modo oscuro.
