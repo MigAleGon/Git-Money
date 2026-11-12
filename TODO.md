@@ -182,6 +182,39 @@ Objetivo: formarse con profundidad en inteligencia artificial como preparación 
 
 Empezar esta fase después de resolver las prioridades de privacidad y conexión bancaria. El alcance concreto y la estimación de horas se definirán al preparar el proyecto; el rango anterior de 50–100 horas para un modelo pequeño no representa este objetivo ampliado.
 
+### Punto de partida y continuidad del aprendizaje
+
+Referencia: extracto reconstruido de la conversación sobre aprendizaje de Python e IA, aportado por el usuario el 12 de noviembre de 2026. No es una exportación íntegra; distinguir los avances documentados de las recomendaciones del asistente.
+
+- El usuario cursa 1.º de DAM, ha visto el curso completo de Python de Píldoras Informáticas y quiere comprender los modelos de IA además de crear aplicaciones que los utilicen. Haber visto el curso no equivale a dominar todos sus contenidos: comprobar la práctica antes de repetir teoría.
+- Base matemática declarada: nivel de bachillerato, con experiencia previa en matemáticas, física y estudios universitarios. Repasar según las necesidades del aprendizaje, sin dar por dominado el temario.
+- Mantener como trayectoria principal la especialización en IA después de DAM; el full-stack es apoyo. Las propuestas anteriores de React, TypeScript, Node.js, Next.js, Laravel o ciberseguridad no constituyen requisitos de este itinerario.
+- Método: explicación breve, un reto cada vez, solución escrita por el usuario, pistas graduales y revisión razonada. Evitar dar de entrada la solución completa y la generación automática que sustituya la práctica; conservar el autocompletado convencional si resulta útil.
+- Adaptar la dedicación a DAM y sus evaluaciones, sin fijar todavía un calendario ni alterar las prioridades prácticas de Git Money.
+
+### Progreso previo en Python y siguiente reto
+
+Los dos retos completados se registran a partir del código corregido y de la confirmación incluida en el extracto; no se han vuelto a ejecutar sus archivos originales en esta revisión.
+
+- [x] Reto 1: calculadora financiera con funciones, parámetros, listas de diccionarios, bucles, condicionales, acumuladores y return. Corregida la inicialización del acumulador fuera del bucle; resultado documentado: 400.
+- [x] Reto 2: análisis de ingresos, gastos, balance y cantidad. Corregidas la inicialización de acumuladores y la devolución de un diccionario clave: valor en lugar de un set. Resultados documentados: ingresos 1500, gastos 280, balance 1220 y cantidad 5.
+- [ ] Retomar el Reto 3: corregir agrupar_gastos(movimientos) para devolver un único diccionario de totales por categoría, sin categorías escritas manualmente ni una lista global.
+- [ ] Antes de resolver el Reto 3, explicar qué comprueba `if "categoria" in movimiento` y distinguirlo de buscar el valor de esa categoría entre las claves del diccionario acumulador.
+- [ ] Conservar el diccionario acumulador dentro de la función y decidir cuándo crear una categoría y cuándo sumar al importe existente. Resultado esperado del ejemplo: comida 50, ocio 30 y transporte 40. Dar pistas, no la solución completa.
+- [ ] Consolidar snake_case, claves de diccionario sin espacios sobrantes y la diferencia entre list, dict y set.
+
+### Ruta técnica propuesta, adaptable al progreso
+
+Esta secuencia recoge recomendaciones formativas del chat, no tecnologías ya aprendidas ni una arquitectura obligatoria para Git Money.
+
+- [ ] Consolidar Python con ejercicios y lectura de archivos; avanzar a un pequeño análisis de un CSV financiero cuando el Reto 3 esté comprendido.
+- [ ] Aprender NumPy para operaciones numéricas, pandas para tratamiento de datos y Matplotlib para visualización mediante prácticas progresivas.
+- [ ] Repasar álgebra lineal, estadística, probabilidad, cálculo y optimización de forma conectada a los modelos estudiados.
+- [ ] Abordar aprendizaje automático clásico con scikit-learn: entrenamiento, comparación y evaluación. Valorar un clasificador de gastos como primer experimento, manteniendo abierto el alcance del proyecto independiente.
+- [ ] Estudiar redes neuronales con PyTorch cuando estén asentados los fundamentos; elegir el momento y la utilidad según el proyecto.
+- [ ] Valorar FastAPI para exponer el prototipo Python como servicio cuando esté listo para esa etapa; la conexión a Git Money sigue sujeta a los criterios de integración de la prioridad 4.
+- [ ] Revisar la orientación y los siguientes proyectos de especialización según la experiencia adquirida, combinando comprensión de modelos y desarrollo de aplicaciones de IA.
+
 ### 1. Definir el proyecto y la ruta de aprendizaje
 
 - [ ] Definir qué problema resolverá la IA y qué resultados permitirán evaluar su utilidad. La clasificación de movimientos es una opción inicial, no el alcance definitivo.
