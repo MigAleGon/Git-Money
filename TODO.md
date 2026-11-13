@@ -62,11 +62,12 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 ### 3. Cuentas, categorías y validaciones
 
 - [x] Permitir seleccionar la cuenta del movimiento en lugar de fijar su ID en 1.
-- [ ] Gestionar cuentas y calcular saldos incluyendo el saldo inicial.
+- [x] Gestionar cuentas y calcular saldos incluyendo el saldo inicial.
 
 La gestión de categorías se detalla más abajo; su aislamiento por usuario forma parte del núcleo multiusuario.
 
-- [ ] Filtrar las categorías por el usuario correspondiente en PHP.
+- [ ] Permitir a cada usuario crear, editar y eliminar sus propias categorías.
+- [x] Filtrar las categorías por el usuario correspondiente en PHP.
 - [x] Completar en el alta la validación de que la categoría corresponde al tipo de movimiento y al usuario. El usuario comprobó la validación. La revisión del código confirma que el error `400` devuelve un objeto JSON con la propiedad `mensaje`. La edición ya comprueba el tipo y el usuario en el `UPDATE`.
 - [x] Completar las validaciones del servidor: fecha, hora, identificadores, longitudes, notas y límites del importe. La fecha y la hora ya se validan en el alta y en la edición. Las comprobaciones pasaron pruebas aisladas en PHP con fechas válidas, bisiestas e imposibles, horas válidas y fuera de rango, formatos incorrectos y valores que no eran texto. El ID de categoría también se valida en ambos endpoints. Las pruebas aisladas cubrieron el formato y el rango de `INTEGER` de PostgreSQL para los IDs positivos. El concepto se limita a 200 caracteres y la procedencia de los ingresos a 50, después de quitar los espacios de los extremos. Las pruebas aisladas con texto acentuado confirmaron ambos límites en el alta y en la edición. En ambos archivos, las notas admiten el campo ausente, `null` o texto de hasta 500 caracteres. Las pruebas aisladas confirmaron el límite y el rechazo de arrays.
   - El importe se valida en el alta y en la edición. Las pruebas aisladas en PHP cubrieron importes enteros, decimales, fuera de rango y valores no numéricos. En la edición, el ID del movimiento debe ser un entero entre 1 y 2147483647. El bloque pasó pruebas aisladas de tipo y rango en PHP.
@@ -103,9 +104,9 @@ Estimación orientativa del multiusuario básico con explicaciones y pruebas: 15
 
 ### 1. Preparar y conservar los datos (1–2 h)
 
-- [ ] Hacer una copia de seguridad y contrastar el esquema versionado con la base de datos instalada.
-- [ ] Preparar la migración conservando los movimientos, cuentas y categorías actuales asociados al usuario propietario.
-- [ ] Revisar la tabla de usuarios y el almacenamiento de hashes de contraseñas.
+- [x] Hacer una copia de seguridad y contrastar el esquema versionado con la base de datos instalada.
+- [x] Preparar la migración conservando los movimientos, cuentas y categorías actuales asociados al usuario propietario.
+- [x] Revisar la tabla de usuarios y el almacenamiento de hashes de contraseñas.
 
 ### 2. Inicio y cierre de sesión (3–4 h)
 

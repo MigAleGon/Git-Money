@@ -85,3 +85,12 @@ SELECT id, nombre
 FROM cuenta
 WHERE idusuario = 1
 ORDER BY id;
+
+
+ALTER TABLE usuario
+ALTER COLUMN hashcontrasenia TYPE VARCHAR(255);
+
+SELECT character_maximum_length
+FROM information_schema.columns
+WHERE table_name = 'usuario'
+  AND column_name = 'hashcontrasenia';

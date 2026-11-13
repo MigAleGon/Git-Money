@@ -266,7 +266,17 @@ function mostrarSaldosCuentas(){
 
     for (const saldoCuenta of cuentas) {
         const listaCuenta = document.createElement("li")
-        listaCuenta.textContent = `${saldoCuenta.nombre}: ${calcularSaldoCuenta(saldoCuenta).toFixed(2)} €`
+        const saldo = calcularSaldoCuenta(saldoCuenta)
+        const importeCuenta = document.createElement("span")
+
+        importeCuenta.textContent = `${saldo.toFixed(2)} €`
+
+        if (saldo < 0) {
+            importeCuenta.classList.add("importe-gasto")
+        }
+
+        listaCuenta.textContent = `${saldoCuenta.nombre}: `
+        listaCuenta.appendChild(importeCuenta)
         
         saldosCuentas.appendChild(listaCuenta)
     }

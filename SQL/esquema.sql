@@ -2,7 +2,7 @@ CREATE TABLE usuario (
 	id SERIAL PRIMARY KEY,
 	nombre VARCHAR(70) NOT NULL,
 	correoElectronico VARCHAR(100) UNIQUE NOT NULL,
-	hashContrasenia VARCHAR(100) NOT NULL,
+	hashContrasenia VARCHAR(255) NOT NULL,
 	apellidos VARCHAR(70) NOT NULL
 );
 
