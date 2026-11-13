@@ -27,6 +27,7 @@ Estos objetivos definen el alcance prioritario. Los objetivos secundarios no amp
 - [x] Filtrar movimientos por fechas. El usuario comprobó el filtro Desde/Hasta y su estado sin coincidencias en el navegador.
 - [x] Tener una interfaz usable y mensajes claros cuando algo falle. Avisos en la página y el formulario, conservación de los datos ante un error y bloqueo de peticiones repetidas. Verificado con fallos simulados.
 - [x] Adaptar Git Money a móvil. Resumen, filtros, movimientos y formularios adaptados a pantallas pequeñas, con Editar y Borrar siempre visibles en móvil y pantallas táctiles. Verificado en Chrome a 320, 390 y 600 px con respuestas simuladas. Queda la comprobación en un teléfono físico.
+  - [x] Arreglar el desborde de los campos Fecha y Hora del formulario en móviles. El usuario confirmó en un iPhone que ambos campos se ven completos al registrar un ingreso y al editar un movimiento, y que los dos selectores se abren. El ajuste usa `display: block` y `appearance: none` en móvil.
 
 ## Objetivos secundarios
 
@@ -35,7 +36,7 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 ### 1. Sincronización de la interfaz y persistencia
 
 - [x] Mostrar movimientos y recalcular tarjetas después de cargar los datos del servidor. Verificado por el usuario en el navegador el 10 de noviembre de 2026.
-- [x] Coordinar la carga de categorías y movimientos antes de dibujar la tabla. iniciarPagina() espera ambas cargas en orden; el usuario confirma que los movimientos se muestran correctamente al recargar.
+- [x] Coordinar la carga de categorías y movimientos antes de dibujar la tabla. `iniciarPagina()` inicia ambas peticiones en paralelo con `Promise.all()` y espera a que terminen; el usuario confirma que los movimientos se muestran correctamente al recargar.
 - [x] Normalizar importes e identificadores recibidos para evitar errores de cálculo, formato y comparación. Revisado en cargarMovimientos(): importe con Number() y categoría con String(). El usuario confirma la carga de movimientos y los totales de las tarjetas en el navegador.
 - [x] Gestionar categorías no encontradas sin interrumpir el dibujado de la tabla. Comprobado con una categoría ausente en una prueba simulada.
 - [x] Esperar la confirmación del guardado antes de añadir el movimiento a la interfaz y cerrar el formulario. El usuario confirma las pruebas de guardado correcto y servidor detenido el 10 de noviembre de 2026: si falla, se conserva el formulario y no se añade la fila.
@@ -51,28 +52,31 @@ Se conserva el detalle técnico de la revisión inicial para consultar dependenc
 - [x] Conectar el evento de Borrar.
 - [x] Conectar el evento de Editar para abrir el formulario con los datos básicos de la fila. Comprobado por el usuario en el navegador.
 - [x] Mostrar las acciones sobre el importe al pasar el ratón por la fila. Comprobado por el usuario en el navegador.
-- [ ] Comprobar que las acciones aparecen al llegar a sus botones con Tab. El selector con `:focus-visible` ya está implementado.
+- [x] Comprobar que Editar y Borrar aparecen al llegar a sus botones con Tab. El usuario confirmó que `:focus-visible` funciona.
 - [x] Adaptar los botones de Editar y Borrar a móvil y pantallas táctiles. Controles visibles y de al menos 44 px de ancho en las pruebas de Chrome con pantalla estrecha.
 - [x] Recuperar las notas guardadas para rellenar el formulario de edición. Comprobado por el usuario tras recargar la página.
+- [x] Precargar el medio de pago al editar gastos con valores antiguos como `Efectivo`. Una prueba en Node verificó que `Efectivo` y `efectivo` coinciden con la opción del formulario, y que un valor ausente selecciona la opción vacía. Queda la prueba en navegador dentro del flujo completo.
 - [x] Distinguir la ausencia de movimientos de la ausencia de resultados del filtro.
 - [x] Hacer que el mensaje de tabla vacía ocupe las cinco columnas. Verificado en JavaScript.
 
 ### 3. Cuentas, categorías y validaciones
 
-- [ ] Permitir seleccionar la cuenta del movimiento en lugar de fijar su ID en 1.
+- [x] Permitir seleccionar la cuenta del movimiento en lugar de fijar su ID en 1.
 - [ ] Gestionar cuentas y calcular saldos incluyendo el saldo inicial.
 
 La gestión de categorías se detalla más abajo; su aislamiento por usuario forma parte del núcleo multiusuario.
 
 - [ ] Filtrar las categorías por el usuario correspondiente en PHP.
-- [ ] Validar en el servidor que la categoría corresponde al tipo de movimiento y al usuario.
-- [ ] Completar las validaciones del servidor: fecha, hora, identificadores, longitudes, notas y límites del importe.
+- [x] Completar en el alta la validación de que la categoría corresponde al tipo de movimiento y al usuario. El usuario comprobó la validación. La revisión del código confirma que el error `400` devuelve un objeto JSON con la propiedad `mensaje`. La edición ya comprueba el tipo y el usuario en el `UPDATE`.
+- [x] Completar las validaciones del servidor: fecha, hora, identificadores, longitudes, notas y límites del importe. La fecha y la hora ya se validan en el alta y en la edición. Las comprobaciones pasaron pruebas aisladas en PHP con fechas válidas, bisiestas e imposibles, horas válidas y fuera de rango, formatos incorrectos y valores que no eran texto. El ID de categoría también se valida en ambos endpoints. Las pruebas aisladas cubrieron el formato y el rango de `INTEGER` de PostgreSQL para los IDs positivos. El concepto se limita a 200 caracteres y la procedencia de los ingresos a 50, después de quitar los espacios de los extremos. Las pruebas aisladas con texto acentuado confirmaron ambos límites en el alta y en la edición. En ambos archivos, las notas admiten el campo ausente, `null` o texto de hasta 500 caracteres. Las pruebas aisladas confirmaron el límite y el rechazo de arrays.
+  - El importe se valida en el alta y en la edición. Las pruebas aisladas en PHP cubrieron importes enteros, decimales, fuera de rango y valores no numéricos. En la edición, el ID del movimiento debe ser un entero entre 1 y 2147483647. El bloque pasó pruebas aisladas de tipo y rango en PHP.
 - [x] Recoger la procedencia del ingreso y el medio de pago del gasto en el formulario, validarlos en PHP y guardar los valores elegidos en PostgreSQL. El usuario confirmó la prueba de guardado de ambos tipos el 11 de noviembre de 2026. No es necesario mostrar estos campos en la tabla principal.
 
 ### 4. Pantallas y funciones previstas
 
 - [ ] Crear la pantalla Movimientos y conectar la navegación.
 - [x] Añadir un filtro por intervalo de fechas.
+- [x] Mostrar un aviso específico cuando la fecha Desde sea posterior a la fecha Hasta. El usuario comprobó el cambio.
 - [ ] Añadir filtros rápidos por día, semana, mes o año.
 - [ ] Añadir un selector de periodo y definir su efecto sobre los resúmenes.
 - [ ] Añadir gráficos y desglose de gastos por categoría. La propuesta original plantea Canvas o SVG sin librerías externas.
@@ -86,9 +90,10 @@ La gestión de categorías se detalla más abajo; su aislamiento por usuario for
 - [ ] Actualizar el diagrama y la documentación para reflejar el esquema actual.
 - [ ] Crear un README con requisitos, configuración, arranque, capturas y funciones disponibles.
 - [ ] Retirar credenciales de prueba del SQL y configurar un usuario de base de datos con permisos adecuados en lugar de usar postgres.
-- [ ] Revisar la accesibilidad, especialmente los indicadores de foco eliminados por el CSS.
+- [ ] Revisar la accesibilidad. El usuario ya comprobó con el teclado los indicadores de foco de Editar y Borrar en la tabla.
 - [ ] Resolver las opciones provisionales de Configuración, Ayuda y Salir, y los datos de usuario de ejemplo según el alcance acordado.
-- [ ] Verificar el flujo completo de guardar, recargar, filtrar, editar y eliminar, incluyendo errores de conexión y revisión en móvil.
+- [x] Verificar el flujo completo de guardar, recargar, filtrar, editar y eliminar, incluyendo errores de conexión y revisión en móvil. El usuario confirmó el flujo normal en el PC y en el iPhone con un gasto de prueba. También confirmó en el iPhone que, al intentar guardar sin conexión, aparece el aviso, se conservan los datos y se puede reintentar al recuperar la conexión sin duplicar el gasto.
+- [ ] Hacer que el flujo de despliegue se detenga si falla una comprobación de sintaxis antes de generar el paquete.
 
 ## Prioridad 1: privacidad y núcleo multiusuario
 

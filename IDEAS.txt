@@ -1,3 +1,9 @@
+
+COMANDOS PARA INICIAR EL SERVER
+1. cd "$env:USERPROFILE\Desktop\Git-Money"
+2. $env:GIT_MONEY_DB_PASSWORD = Read-Host "Contraseña de PostgreSQL" -MaskInput
+3. & "C:\xampp\php\php.exe" -S localhost:8000
+
 INSPO: https://webapp.fastbudget.app/calendar/trial
 
 añadir movimientos html para movimientos con gráficos y capacidad de filtrar por día, semana, mes, año, ingresos, gastos

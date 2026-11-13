@@ -127,6 +127,8 @@
                     </div>
                 </div>
 
+                <ul id="saldos-cuentas" class="saldos-cuentas"></ul>
+
                 <section class="movimientos-section">
                     <h2 id="movimientos-recientes">Movimientos recientes</h2>
 
@@ -223,6 +225,11 @@
                 </select>
             </p>
 
+            <p>
+                <label for="cuenta-movimiento">Cuenta:</label>
+                <select id="cuenta-movimiento" name="cuenta" required>
+                </select>
+            </p>
             <p id="campo-procedencia">
                 <label for="procedencia">Procedencia:</label>
                 <input id="procedencia" name="procedencia" type="text">
@@ -269,7 +276,5 @@
     </dialog>
 
     <script src="js/script.js"></script>
-
-    <!-- Prueba de despliegue automatico -->
 </body>
 </html>

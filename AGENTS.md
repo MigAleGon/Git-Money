@@ -36,3 +36,8 @@ Las tareas y prioridades se mantienen en [TODO.md](TODO.md). Estos archivos sirv
 - ProyectoReto.pdf: propuesta original de funcionalidades.
 - Specs BBDD Git Money.pdf, Diagrama.dia y ENTIDADES ATRIBUTOS Y RELACIONES.txt: diseño de datos que debe contrastarse con el esquema vigente.
 - SQL/esquema.sql: esquema versionado; comprobar posibles diferencias con la base de datos instalada.
+
+## Gestión de conversaciones
+
+- Si el usuario repite una instrucción o preferencia que ya está establecida, aplícala y responde brevemente. No vuelvas a explicar ni resumir el contexto que ya conoce.
+- Si la conversación de trabajo se vuelve demasiado larga o empieza a perder claridad, propón reiniciarla en un hilo nuevo y prepara un resumen breve del estado actual para retomarla sin arrastrar todo el contexto anterior.

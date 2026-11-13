@@ -51,6 +51,8 @@ VALUES ('Pedro', 'Pérez', 'pedro@example.test', 'solo_datos_de_prueba');
 
 INSERT INTO cuenta (tipo, saldoInicial, nombre, IDUsuario)
 VALUES ('efectivo', 0.00, 'Cartera', 1);
+INSERT INTO cuenta (tipo, saldoInicial, nombre, IDUsuario)
+VALUES ('bancario', 0.00, 'BBVA', 1);
 
 INSERT INTO categoria (nombre, tipo, IDUsuario)
 VALUES
@@ -78,3 +80,8 @@ VALUES
      NULL, 'efectivo', 'gasto', 1, 5, 1);
 
 COMMIT;
+
+SELECT id, nombre
+FROM cuenta
+WHERE idusuario = 1
+ORDER BY id;

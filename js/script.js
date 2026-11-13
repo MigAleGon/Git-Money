@@ -17,6 +17,8 @@ const medioPago = document.getElementById("medioPago")
 const fecha = document.getElementById("fecha")
 const hora = document.getElementById("hora")
 const categoriaMovimiento = document.getElementById("categoria-movimiento")
+const saldosCuentas = document.getElementById("saldos-cuentas")
+const cuentaMovimiento = document.getElementById("cuenta-movimiento")
 const concepto = document.getElementById("concepto")
 const importe = document.getElementById("importe")
 const notas = document.getElementById("notas")
@@ -32,6 +34,7 @@ const errorFormulario = document.getElementById("error-formulario")
 // Datos del servidor y selección actual de la interfaz.
 let categorias = []
 let movimientos = []
+let cuentas = []
 let tipoMovimiento
 let idMovimientoEditar = null
 let datosFiltro = "todos"
@@ -79,6 +82,17 @@ async function cargarCategorias() {
     
     // Array.isArray comprueba si el parámetro es un array
     if (!Array.isArray(datos)) {
+        throw new Error(mensaje)
+    }
+
+    return datos
+}
+
+async function cargarCuentas(){
+    const mensaje = "No se pudieron cargar las cuentas. Regarga la página para reintentar"
+    const datos = await solicitarJson("php/listar-cuentas.php", mensaje)
+
+    if (!Array.isArray(datos)){
         throw new Error(mensaje)
     }
 
@@ -154,16 +168,25 @@ function abrirVentana(textoTitulo, tipo, movimientoEditar = null) {
     hora.value = horaActual
 
     categoriaMovimiento.replaceChildren()
-    const opcionDef = new Option("Selecciona una categoría", "")
-    categoriaMovimiento.add(opcionDef)
+    const categoriaDef = new Option("Selecciona una categoría", "")
+    categoriaMovimiento.add(categoriaDef)
+
+    cuentaMovimiento.replaceChildren()
+    const cuentaDef = new Option("Selecciona una cuenta", "")
+    cuentaMovimiento.add(cuentaDef)
 
     // Ofrece únicamente categorías del mismo tipo que el movimiento.
     const categoriasDisponibles = categorias.filter(function(categoria) {
         return categoria.tipo === tipo
     })
     for(const categoria of categoriasDisponibles){
-        const opcion = new Option(categoria.nombre, categoria.id)
-        categoriaMovimiento.add(opcion)
+        const categoriaOpcion = new Option(categoria.nombre, categoria.id)
+        categoriaMovimiento.add(categoriaOpcion)
+    }
+
+    for(const cuenta of cuentas){
+        const cuentaOpcion = new Option(cuenta.nombre, cuenta.id)
+        cuentaMovimiento.add(cuentaOpcion)
     }
 
     if (movimientoEditar !== null) {
@@ -171,6 +194,7 @@ function abrirVentana(textoTitulo, tipo, movimientoEditar = null) {
         concepto.value = movimientoEditar.concepto
         importe.value = movimientoEditar.importe
         categoriaMovimiento.value = movimientoEditar.categoria
+        cuentaMovimiento.value = movimientoEditar.cuenta
         fecha.value = movimientoEditar.fecha
         hora.value = movimientoEditar.hora
         notas.value = movimientoEditar.notas ?? ""
@@ -178,7 +202,7 @@ function abrirVentana(textoTitulo, tipo, movimientoEditar = null) {
         if (tipoMovimiento === "ingreso"){
             procedencia.value = movimientoEditar.procedencia
         } else if (tipoMovimiento === "gasto") {
-            medioPago.value = movimientoEditar.medioPago
+            medioPago.value = movimientoEditar.medioPago?.toLowerCase() ?? ""
         }
     } else {
         idMovimientoEditar = null
@@ -194,20 +218,20 @@ function calcularMovimiento() {
     let totalBalance = 0
     const ahora = new Date()
 
-    for(const movimiento of movimientos){
+    for (const movimiento of movimientos) {
         const anio = movimiento.fecha.split("-")[0]
         const mes = movimiento.fecha.split("-")[1]
 
-        if(anio === String(ahora.getFullYear()) &&
+        if (anio === String(ahora.getFullYear()) &&
            mes === String((ahora.getMonth() + 1)).padStart(2, "0")) {
-            if (movimiento.tipo === "ingreso"){
+            if (movimiento.tipo === "ingreso") {
                 totalIngresos += movimiento.importe
-            } else if (movimiento.tipo === "gasto"){
+            } else if (movimiento.tipo === "gasto") {
                 totalGastos -= movimiento.importe
             }
         }
 
-        if(movimiento.tipo === "ingreso"){
+        if (movimiento.tipo === "ingreso") {
             totalBalance += movimiento.importe
         } else if(movimiento.tipo === "gasto"){
             totalBalance -= movimiento.importe
@@ -217,6 +241,35 @@ function calcularMovimiento() {
     tarjetaIngresos.textContent = totalIngresos.toFixed(2) + " €"
     tarjetaGastos.textContent = totalGastos.toFixed(2) + " €"
     tarjetaBalance.textContent = totalBalance.toFixed(2) + " €"
+
+    mostrarSaldosCuentas()
+}
+
+function calcularSaldoCuenta(cuenta){
+    let saldoInicial = Number(cuenta.saldoInicial)
+
+    for (const movimiento of movimientos) {
+        if (String(movimiento.cuenta) === String(cuenta.id)) {
+            if (movimiento.tipo === "ingreso") {
+                saldoInicial += movimiento.importe
+            } else if (movimiento.tipo === "gasto") {
+                saldoInicial -= movimiento.importe
+            }
+        }
+    }
+
+    return saldoInicial
+}
+
+function mostrarSaldosCuentas(){
+    saldosCuentas.replaceChildren()
+
+    for (const saldoCuenta of cuentas) {
+        const listaCuenta = document.createElement("li")
+        listaCuenta.textContent = `${saldoCuenta.nombre}: ${calcularSaldoCuenta(saldoCuenta).toFixed(2)} €`
+        
+        saldosCuentas.appendChild(listaCuenta)
+    }
 }
 
 // Apertura y cierre del formulario.
@@ -285,6 +338,7 @@ formularioMovimiento.addEventListener("submit", async function(evento) {
     const conceptoValor = concepto.value.trim()
     const importeValor = Number(importe.value)
     const categoriaValor = categoriaMovimiento.value
+    const cuentaValor = cuentaMovimiento.value
     const fechaValor = fecha.value
     const horaValor = hora.value
     const notasValor = notas.value
@@ -311,6 +365,7 @@ formularioMovimiento.addEventListener("submit", async function(evento) {
         concepto: conceptoValor,
         importe: importeValor,
         categoria: categoriaValor,
+        cuenta: cuentaValor,
         fecha: fechaValor,
         hora: horaValor,
         procedencia: procedenciaValor,
@@ -537,11 +592,15 @@ function mostrarMovimientos(){
         celdaVacia.setAttribute("role", "cell")
         celdaVacia.classList.add("celda-vacia")
 
-        if (movimientos.length === 0) {
+        
+        if (desde !== "" && hasta !== "" && desde > hasta) {
+            celdaVacia.textContent = "La fecha  <Desde> debe ser anterior o igual a la fecha <Hasta>"
+        } else if (movimientos.length === 0) {
             celdaVacia.textContent = "Aún no se han registrado movimientos"
         } else {
             celdaVacia.textContent = "No hay movimientos que coincidan con los filtros"
         }
+           
 
         filaVacia.append(celdaVacia)
         cuerpoTabla.append(filaVacia)
@@ -552,17 +611,19 @@ function mostrarMovimientos(){
 
 async function iniciarPagina(){
     try {
-        const [categoriasGuardadas, movimientosGuardados] = 
+        const [categoriasGuardadas, movimientosGuardados, cuentasGuardadas] = 
         // En lugar de esperar a que inicie una y luego otra como haríamos con await
         // Aquí inician las dos a la vez
         // como hacer los await simultaneamente
         // luego devuelve un array con los resultados de las funciones
             await Promise.all([
                 cargarCategorias(), 
-                cargarMovimientos()
+                cargarMovimientos(),
+                cargarCuentas()
             ])
         categorias = categoriasGuardadas
         movimientos = movimientosGuardados
+        cuentas = cuentasGuardadas
     } catch (error) {
         mostrarAviso(errorCargaMovimientos, error.message)
         return
