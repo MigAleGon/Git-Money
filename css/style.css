@@ -644,8 +644,9 @@ button:disabled{
 
 .saldos-cuentas{
     display: grid;
-    grid-template-columns: minmax(220px, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
     gap: 12px;
+    list-style: none;
 }
 
 .saldos-cuentas li{
@@ -653,7 +654,8 @@ button:disabled{
     border: 1px solid var(--line);
     padding: 16px 20px;
     border-radius: 12px;
-
+    font-size: 18px;
+    font-weight: 600;
 }
 
 @media (max-width: 600px), (hover: none), (pointer: coarse){
