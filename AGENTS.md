@@ -19,6 +19,16 @@ Aplicación de finanzas personales desarrollada por un estudiante de 1.º de DAM
 - No añadir funcionalidades ajenas a la petición ni modificar archivos que no correspondan a la tarea.
 - Respetar los cambios locales del usuario. No hacer commits ni publicar cambios salvo que lo solicite.
 
+## Consolidación del aprendizaje
+
+- Dedicar aproximadamente una de cada cuatro sesiones a consolidar lo aprendido, sin cambiar las prioridades funcionales del TODO ni rehacer el proyecto entero.
+- En los retos de consolidación, presentar primero el objetivo y los criterios de comprobación. Pedir al usuario que explique el recorrido o proponga los pasos sin mirar el código; repasar después solo los conceptos que falten.
+- Dejar que escriba un intento antes de ofrecer una solución. Dar pistas graduales y pedir que prediga la causa del fallo antes de mostrar una corrección, salvo que solicite expresamente la implementación.
+- Practicar con fragmentos pequeños en una carpeta o rama de prácticas y datos de prueba. Introducir una variación del requisito y comprobar casos correctos, incorrectos y de falta de autorización cuando proceda.
+- Permitir consultar documentación: evaluar comprensión, adaptación y depuración, no memorización de sintaxis.
+- Retomar los ejercicios unos días después y registrar por tarea si la resuelve solo, con pistas o si solo la entiende al verla. No dar por consolidado un concepto únicamente porque el código funcione.
+- Mantener el orden de retos y el punto de continuación en TODO.md. El usuario marcará los avances; indicar qué punto puede marcar cuando esté comprobado.
+
 ## Seguimiento compartido
 
 Las tareas y prioridades se mantienen en [TODO.md](TODO.md). Estos archivos sirven de referencia para las sesiones que accedan al repositorio; no sincronizan por sí solos otros chats de ChatGPT.
