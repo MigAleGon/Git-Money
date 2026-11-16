@@ -196,6 +196,44 @@ El aprendizaje de Python, los retos, los modelos y su planificación se traslada
 - [ ] Modo oscuro.
 - [ ] Buscaminas como extra independiente.
 
+## Consolidación del aprendizaje
+
+Plan acordado el 16 de noviembre de 2026. Dedicar aproximadamente una de cada cuatro sesiones a practicar lo ya aprendido, intercalándolo con el desarrollo y manteniendo las prioridades actuales.
+
+### Método de cada práctica
+
+1. Explicar el recorrido o la función con palabras propias antes de consultar el código.
+2. Reconstruir una parte pequeña sin copiar, pudiendo consultar documentación.
+3. Aplicar una variación del requisito para comprobar que se entiende la lógica.
+4. Predecir y comprobar resultados correctos y casos de error; incluir permisos cuando proceda. Usar una carpeta o rama de prácticas y datos de prueba.
+5. Repetir una variante unos días después y anotar el grado de autonomía.
+
+El asistente propone el objetivo y los criterios de comprobación; el usuario plantea los pasos y escribe un intento. Después se ofrecen pistas graduales y revisión razonada, sin entregar de entrada la solución completa.
+
+### Punto de continuación
+
+- [ ] Primer ejercicio: explicar sin abrir el código qué ocurre desde que se pulsa Guardar hasta que aparece el movimiento, indicando las responsabilidades de JavaScript, PHP y PostgreSQL y qué sucede si el servidor rechaza el guardado. Elegir el siguiente repaso según los huecos detectados.
+
+### Retos por bloques
+
+- [ ] Arrays y objetos: calcular ingresos, gastos y balance a partir de movimientos sin utilizar el DOM.
+- [ ] DOM y eventos: dibujar movimientos y filtrarlos por tipo.
+- [ ] Asincronía y JSON: cargar datos y mostrar un mensaje si falla la petición.
+- [ ] PHP y validaciones: recibir un movimiento y rechazar datos incorrectos.
+- [ ] SQL y PDO: consultar y modificar únicamente registros del usuario correspondiente.
+- [ ] Sesiones y permisos: explicar y comprobar por qué cambiar un ID no permite acceder a datos ajenos.
+- [ ] Transacciones: explicar y comprobar qué debe deshacerse si falla la creación de las categorías durante el registro.
+
+### Registro breve de autonomía
+
+Registrar tareas concretas, no listas de métodos del lenguaje. Estados: **lo resuelvo solo**, **lo resuelvo con alguna pista**, **lo entiendo al verlo, pero todavía no sé construirlo**. No hay una evaluación inicial realizada.
+
+| Tarea practicada | Fecha | Grado de autonomía | Siguiente repaso |
+|---|---|---|---|
+| Pendiente de la primera práctica | — | Sin evaluar | — |
+
+El usuario marca los puntos completados después de comprobarlos; el asistente indica cuáles puede marcar. Completar un primer intento no sustituye el repaso posterior.
+
 ## Apuntes de aprendizaje
 
 Los comentarios didácticos de JavaScript y PHP se han resumido, junto con los apuntes SQL, en [Apuntes_Git_Money.pdf](output/pdf/Apuntes_Git_Money.pdf). Se mantienen comentarios sobre el propósito de los bloques y las decisiones del proyecto. Esta limpieza no resuelve ni marca como completadas las tareas funcionales.
