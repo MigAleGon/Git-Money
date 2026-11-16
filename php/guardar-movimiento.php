@@ -11,6 +11,18 @@ if ($metodo !== "POST"){
     exit;
 }
 
+session_start();
+
+if(!isset($_SESSION["idusuario"])){
+    http_response_code(401);
+    $mensaje = [
+        "correcto" => false,
+        "mensaje" => "Sesión no iniciada"
+    ];
+    echo json_encode($mensaje);
+    exit;
+}
+
 // Lee el cuerpo JSON como un array asociativo de PHP.
 $cuerpo = file_get_contents("php://input");
 
@@ -121,11 +133,8 @@ if(isset($datos["notas"]) && (!is_string($datos["notas"]) || mb_strlen($datos["n
 }
 
 try {
+    $idusuario = $_SESSION["idusuario"];
     require_once __DIR__ . "/conexion.php";
-
-    // usuario fijos durante esta fase de desarrollo.
-
-    $IDUsuario = 1;
 
     $existeCategoria = "SELECT 1 FROM categoria
         WHERE id = :categoria
@@ -137,7 +146,7 @@ try {
     $comprobacionCategoria->execute([
         "categoria" => $datos["categoria"],
         "tipo" => $datos["tipo"],
-        "idusuario" => $IDUsuario
+        "idusuario" => $idusuario
     ]);
 
     if(!$comprobacionCategoria->fetchColumn()){
@@ -155,7 +164,7 @@ try {
 
     $comprobacionCuenta->execute([
         "cuenta" => $datos["cuenta"],
-        "idusuario" => $IDUsuario
+        "idusuario" => $idusuario
     ]);
 
     if(!$comprobacionCuenta->fetchColumn()){
@@ -193,7 +202,7 @@ try {
         "tipo" => $datos["tipo"],
         "IDCuenta" => $datos["cuenta"],
         "IDCategoria" => $datos["categoria"],
-        "IDUsuario" => $IDUsuario
+        "IDUsuario" => $idusuario
     ]);
 
     // obtiene el valor de la primera columna que devuelve el resultado
@@ -207,7 +216,7 @@ try {
         "procedencia" => $procedencia,
         "medioPago" => $medioPago,
         "idCuenta" => $datos["cuenta"],
-        "idUsuario" => $IDUsuario
+        "idUsuario" => $idusuario
     ];
 } catch (Throwable $error) {
     // Registra el detalle en el servidor y devuelve un mensaje genérico al cliente.

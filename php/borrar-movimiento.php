@@ -10,6 +10,18 @@ if ($metodo !== "POST"){
     exit;
 }
 
+session_start();
+
+if(!isset($_SESSION["idusuario"])){
+    http_response_code(401);
+    $mensaje = [
+        "correcto" => false,
+        "mensaje" => "Sesión no iniciada"
+    ];
+    echo json_encode($mensaje);
+    exit;
+}
+
 $cuerpo = file_get_contents("php://input");
 
 $datos = json_decode($cuerpo, true);
@@ -24,15 +36,16 @@ if(!is_int($id) || $id <= 0){
 }
 
 try {
+    $idusuario = $_SESSION["idusuario"];
     require_once __DIR__ . "/conexion.php";
 
     $sql = "DELETE FROM movimiento
-            WHERE id = :id AND idusuario = :idUsuario";
+            WHERE id = :id AND idusuario = :idusuario";
     $consulta = $conexion->prepare($sql);
 
     $consulta->execute([
         "id" => $id,
-        "idUsuario" => 1
+        "idusuario" => $idusuario
     ]);
 
     if($consulta->rowCount() === 0){

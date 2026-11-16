@@ -51,5 +51,13 @@ CREATE TABLE movimiento (
 	REFERENCES categoria (id, IDUsuario)
 );
 
+CREATE TABLE token_recuperacion (
+	id SERIAL PRIMARY KEY,
+	IDUsuario INTEGER NOT NULL REFERENCES usuario(id),
+	hash_token CHAR(64) UNIQUE NOT NULL,
+	expira_en TIMESTAMPTZ NOT NULL, /* indica fecha y hora */
+	usado_en TIMESTAMPTZ NULL,
+	creado_en TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 

@@ -7,7 +7,7 @@ Aplicación de finanzas personales desarrollada por un estudiante de 1.º de DAM
 - Interfaz: HTML, CSS y JavaScript.
 - Servidor: PHP con PDO.
 - Base de datos actual: PostgreSQL. No asumir MySQL ni cambiar de motor sin petición del usuario.
-- El alcance actual es el uso personal. La autenticación multiusuario no es un requisito confirmado.
+- Git Money es privado y está destinado al usuario y a un grupo reducido de confianza. El acceso de red se limita mediante Tailscale. La aplicación tendrá cuentas independientes con correo y contraseña, registro propio y recuperación de contraseña; no tendrá un sistema interno de invitaciones con códigos.
 
 ## Forma de trabajar
 

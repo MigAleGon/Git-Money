@@ -6,9 +6,9 @@ Revisión inicial: 10 de noviembre de 2026. Basada en los archivos del proyecto;
 
 ## Objetivo y orden de trabajo acordados
 
-Actualizado el 12 de noviembre de 2026. Git Money debe ser útil para controlar el dinero del usuario: proteger sus datos frente a otros usuarios y reducir la introducción manual de movimientos. Su objetivo profesional principal es la inteligencia artificial y el curso de especialización en IA; el desarrollo full-stack sirve de apoyo para construir y utilizar sus soluciones.
+Actualizado el 15 de noviembre de 2026. Git Money debe ser útil para controlar el dinero del usuario: proteger sus datos frente a otros usuarios y reducir la introducción manual de movimientos. Su objetivo profesional principal es la inteligencia artificial y el curso de especialización en IA; el desarrollo full-stack sirve de apoyo para construir y utilizar sus soluciones.
 
-1. Completar el multiusuario con autenticación, aislamiento de datos e invitaciones, verificando la privacidad antes de compartir la aplicación.
+1. Completar el multiusuario con cuentas independientes, registro y recuperación de contraseña, y aislamiento de datos. La aplicación solo será accesible mediante Tailscale; no se implementarán invitaciones internas con códigos. Verificar la privacidad antes de compartirla.
 2. Conectar Enable Banking y conseguir una sincronización bancaria fiable para el uso cotidiano. La gestión de cuentas necesaria para esa conexión forma parte de esta prioridad.
 3. Mantener como objetivos confirmados crear, editar y eliminar categorías e iniciar sesión con Google. Pueden desarrollarse tras el núcleo multiusuario, pero no deben retrasar la conexión bancaria salvo dependencia real. Los gráficos, presupuestos y demás ampliaciones tampoco bloquean estas prioridades.
 4. El proyecto de IA se planifica y desarrolla por separado. Cuando esté terminado o suficientemente avanzado y evaluado, integrarlo mediante una API propia en Python para hacer más cómodo el uso de Git Money.
@@ -110,27 +110,27 @@ Estimación orientativa del multiusuario básico con explicaciones y pruebas: 15
 
 ### 2. Inicio y cierre de sesión (3–4 h)
 
-- [ ] Implementar inicio de sesión con correo y contraseña y cierre de sesión.
-- [ ] Gestionar la identidad desde la sesión del servidor, sin confiar en un ID de usuario enviado por el navegador.
-- [ ] Proteger los endpoints PHP que leen o modifican datos privados y rechazar solicitudes sin sesión válida.
+- [x] Implementar inicio de sesión con correo y contraseña y cierre de sesión.
+- [x] Gestionar la identidad desde la sesión del servidor, sin confiar en un ID de usuario enviado por el navegador.
+- [x] Proteger los endpoints PHP que leen o modifican datos privados y rechazar solicitudes sin sesión válida.
 
 ### 3. Separar los datos de cada usuario (2–4 h)
 
-- [ ] Sustituir el usuario fijo 1 en listar, guardar, editar y borrar movimientos por el usuario autenticado.
-- [ ] Filtrar las categorías por el usuario autenticado.
-- [ ] Validar en el servidor la propiedad de cuentas, categorías y movimientos y la correspondencia entre categoría y tipo de movimiento.
-- [ ] Resolver la cuenta de cada usuario sin utilizar la cuenta fija 1. Empezar con una cuenta financiera inicial por usuario; la gestión de varias cuentas necesaria para Enable Banking se abordará en la fase bancaria.
+- [x] Sustituir el usuario fijo 1 en listar, guardar, editar y borrar movimientos por el usuario autenticado.
+- [x] Filtrar las categorías por el usuario autenticado.
+- [x] Validar en el servidor la propiedad de cuentas, categorías y movimientos y la correspondencia entre categoría y tipo de movimiento.
+- [x] Resolver la cuenta de cada usuario sin utilizar la cuenta fija 1. Empezar con una cuenta financiera inicial por usuario; la gestión de varias cuentas necesaria para Enable Banking se abordará en la fase bancaria.
 
-### 4. Altas privadas y gestión de usuarios (3–5 h)
+### 4. Registro y gestión de usuarios (3-5 h)
 
-- [ ] Crear cuentas de usuario únicamente mediante invitaciones de un solo uso y con caducidad.
-- [ ] Crear una cuenta financiera y categorías iniciales propias para cada nuevo usuario.
-- [ ] Implementar una gestión sencilla de usuarios e invitaciones.
-- [ ] Permitir revocar el acceso a un usuario, incluyendo sus sesiones activas.
+- [x] Permitir el autorregistro únicamente desde la aplicación privada accesible por Tailscale.
+- [x] Crear de forma transaccional una cuenta financiera y categorías iniciales propias para cada usuario nuevo.
+- [ ] Implementar la recuperación de contraseña por correo con un token de un solo uso y caducidad; configurar el envío de correos.
+- [ ] Permitir desactivar la cuenta de un usuario e invalidar sus sesiones activas; retirar también su acceso en Tailscale cuando corresponda.
 
 ### 5. Adaptar la interfaz (2–3 h)
 
-- [ ] Crear la pantalla de acceso, mostrar el nombre del usuario y conectar el botón Salir.
+- [ ] Crear las pantallas de inicio de sesión, registro y recuperación de contraseña; mostrar el nombre del usuario y conectar el botón Salir.
 - [ ] Gestionar sesiones caducadas y limpiar los datos visibles del usuario al cerrar o cambiar de sesión.
 - [ ] Comprobar los nuevos formularios y mensajes en móvil.
 
@@ -161,9 +161,9 @@ Estas funciones siguen previstas; la privacidad y la sincronización bancaria ti
 - [ ] Configurar el acceso con Google y las direcciones de retorno para el entorno de desarrollo y el despliegue.
 - [ ] Implementar y validar la identidad de Google en el servidor y asociarla de forma segura a una cuenta local.
 - [ ] Definir la vinculación de Google con cuentas existentes evitando duplicados y vinculaciones basadas únicamente en un correo recibido del navegador.
-- [ ] Mantener el acceso por invitación: iniciar sesión con Google no debe permitir registrarse sin autorización.
+- [ ] Restringir el registro y el acceso con Google a quienes puedan acceder a la aplicación mediante Tailscale.
 - [ ] Aplicar las mismas reglas de sesión, aislamiento y revocación que al acceso con correo y contraseña.
-- [ ] Probar el primer acceso, accesos posteriores, cancelaciones, errores y usuarios no invitados.
+- [ ] Probar el primer acceso, accesos posteriores, cancelaciones, errores y usuarios sin acceso autorizado por Tailscale.
 
 ## Prioridad 2: integración con Enable Banking
 

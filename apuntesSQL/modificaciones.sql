@@ -49,6 +49,9 @@ BEGIN;
 INSERT INTO usuario (nombre, apellidos, correoElectronico, hashContrasenia)
 VALUES ('Pedro', 'Pérez', 'pedro@example.test', 'solo_datos_de_prueba');
 
+INSERT INTO usuario (nombre, apellidos, correoElectronico, hashContrasenia)
+VALUES ('Miguel', 'Aleman', 'miguel@example.test', 'contraseña_de_prueba');
+
 INSERT INTO cuenta (tipo, saldoInicial, nombre, IDUsuario)
 VALUES ('efectivo', 0.00, 'Cartera', 1);
 INSERT INTO cuenta (tipo, saldoInicial, nombre, IDUsuario)
@@ -94,3 +97,14 @@ SELECT character_maximum_length
 FROM information_schema.columns
 WHERE table_name = 'usuario'
   AND column_name = 'hashcontrasenia';
+
+SELECT * FROM categoria;
+
+UPDATE usuario
+SET hashcontrasenia = '$2y$12$EoIcukfsyg49ORx.z3KQ9uB1XEl8c4R6nnroz6uUxZJUKf7283xVa'
+WHERE correoelectronico = 'pedro@example.test';
+
+
+UPDATE usuario
+SET hashcontrasenia = '$2y$12$zGkkSzgV2eVG5Abikbn5zux1OYIkWEFxQpKgl0RWAyu3lBkDK5pRe'
+WHERE correoelectronico = 'miguel@example.test';
