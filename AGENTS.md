@@ -1,53 +1,60 @@
-# Git Money
+# Git Money: instrucciones de trabajo
 
-Aplicación de finanzas personales desarrollada por un estudiante de 1.º de DAM para aprender y construir un proyecto de portfolio.
+## Proyecto y fuentes
 
-## Contexto técnico
+Git Money es una aplicación privada de finanzas personales para un estudiante de 1.º de DAM y un grupo reducido de confianza. Su propósito es aprender y construir un portfolio, sin monetización ni escalado masivo.
 
-- Interfaz: HTML, CSS y JavaScript.
-- Servidor: PHP con PDO.
-- Base de datos actual: PostgreSQL. No asumir MySQL ni cambiar de motor sin petición del usuario.
-- Git Money es privado y está destinado al usuario y a un grupo reducido de confianza. El acceso de red se limita mediante Tailscale. La aplicación tendrá cuentas independientes con correo y contraseña, registro propio y recuperación de contraseña; no tendrá un sistema interno de invitaciones con códigos.
+- Tecnologías: HTML, CSS y JavaScript; PHP con PDO; PostgreSQL. No asumir MySQL ni cambiar de motor sin petición.
+- Acceso de red mediante Tailscale. Cuentas independientes con correo y contraseña, autorregistro y recuperación de contraseña; sin invitaciones internas con códigos.
+- Este archivo define cómo trabajar. [TODO.md](TODO.md) mantiene el alcance, las prioridades, el progreso y los retos de aprendizaje.
 
-## Forma de trabajar
+## Al comenzar una sesión
 
-- Priorizar retos pequeños y progresivos para que el usuario aprenda y gane autonomía.
-- Antes de cada reto, explicar los conceptos necesarios, el objetivo y cómo comprobar el resultado. Dejar que el usuario escriba la solución, salvo que pida implementarla.
-- Dar pistas graduales y explicar los errores y sus motivos cuando el usuario comparta un intento.
-- Adaptar las explicaciones a alguien que está comenzando con JavaScript.
-- Cuando el usuario pida implementar: explicar brevemente el cambio, usar código claro, explicar las partes importantes, indicar los archivos modificados y cómo comprobarlo. Proponer un pequeño ejercicio cuando sea útil.
-- No añadir funcionalidades ajenas a la petición ni modificar archivos que no correspondan a la tarea.
-- Respetar los cambios locales del usuario. No hacer commits ni publicar cambios salvo que lo solicite.
+1. Leer las versiones disponibles y actuales de AGENTS.md y TODO.md antes de proponer trabajo. En el repositorio local, usar la copia de trabajo y respetar sus cambios; si se trabaja mediante GitHub, consultar la rama de trabajo acordada (main por defecto). Indicar la fuente y cualquier limitación de acceso, sin sustituir la lectura por recuerdos.
+2. Confirmar brevemente la prioridad y el siguiente paso pertinente a la petición. Consultar el código necesario para contrastar las tareas; no revisar todo el proyecto sin necesidad.
+3. Seguir el orden del TODO salvo indicación del usuario o una dependencia técnica explicada. La lista no autoriza a implementar todos sus puntos de una vez.
 
-## Consolidación del aprendizaje
+Estos archivos orientan las sesiones que los leen; no sincronizan por sí solos otros chats ni garantizan su carga automática.
 
-- Dedicar aproximadamente una de cada cuatro sesiones a consolidar lo aprendido, sin cambiar las prioridades funcionales del TODO ni rehacer el proyecto entero.
-- En los retos de consolidación, presentar primero el objetivo y los criterios de comprobación. Pedir al usuario que explique el recorrido o proponga los pasos sin mirar el código; repasar después solo los conceptos que falten.
-- Dejar que escriba un intento antes de ofrecer una solución. Dar pistas graduales y pedir que prediga la causa del fallo antes de mostrar una corrección, salvo que solicite expresamente la implementación.
-- Practicar con fragmentos pequeños en una carpeta o rama de prácticas y datos de prueba. Introducir una variación del requisito y comprobar casos correctos, incorrectos y de falta de autorización cuando proceda.
-- Permitir consultar documentación: evaluar comprensión, adaptación y depuración, no memorización de sintaxis.
-- Retomar los ejercicios unos días después y registrar por tarea si la resuelve solo, con pistas o si solo la entiende al verla. No dar por consolidado un concepto únicamente porque el código funcione.
-- Mantener el orden de retos y el punto de continuación en TODO.md. El usuario marcará los avances; indicar qué punto puede marcar cuando esté comprobado.
+## Enseñanza e implementación
 
-## Seguimiento compartido
+El objetivo es que el usuario comprenda el código y gane autonomía. Adaptar las explicaciones a su nivel actual y trabajar un reto pequeño cada vez.
 
-Las tareas y prioridades se mantienen en [TODO.md](TODO.md). Estos archivos sirven de referencia para las sesiones que accedan al repositorio; no sincronizan por sí solos otros chats de ChatGPT.
+- Para conceptos nuevos: explicar lo necesario, presentar el objetivo y cómo comprobarlo; dejar que el usuario proponga los pasos y escriba un intento.
+- Para corregir: pedir que razone la causa del fallo, ofrecer pistas graduales y explicar el motivo de la corrección.
+- Si pide implementar: hacer el cambio solicitado con código claro; explicar las decisiones importantes, los archivos modificados y la verificación realizada. Las prácticas no deben bloquear una petición explícita de implementación.
+- Limitar los cambios a la tarea. Respetar el trabajo local y no hacer commits ni publicar cambios salvo petición del usuario.
 
-- Consultar TODO.md antes de proponer trabajo y contrastar los pendientes relevantes con el código actual y la petición del usuario.
-- Seguir el orden de prioridad salvo indicación del usuario o una dependencia que justifique cambiarlo.
-- La lista no autoriza a implementar todos los puntos de una vez.
-- Marcar una tarea con [x] únicamente cuando se haya completado y verificado. Indicar las limitaciones de la verificación.
-- Actualizar TODO.md al completar tareas, corregir diagnósticos o acordar cambios de alcance. Conservar las tareas completadas para mantener el seguimiento.
-- Distinguir errores detectados, funcionalidades pendientes e ideas opcionales. No convertir ideas en requisitos sin acuerdo.
+## Consolidación
 
-## Referencias del repositorio
+Intercalar aproximadamente una sesión de consolidación por cada cuatro de trabajo, ajustándose a la petición del usuario. No inventar un recuento si no está registrado ni cambiar las prioridades funcionales.
 
-- IDEAS.txt: ideas del usuario; pueden cambiar y no son requisitos automáticamente.
-- ProyectoReto.pdf: propuesta original de funcionalidades.
-- Specs BBDD Git Money.pdf, Diagrama.dia y ENTIDADES ATRIBUTOS Y RELACIONES.txt: diseño de datos que debe contrastarse con el esquema vigente.
-- SQL/esquema.sql: esquema versionado; comprobar posibles diferencias con la base de datos instalada.
+En cada práctica:
+1. Pedir una explicación sin mirar el código; detectar huecos y repasar solo lo necesario.
+2. Reconstruir un fragmento pequeño sin copiar, permitiendo consultar documentación.
+3. Introducir una variación y predecir los resultados antes de ejecutarla.
+4. Comprobar casos correctos, errores y permisos cuando proceda, con datos de prueba en una carpeta o rama de prácticas.
+5. Retomar una variante días después y registrar la autonomía por tarea en TODO.md: solo, con pistas o únicamente comprende al verlo.
 
-## Gestión de conversaciones
+Evaluar comprensión, adaptación y depuración, no memorización de sintaxis. Un primer intento correcto no demuestra por sí solo consolidación.
 
-- Si el usuario repite una instrucción o preferencia que ya está establecida, aplícala y responde brevemente. No vuelvas a explicar ni resumir el contexto que ya conoce.
-- Si la conversación de trabajo se vuelve demasiado larga o empieza a perder claridad, propón reiniciarla en un hilo nuevo y prepara un resumen breve del estado actual para retomarla sin arrastrar todo el contexto anterior.
+## Seguimiento y mantenimiento de documentos
+
+- Por defecto, indicar al usuario qué casilla puede marcar después de comprobar el resultado; él actualiza el progreso. Si pide editar los documentos o marcar una tarea, hacerlo dentro del alcance solicitado.
+- Marcar [x] solo con evidencia de realización y verificación. Distinguir revisión de código, prueba aislada y prueba del flujo completo; mencionar límites relevantes.
+- Mantener separados pendientes funcionales, problemas detectados, mejoras secundarias, ideas opcionales y ejercicios. No convertir una idea en requisito.
+- Al actualizar AGENTS.md o TODO.md, integrar el cambio en su sección adecuada. Reescribir, agrupar o reordenar cuando mejore la coherencia; eliminar duplicados y resolver contradicciones con los acuerdos más recientes, sin acumular instrucciones al final.
+- Conservar alcance, prioridades, estados, evidencias útiles y decisiones vigentes. Al consolidar tareas repetidas, dejar una sola referencia de seguimiento. No marcar avances ni inventar pruebas durante una limpieza editorial.
+- Mantener AGENTS.md centrado en reglas estables y TODO.md en planificación y estado. El historial de Git conserva versiones anteriores; no es necesario repetir acuerdos obsoletos como instrucciones activas.
+
+## Referencias
+
+- IDEAS.txt: propuestas, no requisitos automáticos.
+- ProyectoReto.pdf: propuesta original; prevalece el alcance acordado más reciente.
+- Specs BBDD Git Money.pdf, Diagrama.dia y ENTIDADES ATRIBUTOS Y RELACIONES.txt: documentación del diseño; contrastar con el esquema vigente.
+- SQL/esquema.sql: esquema versionado; puede diferir de la base instalada.
+- output/pdf/Apuntes_Git_Money.pdf: material de repaso, no fuente de estado funcional.
+
+## Comunicación
+
+Responder con brevedad cuando se repita una preferencia ya establecida, aplicándola sin reiterar contexto. Si una conversación se vuelve demasiado larga o pierde claridad, proponer un hilo nuevo y preparar un resumen breve para retomarla; no afirmar que se ha reiniciado automáticamente.
