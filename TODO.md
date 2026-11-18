@@ -53,7 +53,7 @@ Estimación histórica de planificación: 15–25 h para el bloque básico. No r
 - [x] Permitir el autorregistro únicamente desde la aplicación privada accesible por Tailscale.
 - [x] Crear de forma transaccional una cuenta financiera y categorías iniciales propias para cada usuario nuevo.
 - [x] Implementar el restablecimiento de contraseña mediante un token de un solo uso. Comprobado con una cuenta de prueba.
-- [ ] Configurar el envío del enlace de recuperación por correo y probar el flujo completo, incluida la caducidad del token.
+- [ ] Configurar el envío del enlace de recuperación por correo y probar el flujo completo, incluida la caducidad del token. Comprobados el envío local desde PHP a Mailpit y el rechazo con HTTP 400 de un token caducado. Creado el formulario HTML de restablecimiento. Siguiente paso: leer `token` de la URL con JavaScript, avisar si falta y desactivar el botón. Quedan conectar el formulario al endpoint, configurar el envío real y probar el enlace de principio a fin.
 - [ ] Permitir desactivar la cuenta de un usuario e invalidar sus sesiones activas; retirar también su acceso en Tailscale cuando corresponda.
 
 ### 5. Adaptar la interfaz
