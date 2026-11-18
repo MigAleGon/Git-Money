@@ -62,6 +62,16 @@ try{
             "idusuario" => $idusuario,
             "hash_token" => $hashToken,
         ]);
+
+        $enlace = "https://git-money.example/restablecer-contrasenia.html?token=$token";
+        $asunto = "Recuperación de contraseña";
+        $mensajeCorreo = "Enlace: $enlace
+            \n\n
+            El código caducará en 30 minutos";
+        ini_set("SMTP", "127.0.0.1");
+        ini_set("smtp_port", "1025");
+        ini_set("sendmail_from", "git-money@example.com");
+        $enviado = mail(trim($datos["correo"]), $asunto, $mensajeCorreo);
     }
 
     $respuesta = [

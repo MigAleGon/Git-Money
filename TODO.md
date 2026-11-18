@@ -52,7 +52,8 @@ Estimación histórica de planificación: 15–25 h para el bloque básico. No r
 
 - [x] Permitir el autorregistro únicamente desde la aplicación privada accesible por Tailscale.
 - [x] Crear de forma transaccional una cuenta financiera y categorías iniciales propias para cada usuario nuevo.
-- [ ] Implementar la recuperación de contraseña por correo con un token de un solo uso y caducidad; configurar el envío de correos.
+- [x] Implementar el restablecimiento de contraseña mediante un token de un solo uso. Comprobado con una cuenta de prueba.
+- [ ] Configurar el envío del enlace de recuperación por correo y probar el flujo completo, incluida la caducidad del token.
 - [ ] Permitir desactivar la cuenta de un usuario e invalidar sus sesiones activas; retirar también su acceso en Tailscale cuando corresponda.
 
 ### 5. Adaptar la interfaz

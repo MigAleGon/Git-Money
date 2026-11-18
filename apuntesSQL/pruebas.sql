@@ -22,6 +22,7 @@ SELECT * FROM usuario;
 SELECT * FROM cuenta;
 SELECT * FROM categoria;
 SELECT * FROM movimiento;
+SELECT * FROM token_recuperacion;
 
 SELECT id, nombre, tipo FROM categoria;
 SELECT id, nombre, idusuario FROM cuenta;
@@ -37,3 +38,12 @@ RESTART IDENTITY;
 UPDATE cuenta
 SET nombre = 'cartera'
 WHERE id = 1
+
+SELECT u.id, u.correoelectronico, t.creado_en, t.usado_en
+FROM token_recuperacion AS t
+JOIN usuario AS u ON u.id = t.idusuario
+WHERE u.id = 3
+ORDER BY t.creado_en DESC
+LIMIT 1;
+
+SELECT hashcontrasenia FROM usuario WHERE id = 3;

@@ -108,3 +108,21 @@ WHERE correoelectronico = 'pedro@example.test';
 UPDATE usuario
 SET hashcontrasenia = '$2y$12$zGkkSzgV2eVG5Abikbn5zux1OYIkWEFxQpKgl0RWAyu3lBkDK5pRe'
 WHERE correoelectronico = 'miguel@example.test';
+
+UPDATE usuario
+SET hashcontrasenia = '$2y$12$p6Ml7OLMpusN3mMf9hbIpeJ7.Y3/x9Uhz.BPT9z5YroLr3zgzhXNa'
+WHERE id = 3
+
+/* GENERAR TOKEN NUEVO */
+
+WITH prueba AS (
+    SELECT replace(gen_random_uuid()::text || gen_random_uuid()::text, '-', '') AS token
+),
+insertado AS (
+    INSERT INTO token_recuperacion (idusuario, hash_token, expira_en)
+    SELECT 1, encode(sha256(convert_to(token, 'UTF8')), 'hex'),
+           CURRENT_TIMESTAMP + INTERVAL '30 minutes'
+    FROM prueba
+    RETURNING id
+)
+SELECT prueba.token FROM prueba CROSS JOIN insertado;
